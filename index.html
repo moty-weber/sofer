@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Video Cloud</title>
+    <link href="https://vjs.zencdn.net/8.3.0/video-js.css" rel="stylesheet" />
+    
+    <style>
+        :root {
+            --bg-dark: #121824;
+            --card-bg: #1c2638;
+            --drive-blue: #1a73e8;
+            --drive-green: #0f9d58;
+            --drive-yellow: #f4b400;
+            --text-light: #ffffff;
+            --text-muted: #9aa0a6;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: var(--card-bg);
+            border-bottom: 3px solid var(--drive-blue);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .profile-area {
+            display: flex;
+            gap: 15px;
+        }
+
+        .user-profile, .video-profile {
+            background: linear-gradient(135deg, var(--drive-green), var(--drive-blue));
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .breadcrumb-container {
+            padding: 15px 25px;
+            background-color: rgba(28, 38, 56, 0.5);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .back-btn {
+            background-color: var(--drive-blue);
+            border: none;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .back-btn:hover { background-color: var(--drive-green); }
+        .breadcrumbs a { color: var(--drive-yellow); text-decoration: none; margin: 0 5px; }
+
+        .main-container { padding: 25px; }
+        .section-title { border-left: 5px solid var(--drive-yellow); padding-left: 10px; margin-bottom: 20px; }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.05);
+            position: relative;
+        }
+
+        .card:hover { 
+            transform: translateY(-5px); 
+            box-shadow: 0 8px 15px rgba(0,0,0,0.3);
+        }
+        
+        .card.folder { border-top: 4px solid var(--drive-yellow); }
+        .card.video { border-top: 4px solid var(--drive-green); }
+
+        .thumbnail-placeholder {
+            height: 130px;
+            background: #25334a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+        }
+
+        .card-info { padding: 12px; }
+        .card-title { font-size: 15px; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 600; }
+
+        .download-icon-btn {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background-color: var(--drive-blue);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .download-icon-btn:hover { background-color: var(--drive-green); }
+
+        .player-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.9);
+            z-index: 1000;
+            justify-content: center; align-items: center;
+        }
+
+        .player-content { width: 80%; max-width: 900px; position: relative; background-color: var(--bg-dark); padding: 10px; border-radius: 8px; }
+        .close-player { position: absolute; top: -40px; right: 0; color: white; font-size: 30px; background: none; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand"><h1>My Video Cloud</h1></div>
+        <div class="profile-area">
+            <div class="user-profile">My Profile</div>
+            <div class="video-profile">Video Stats</div>
+        </div>
+    </header>
+
+    <div class="breadcrumb-container">
+        <button class="back-btn" onclick="goBack()">← Back</button>
+        <div class="breadcrumbs" id="breadcrumbs"><a href="#" onclick="loadFolder(START_FOLDER_ID)">Home</a></div>
+    </div>
+
+    <div class="main-container">
+        <h2 class="section-title">Folders</h2>
+        <div class="grid" id="foldersGrid"></div>
+        <div style="margin-top: 40px;"></div>
+        <h2 class="section-title">Videos</h2>
+        <div class="grid" id="videosGrid"></div>
+    </div>
+
+    <div class="player-modal" id="playerModal">
+        <div class="player-content">
+            <button class="close-player" onclick="closeVideo()">×</button>
+            <video id="my-video" class="video-js vjs-big-play-centered" controls preload="auto" width="900" height="500">
+                <p class="vjs-no-js">To view this video please enable JavaScript</p>
+            </video>
+        </div>
+    </div>
+
+    <script src="https://vjs.zencdn.net/8.3.0/video.min.js"></script>
+    
+    <script>
+        // ************************************************************
+        // 1) לייג אריין דיין פערזענליכע API KEY צווישן די קוואטס אונטן:
+        const API_KEY = "לייג_דא_דיין_API_KEY_וואס_דו_האסט_באקומען"; 
+        
+        // 2) דיין פאלדער ID איז שוין אריינגעלייגט דא פערפעקט:
+        const START_FOLDER_ID = "14v9raW-BX5EkdfK2-Yj8wDA5kGok2Tda"; 
+        // ************************************************************
+
+        let folderHistory = [];
+        let currentFolderId = START_FOLDER_ID;
+
+        window.onload = function() {
+            loadFolder(START_FOLDER_ID);
+        };
+
+        async function loadFolder(folderId) {
+            currentFolderId = folderId;
+            updateBreadcrumbs();
+            
+            const foldersGrid = document.getElementById('foldersGrid');
+            const videosGrid = document.getElementById('videosGrid');
+            foldersGrid.innerHTML = 'Loading...';
+            videosGrid.innerHTML = 'Loading...';
+
+            try {
+                const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+trashed=false&fields=files(id,name,mimeType,thumbnailLink)&key=${API_KEY}`;
+                const response = await fetch(url);
+                const data = await response.json();
+
+                foldersGrid.innerHTML = '';
+                videosGrid.innerHTML = '';
+
+                if (data.files && data.files.length > 0) {
+                    data.files.forEach(file => {
+                        const card = document.createElement('div');
+                        
+                        if (file.mimeType === 'application/vnd.google-apps.folder') {
+                            card.className = 'card folder';
+                            card.onclick = () => {
+                                folderHistory.push(folderId);
+                                loadFolder(file.id);
+                            };
+                            card.innerHTML = `<div class="thumbnail-placeholder">📁</div><div class="card-info"><p class="card-title">${file.name}</p></div>`;
+                            foldersGrid.appendChild(card);
+                        } else if (file.mimeType.startsWith('video/')) {
+                            card.className = 'card video';
+                            card.onclick = (e) => { if(!e.target.classList.contains('download-icon-btn')) playVideo(file.id); };
+                            card.innerHTML = `
+                                <div class="thumbnail-placeholder">
+                                    ${file.thumbnailLink ? `<img src="${file.thumbnailLink}" style="width:100%;height:100%;object-fit:cover;">` : '🎬'}
+                                </div>
+                                <div class="card-info"><p class="card-title">${file.name}</p></div>
+                                <button class="download-icon-btn" onclick="downloadVideo('${file.id}')" title="Download">↓</button>
+                            `;
+                            videosGrid.appendChild(card);
+                        }
+                    });
+                } else {
+                    foldersGrid.innerHTML = '<p style="color:var(--text-muted)">No folders here.</p>';
+                    videosGrid.innerHTML = '<p style="color:var(--text-muted)">No videos here.</p>';
+                }
+            } catch (error) {
+                foldersGrid.innerHTML = 'Error loading files. Make sure your API Key is pasted correctly and the Google Drive folder is shared as "Anyone with the link".';
+                videosGrid.innerHTML = '';
+            }
+        }
+
+        function goBack() {
+            if (folderHistory.length > 0) {
+                loadFolder(folderHistory.pop());
+            }
+        }
+
+        function updateBreadcrumbs() {
+            document.getElementById('breadcrumbs').innerHTML = `<a href="#" onclick="loadFolder(START_FOLDER_ID)">Home</a> / Folder ID: ${currentFolderId}`;
+        }
+
+        function playVideo(fileId) {
+            document.getElementById('playerModal').style.display = 'flex';
+            const player = videojs('my-video');
+            player.src({
+                type: 'video/mp4',
+                src: `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${API_KEY}`
+            });
+            player.playbackRates([0.5, 1, 1.25, 1.5, 2]);
+            player.play();
+        }
+
+        function closeVideo() {
+            document.getElementById('playerModal').style.display = 'none';
+            videojs('my-video').pause();
+        }
+
+        function downloadVideo(fileId) {
+            window.open(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${API_KEY}`, '_blank');
+        }
+    </script>
+</body>
+</html>
