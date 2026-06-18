@@ -40,11 +40,20 @@
         .brand-area h1 { margin: 0; font-size: 24px; cursor: pointer; }
         .menu-area { display: flex; align-items: center; gap: 15px; }
         
-        .nav-btn { background-color: #25334a; border: 1px solid rgba(255,255,255,0.1); color: white; padding: 8px 16px; border-radius: 6px; cursor: pointer; text-decoration: none; font-weight: bold; font-size: 14px; position: relative; }
+        .nav-btn { background-color: #25334a; border: 1px solid rgba(255,255,255,0.1); color: white; padding: 8px 16px; border-radius: 6px; cursor: pointer; text-decoration: none; font-weight: bold; font-size: 14px; position: relative; width: 100%; text-align: left; display: block; box-sizing: border-box; }
         .nav-btn:hover { background-color: var(--drive-blue); }
         #adminPanelBtn { display: none; background-color: #7b1fa2; }
-        #favMenuBtn { display: none; background-color: #00796b; }
         
+        /* ☰ Options Hamburger Style */
+        .menu-trigger-btn { background: none; border: none; color: white; font-size: 28px; cursor: pointer; display: flex; align-items: center; }
+
+        /* Slide Menu (Side Drawer) */
+        .slide-menu { position: fixed; top: 0; right: -320px; width: 320px; height: 100%; background-color: var(--card-bg); box-shadow: -5px 0 25px rgba(0,0,0,0.5); z-index: 1600; transition: right 0.3s ease; padding: 25px; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px; overflow-y: auto; border-left: 2px solid var(--drive-blue); }
+        .slide-menu.open { right: 0; }
+        .slide-menu-close { background: none; border: none; color: white; font-size: 30px; cursor: pointer; align-self: flex-start; }
+        .slide-section-title { font-size: 16px; color: var(--drive-yellow); border-bottom: 1px solid #25334a; padding-bottom: 5px; margin: 5px 0; font-weight: bold; }
+        .theme-select-box { background: #121824; border: 1px solid rgba(255,255,255,0.1); padding: 8px; border-radius: 6px; color: white; width: 100%; cursor: pointer; }
+
         .badge-red::after { content: ''; position: absolute; top: -3px; right: -3px; width: 10px; height: 10px; background-color: var(--drive-red); border-radius: 50%; border: 2px solid var(--bg-dark); }
         .tab-btn { position: relative; }
         .tab-badge-red::after { content: ''; position: absolute; top: 2px; right: 2px; width: 8px; height: 8px; background-color: var(--drive-red); border-radius: 50%; }
@@ -69,13 +78,14 @@
         .card-info { padding: 12px; position: relative; padding-right: 40px; }
         .card-title { font-size: 15px; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 600; }
 
-        .admin-card-overlay { display: none; position: absolute; top: 5px; left: 5px; background: rgba(0,0,0,0.8); padding: 4px 8px; border-radius: 4px; font-size: 11px; color: var(--drive-yellow); z-index: 5; }
+        .admin-card-overlay { display: none; position: absolute; top: 5px; left: 5px; background: rgba(0,0,0,0.8); padding: 4px 8px; border-radius: 4px; font-size: 11px; color: var(--drive-yellow); z-index: 5; margin-bottom: 2px; }
+        .admin-popular-overlay { display: none; position: absolute; top: 30px; left: 5px; background: rgba(0,0,0,0.8); padding: 4px 8px; border-radius: 4px; font-size: 11px; color: #ffeb3b; z-index: 5; }
         .download-icon-btn { position: absolute; bottom: 10px; right: 10px; background-color: var(--drive-blue); color: white; border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; z-index: 2; }
         
         .fav-btn { position: absolute; top: 10px; right: 10px; background: none; border: none; font-size: 18px; cursor: pointer; z-index: 3; filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.5)); transition: transform 0.2s; }
         .fav-btn:hover { transform: scale(1.2); }
 
-        .close-continue-btn { position: absolute; top: 5px; right: 5px; background: rgba(0,0,0,0.6); color: white; border: none; border-radius: 50%; width: 22px; height: 22px; cursor: pointer; font-size: 12px; z-index: 4; display: flex; align-items: center; justify-content: center; }
+        .close-continue-btn { position: absolute; top: 5px; right: 5px; background: rgba(0,0,0,0.8); color: white; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; font-size: 14px; z-index: 10; display: flex; align-items: center; justify-content: center; font-weight: bold; }
         .close-continue-btn:hover { background: var(--drive-red); }
 
         .search-wrapper { max-width: 500px; margin: 0 auto 25px auto; }
@@ -84,10 +94,6 @@
 
         .continue-progress-bg { position: absolute; bottom: 0; left: 0; width: 100%; height: 5px; background: rgba(255,255,255,0.2); }
         .continue-progress-fill { height: 100%; background: var(--drive-red); width: 0%; }
-
-        /* קאלירן טוישער פּאַנעל */
-        .theme-picker-panel { display: none; position: absolute; top: 70px; right: 80px; background-color: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); z-index: 1500; flex-direction: column; gap: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
-        .theme-option { display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 14px; font-weight: bold; }
 
         /* לאגין סקרין */
         .lock-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-dark); display: flex; justify-content: center; align-items: center; z-index: 2000; }
@@ -99,13 +105,14 @@
         .verify-row { display: flex; gap: 10px; align-items: center; }
         .verify-row button { width: auto; font-size: 12px; padding: 12px 15px; margin: 0; white-space: nowrap; background-color: #25334a; }
 
-        /* מאדאלס און פילטער פאר פיקטשער-אין-פיקטשער */
-        .player-modal, .admin-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center; }
+        /* מאדאלס */
+        .player-modal, .admin-modal { display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center; }
+        #playerModal, #adminModal { display: none; }
         .player-content, .admin-content { width: 80%; max-width: 900px; position: relative; background-color: var(--bg-dark); padding: 25px; border-radius: 8px; color: white; max-height: 90vh; overflow-y: auto; }
         .close-player { position: absolute; top: -40px; right: 0; color: white; font-size: 30px; background: none; border: none; cursor: pointer; z-index: 1010; }
         .minimize-player { position: absolute; top: -40px; right: 40px; color: white; font-size: 25px; background: none; border: none; cursor: pointer; z-index: 1010; }
 
-        /* Picture-in-picture קלאס */
+        /* Picture-in-picture */
         .player-modal.pip-mode { width: 350px; height: 240px; top: auto; left: auto; bottom: 130px; right: 20px; background: none; box-shadow: 0 10px 30px rgba(0,0,0,0.8); border-radius: 8px; overflow: hidden; }
         .player-modal.pip-mode .player-content { width: 100%; height: 100%; padding: 0; max-height: 100%; }
         .player-modal.pip-mode video { height: 180px !important; }
@@ -131,51 +138,33 @@
         .list-item.msg-item.unread { background-color: #222d42; border-left-width: 6px; font-weight: bold; border-left-color: var(--drive-red); }
         .unread-badge { background-color: var(--drive-red); color: white; font-size: 11px; padding: 2px 6px; border-radius: 4px; margin-left: 8px; font-weight: bold; }
 
-        /* קאנטאקט באר אונטן */
+        /* קאנטאקט באר */
         .footer-contact-bar { position: fixed; bottom: 0; left: 0; width: 100%; background-color: var(--card-bg); border-top: 3px solid var(--drive-yellow); padding: 15px 25px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; gap: 15px; z-index: 900; box-shadow: 0 -5px 15px rgba(0,0,0,0.3); }
         .footer-contact-bar span { font-weight: bold; color: var(--text-light); font-size: 14px; }
         .footer-contact-bar .user-badge { background-color: #25334a; color: var(--drive-yellow); padding: 8px 14px; border-radius: 6px; font-weight: bold; font-size: 13px; border: 1px solid rgba(255,255,255,0.05); }
         .footer-contact-bar input { background-color: var(--bg-dark); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 11px; border-radius: 6px; font-size: 14px; flex-grow: 1; max-width: 650px; box-sizing: border-box; }
         .footer-contact-bar button { background-color: var(--drive-yellow); color: #121824; border: none; padding: 11px 22px; font-weight: bold; border-radius: 6px; cursor: pointer; font-size: 14px; white-space: nowrap; }
 
-        /* אפדעיטס און פארום בלאט */
+        /* פורום */
         .updates-container { max-width: 900px; margin: 30px auto; padding: 0 20px; }
         .admin-editor-box { background-color: var(--card-bg); padding: 20px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 30px; display: none; }
         .ql-container.ql-snow { border: 1px solid #25334a !important; background: #121824; color: white; border-radius: 0 0 6px 6px; font-size: 15px; }
         .ql-toolbar.ql-snow { background: #25334a; border: 1px solid #25334a !important; border-radius: 6px 6px 0 0; }
-        .ql-snow .ql-stroke { stroke: white !important; }
-        .ql-snow .ql-fill { fill: white !important; }
-        .ql-snow .ql-picker { color: white !important; }
         
         .blog-post { background-color: var(--card-bg); border-radius: 8px; border-top: 4px solid var(--drive-yellow); padding: 25px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
         .blog-time { font-size: 12px; color: var(--text-muted); margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
         .blog-body { font-size: 16px; color: #f1f5f9; line-height: 1.6; }
-        .blog-body img { max-width: 100%; border-radius: 6px; margin: 15px 0; }
         
-        /* פארום קאמענטארן */
         .thread-section { margin-top: 25px; border-top: 1px solid #25334a; padding-top: 20px; }
         .comment-wrapper { display: flex; flex-direction: column; width: 100%; }
         .comment-box { background: #141b27; padding: 12px 16px; border-radius: 6px; margin-top: 10px; border-right: 3px solid var(--drive-blue); position: relative; box-sizing: border-box; }
         .replies-container { padding-left: 25px; border-left: 1px dashed rgba(255,255,255,0.05); width: 100%; box-sizing: border-box; }
         
-        .comment-meta { display: flex; justify-content: space-between; font-size: 12px; font-weight: bold; margin-bottom: 5px; }
-        .comment-user { color: var(--drive-yellow); }
-        .comment-time { color: var(--text-muted); }
-        .comment-text { font-size: 14px; color: #cbd5e1; margin-bottom: 10px; }
-        
-        .comment-actions { font-size: 11px; margin-left: 15px; display: inline-flex; gap: 8px; }
-        .action-link { color: var(--text-muted); cursor: pointer; text-decoration: underline; }
-        .action-link:hover { color: white; }
-        .action-link.delete-link { color: var(--drive-red); }
-        .action-link.delete-link:hover { color: #ff5252; }
-
         .reaction-row { display: flex; gap: 8px; align-items: center; margin-top: 8px; font-size: 13px; flex-wrap: wrap; }
         .react-btn { background: #25334a; border: none; color: white; padding: 4px 8px; border-radius: 4px; cursor: pointer; position: relative; font-size: 12px; display: flex; align-items: center; gap: 4px; }
         .react-btn:hover { background: var(--drive-blue); }
         .react-tooltip { display: none; position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.9); color: white; padding: 5px 10px; border-radius: 4px; font-size: 11px; white-space: nowrap; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); }
         .react-btn:hover .react-tooltip { display: block; }
-
-        .reply-trigger { color: var(--drive-yellow); font-size: 12px; cursor: pointer; font-weight: bold; margin-left: 10px; text-decoration: underline; }
         .comment-input-row { display: flex; gap: 10px; margin-top: 15px; width: 100%; box-sizing: border-box; }
         .comment-input-row input { flex-grow: 1; background: #121824; border: 1px solid #25334a; border-radius: 6px; padding: 10px; color: white; font-size: 14px; }
         .comment-input-row button { background: var(--drive-blue); color: white; border: none; padding: 0 15px; border-radius: 6px; cursor: pointer; font-weight: bold; }
@@ -201,34 +190,41 @@
                 <button type="button" id="sendOtpBtn" onclick="sendVerificationCode()">Get Code</button>
             </div>
             <input type="text" id="reqOtpInput" placeholder="Enter 6-Digit Verification Code..." style="display:none; border-color: var(--drive-yellow);">
-            <div id="spamNotice" style="display:none; color: var(--drive-yellow); font-size: 11px; margin-top: -5px; margin-bottom: 10px; text-align: left;">* Check your Spam/Junk folder if the code doesn't arrive.</div>
             <button type="button" id="verifyOtpBtn" onclick="verifyInsertedCode()" style="background-color: var(--drive-green); display:none;">Verify Code</button>
             <textarea id="reqNote" placeholder="Reason for request (optional)..." rows="2" style="margin-top:15px;"></textarea>
-            <button type="button" id="finalSubmitBtn" onclick="submitAccessRequest()" style="background-color: #25334a; cursor: not-allowed;" disabled>Submit Request (Verify Email First)</button>
+            <button type="button" id="finalSubmitBtn" onclick="submitAccessRequest()" style="background-color: #25334a; cursor: not-allowed;" disabled>Submit Request</button>
             <span class="switch-link" onclick="togglePanels(false)">Already requested? Log In</span>
         </div>
+    </div>
+
+    <!-- Slide Options Menu -->
+    <div class="slide-menu" id="optionsSlideMenu">
+        <button class="slide-menu-close" onclick="toggleOptionsDrawer(false)">×</button>
+        
+        <div class="slide-section-title">Theme Customizer</div>
+        <select class="theme-select-box" onchange="changeTheme(this.value)">
+            <option value="modern-blue">Modern Blue (Default)</option>
+            <option value="pitch-black">Pitch Black</option>
+            <option value="accent-green">Vibrant Green</option>
+            <option value="accent-purple">Royal Purple</option>
+        </select>
+
+        <div class="slide-section-title">Navigation Links</div>
+        <button class="nav-btn" style="margin-bottom:10px;" onclick="toggleOptionsDrawer(false); showAppPage('favorites')">⭐ Bookmarked Favorites</button>
+        <button class="nav-btn" style="margin-bottom:10px;" id="updatesMenuBtn" onclick="toggleOptionsDrawer(false); showAppPage('updates')">📰 Updates & Forum</button>
+        <a href="about.html" class="nav-btn" style="text-align:center; margin-bottom:10px; text-decoration:none;">👤 About Me</a>
+        <button id="adminPanelBtn" class="nav-btn" style="margin-bottom:10px;" onclick="toggleOptionsDrawer(false); openAdminPanel()">⚙️ Admin Panel</button>
     </div>
 
     <div id="mainApp">
         <header>
             <div class="brand-area"><h1 onclick="showAppPage('library')">sofer video cloud</h1></div>
             <div class="menu-area">
-                <button class="nav-btn" style="background: none; font-size: 20px; border: none;" onclick="toggleThemePanel(event)">🎨</button>
-                <button class="nav-btn" id="favMenuBtn" onclick="showAppPage('favorites')">My Favorites</button>
-                <button class="nav-btn" id="updatesMenuBtn" onclick="showAppPage('updates')">Updates & Forum</button>
-                <a href="about.html" class="nav-btn">About Me</a>
-                <button id="adminPanelBtn" class="nav-btn" onclick="openAdminPanel()">Admin Panel</button>
+                <!-- ☰ Options Menu Trigger -->
+                <button class="menu-trigger-btn" id="menuHamburgerBtn" onclick="toggleOptionsDrawer(true)">☰</button>
                 <img src="logo.png" class="profile-pic" alt="Profile" onerror="this.src='https://via.placeholder.com/45?text=sofer'">
             </div>
         </header>
-
-        <!-- Theme Picker Panel -->
-        <div class="theme-picker-panel" id="themePickerPanel">
-            <div class="theme-option" onclick="changeTheme('modern-blue')">🔵 Modern Blue (Default)</div>
-            <div class="theme-option" onclick="changeTheme('pitch-black')">⚫ Pitch Black</div>
-            <div class="theme-option" onclick="changeTheme('accent-green')">🟢 Vibrant Green</div>
-            <div class="theme-option" onclick="changeTheme('accent-purple')">🟣 Royal Purple</div>
-        </div>
 
         <div id="librarySection">
             <div class="breadcrumb-container">
@@ -238,19 +234,19 @@
             
             <div class="main-container">
                 <div class="search-wrapper">
-                    <input type="text" id="cloudSearchInput" class="search-input" placeholder="Global search entire Cloud ecosystem..." oninput="filterGlobalCloudContent()">
+                    <input type="text" id="cloudSearchInput" class="search-input" placeholder="Search entire Cloud archive ecosystem..." oninput="filterGlobalCloudContent()">
                 </div>
 
-                <!-- Continue Watching סעקציע -->
+                <!-- Continue Watching -->
                 <div id="continueWatchingWrapper" style="display: none; margin-bottom: 40px;">
                     <h2 class="section-title">Continue Watching</h2>
                     <div class="grid" id="continueGrid"></div>
                 </div>
 
-                <!-- Trending / Popular Videos Section -->
+                <!-- Trending / Popular Section -->
                 <div id="trendingVideosWrapper" style="margin-bottom: 40px;">
                     <h2 class="section-title">Trending & Popular Videos</h2>
-                    <div class="grid" id="trendingGrid">Loading popular trends...</div>
+                    <div class="grid" id="trendingGrid">Loading curated trends...</div>
                 </div>
 
                 <h2 class="section-title" id="foldersTitle">Folders</h2>
@@ -261,11 +257,11 @@
             </div>
         </div>
 
-        <!-- Favorites פערזענליכע בלאט -->
+        <!-- Favorites בלאט -->
         <div id="favoritesPage">
             <div class="breadcrumb-container" style="background-color: #1c2638; margin-bottom: 20px;">
                 <button class="back-btn" onclick="showAppPage('library')">← Back to Main Menu</button>
-                <span style="color: var(--text-muted); font-size:14px; margin-left: 10px;">My Personal Favorites Bookmarks</span>
+                <span style="color: var(--text-muted); font-size:14px; margin-left: 10px;">My Personal Bookmarks</span>
             </div>
             <div class="main-container">
                 <h2 class="section-title">Bookmarked Favorites</h2>
@@ -276,29 +272,26 @@
         <div id="updatesPage">
             <div class="breadcrumb-container" style="background-color: #1c2638; margin-bottom: 20px;">
                 <button class="back-btn" onclick="showAppPage('library')">← Back to Main Menu</button>
-                <span style="color: var(--text-muted); font-size:14px; margin-left: 10px;">Updates & Community Forum</span>
             </div>
-
             <div class="updates-container">
                 <div class="admin-editor-box" id="adminEditorBox">
                     <h3 style="margin-top:0; color:var(--drive-yellow);" id="editorBoxTitle">Publish a Rich Update</h3>
                     <div id="editor-container" style="height: 200px; margin-bottom: 15px;"></div>
-                    <button class="nav-btn" style="background-color: var(--drive-green);" id="submitPostBtn" onclick="publishAdminUpdate()">Publish Post</button>
-                    <button class="nav-btn" style="background-color: var(--text-muted); display:none; margin-left:10px;" id="cancelEditBtn" onclick="cancelAdminEditing()">Cancel Edit</button>
+                    <button class="nav-btn" style="background-color: var(--drive-green); text-align:center;" onclick="publishAdminUpdate()">Publish Post</button>
                 </div>
-
-                <div id="blogPostsList">Loading forum threads...</div>
+                <div id="blogPostsList">Loading threads...</div>
             </div>
         </div>
 
         <div class="footer-contact-bar" id="footerContactBar">
             <span>Logged in as:</span>
             <div class="user-badge" id="userDisplayBadge">Loading User...</div>
-            <input type="text" id="footerMessageText" placeholder="Type your private message directly to the administrator panel here...">
+            <input type="text" id="footerMessageText" placeholder="Type private message directly to administrator panel...">
             <button onclick="sendMessageToAdmin()">Send Private Message</button>
         </div>
     </div>
 
+    <!-- Admin Panel Modal -->
     <div class="admin-modal" id="adminModal">
         <div class="admin-content">
             <button class="close-player" onclick="document.getElementById('adminModal').style.display='none'">×</button>
@@ -314,25 +307,21 @@
         </div>
     </div>
 
-    <!-- ווידעאו מאדאל מיט קאמענטארן סעקציע און מינימיזירן אפציע -->
+    <!-- Video Player Modal -->
     <div class="player-modal" id="playerModal" onclick="closeVideoFromOutside(event)">
         <div class="player-content" onclick="event.stopPropagation()">
             <button class="minimize-player" onclick="togglePipMode()">🗕</button>
             <button class="close-player" onclick="closeVideo()">×</button>
             <div class="video-wrapper">
-                <video id="my-video" class="video-js vjs-big-play-centered" controls preload="auto" width="900" height="500">
-                    <p class="vjs-no-js">To view this video please enable JavaScript</p>
-                </video>
+                <video id="my-video" class="video-js vjs-big-play-centered" controls preload="auto" width="900" height="500"></video>
                 <img src="logo.png" class="video-watermark" alt="WM" onerror="this.style.display='none'">
             </div>
-            
-            <!-- קאמענטארן און רעאקציעס פאר יעדע ספעציפישע ווידעא -->
-            <div id="videoModalCommentsSection" style="margin-top: 25px; border-top: 1px solid #25334a; padding-top: 20px;">
-                <h3 style="color: var(--drive-yellow); margin-top: 0;">Video Reactions & Comments</h3>
-                <div class="reaction-row" id="videoReactionsRow" style="margin-bottom: 20px;"></div>
-                <div id="videoCommentsList" style="max-height: 200px; overflow-y: auto; margin-bottom: 15px;">Loading comments...</div>
+            <div id="videoModalCommentsSection">
+                <h3 style="color: var(--drive-yellow); margin-top: 15px;">Video Reactions & Comments</h3>
+                <div class="reaction-row" id="videoReactionsRow"></div>
+                <div id="videoCommentsList" style="max-height: 150px; overflow-y: auto; margin-bottom: 10px;">Loading comments...</div>
                 <div class="comment-input-row">
-                    <input type="text" id="videoCommentInput" placeholder="Add a public comment for this video...">
+                    <input type="text" id="videoCommentInput" placeholder="Add public comment...">
                     <button onclick="submitVideoComment()">Comment</button>
                 </div>
             </div>
@@ -346,7 +335,6 @@
     <script src="https://vjs.zencdn.net/8.3.0/video.min.js"></script>
     
     <script>
-        // ************************************************************
         const API_KEY = "AIzaSyDEkcoogK9_8e4HOf7vSWFWEHKct21gjdE"; 
         const START_FOLDER_ID = "14v9raW-BX5EkdfK2-Yj8wDA5kGok2Tda"; 
 
@@ -356,79 +344,46 @@
             projectId: "sofer-video-cloud",
             storageBucket: "sofer-video-cloud.firebasestorage.app",
             messagingSenderId: "408981111758",
-            appId: "1:408981111758:web:15b060660475995f58a19f",
-            measurementId: "G-FCFZWE5LD4"
+            appId: "1:408981111758:web:15b060660475995f58a19f"
         };
 
         const EMAILJS_PUBLIC_KEY = "2VeSFXHu7Jhf2qE-O";
         const EMAILJS_SERVICE_ID = "service_0pgs1vp"; 
         const EMAILJS_TEMPLATE_ID = "template_tq4bhu7";
 
-        const ADMIN_TOKEN = "soferadmin"; 
-        // ************************************************************
-
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
         emailjs.init(EMAILJS_PUBLIC_KEY);
 
         let folderHistory = [{ id: START_FOLDER_ID, name: "Home" }];
-        let playerInstance = null;
-        let isAdmin = false;
-        let savedThumbnails = {};
-        let quillEditor = null;
-        
-        let loggedInUserEmail = "";
-        let loggedInUserName = "User";
-        let generatedVerificationCode = ""; 
-        let currentPlayingFileId = null;
-        let currentSearchTimeout = null;
-        let isPipActive = false;
-
+        let playerInstance = null; let isAdmin = false; let savedThumbnails = {}; let quillEditor = null;
+        let loggedInUserEmail = ""; let loggedInUserName = "User"; let currentPlayingFileId = null;
+        let currentSearchTimeout = null; let isPipActive = false; let generatedVerificationCode = "";
         let currentEditingPostId = null;
-
-        function getDeviceFingerprint() {
-            return navigator.userAgent + (navigator.hardwareConcurrency || 2) + (navigator.deviceMemory || 4);
-        }
 
         window.onload = function() {
             const savedEmail = localStorage.getItem('soferUserEmail');
             const savedName = localStorage.getItem('soferUserName') || "Approved User";
-            if (savedEmail) { 
-                loggedInUserEmail = savedEmail; loggedInUserName = savedName;
-                autoLogin(savedEmail); 
-            }
+            if (savedEmail) { loggedInUserEmail = savedEmail; loggedInUserName = savedName; autoLogin(savedEmail); }
+            const savedTheme = localStorage.getItem('sofer_theme'); if(savedTheme) changeTheme(savedTheme);
             listenForUpdates();
-            updateFavMenuButtonVisibility();
-            
-            // לאדען די היסטארישע טעמע וואס דער יוזער האט אויסגעקליקט
-            const savedTheme = localStorage.getItem('sofer_theme');
-            if(savedTheme) changeTheme(savedTheme);
-
-            document.addEventListener('click', () => { document.getElementById('themePickerPanel').style.display = 'none'; });
         };
 
-        // --- Theme Selector Logic ---
-        function toggleThemePanel(e) {
-            e.stopPropagation();
-            const panel = document.getElementById('themePickerPanel');
-            panel.style.display = (panel.style.display === 'flex') ? 'none' : 'flex';
+        function toggleOptionsDrawer(open) {
+            const menu = document.getElementById('optionsSlideMenu');
+            if(open) menu.classList.add('open'); else menu.classList.remove('open');
         }
+
         function changeTheme(theme) {
             document.body.className = '';
             if(theme !== 'modern-blue') document.body.classList.add('theme-' + theme);
             localStorage.setItem('sofer_theme', theme);
         }
 
-        // --- Picture in Picture Mode (🗕) ---
         function togglePipMode() {
             const modal = document.getElementById('playerModal');
-            if(!isPipActive) {
-                modal.classList.add('pip-mode');
-                isPipActive = true;
-            } else {
-                modal.classList.remove('pip-mode');
-                isPipActive = false;
-            }
+            if(!isPipActive) { modal.classList.add('pip-mode'); isPipActive = true; } 
+            else { modal.classList.remove('pip-mode'); isPipActive = false; }
         }
 
         function showAppPage(page) {
@@ -436,19 +391,9 @@
             document.getElementById('updatesPage').style.display = 'none';
             document.getElementById('favoritesPage').style.display = 'none';
             
-            if(page === 'updates') {
-                document.getElementById('updatesMenuBtn').classList.remove('badge-red');
-                document.getElementById('updatesPage').style.display = 'block';
-                loadBlogPosts();
-            } else if(page === 'favorites') {
-                document.getElementById('favoritesPage').style.display = 'block';
-                renderFavorites();
-            } else {
-                document.getElementById('librarySection').style.display = 'block';
-                renderContinueWatching();
-                loadTrendingVideos();
-            }
-            updateFavMenuButtonVisibility();
+            if(page === 'updates') { document.getElementById('updatesPage').style.display = 'block'; loadBlogPosts(); } 
+            else if(page === 'favorites') { document.getElementById('favoritesPage').style.display = 'block'; renderFavorites(); } 
+            else { document.getElementById('librarySection').style.display = 'block'; renderContinueWatching(); loadTrendingVideos(); }
         }
 
         function togglePanels(showRequest) {
@@ -459,7 +404,7 @@
         function sendVerificationCode() {
             const name = document.getElementById('reqName').value.trim();
             const email = document.getElementById('reqEmail').value.trim().toLowerCase();
-            if (!name || !email) { alert('Please fill in your Name and Email first.'); return; }
+            if (!name || !email) { alert('Please fill in Name and Email first.'); return; }
 
             generatedVerificationCode = Math.floor(100000 + Math.random() * 900000).toString();
             document.getElementById('sendOtpBtn').innerText = "Sending...";
@@ -467,10 +412,9 @@
             emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
                 to_name: name, to_email: email, verification_code: generatedVerificationCode
             }).then(() => {
-                alert(`Code sent to ${email}. Check your inbox!`);
+                alert(`Code sent to ${email}.`);
                 document.getElementById('sendOtpBtn').style.display = "none";
                 document.getElementById('reqOtpInput').style.display = "block";
-                document.getElementById('spamNotice').style.display = "block";
                 document.getElementById('verifyOtpBtn').style.display = "block";
             }, () => { document.getElementById('sendOtpBtn').innerText = "Get Code"; });
         }
@@ -478,42 +422,30 @@
         function verifyInsertedCode() {
             const insertedCode = document.getElementById('reqOtpInput').value.trim();
             if (insertedCode === generatedVerificationCode && generatedVerificationCode !== "") {
-                alert('Email verified! Submit your request.');
+                alert('Email verified!');
                 const submitBtn = document.getElementById('finalSubmitBtn');
-                submitBtn.disabled = false;
-                submitBtn.style.backgroundColor = "var(--drive-blue)";
-                submitBtn.style.cursor = "pointer";
-                submitBtn.innerText = "Submit Request";
-                document.getElementById('reqOtpInput').disabled = true;
-                document.getElementById('verifyOtpBtn').style.display = "none";
-                document.getElementById('spamNotice').style.display = "none";
+                submitBtn.disabled = false; submitBtn.style.backgroundColor = "var(--drive-blue)"; submitBtn.innerText = "Submit Request";
             } else { alert('Invalid code!'); }
+        }
+
+        async function submitAccessRequest() {
+            const name = document.getElementById('reqName').value.trim(); const email = document.getElementById('reqEmail').value.trim().toLowerCase(); const note = document.getElementById('reqNote').value.trim();
+            await db.collection('access_requests').doc(email).set({ name: name, email: email, note: note, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
+            alert('Request submitted!'); togglePanels(false);
         }
 
         async function checkAccess() {
             const input = document.getElementById('accessEmailInput').value.trim().toLowerCase();
-            if (!input) { alert('Please enter an email.'); return; }
-
-            if (input === ADMIN_TOKEN || input === "mw6559154@gmail.com") {
-                isAdmin = true; loggedInUserEmail = "mw6559154@gmail.com"; loggedInUserName = "Platform Administrator";
-                localStorage.setItem('soferUserEmail', "mw6559154@gmail.com"); localStorage.setItem('soferUserName', "Platform Administrator");
-                unlockApp(); return;
-            }
-
+            if (input === "mw6559154@gmail.com" || input === "soferadmin") { isAdmin = true; loggedInUserEmail = "mw6559154@gmail.com"; unlockApp(); return; }
             const userDoc = await db.collection('allowed_users').doc(input).get();
             if (userDoc.exists && userDoc.data().approved) {
-                const currentDevice = getDeviceFingerprint(); const userData = userDoc.data();
-                if (userData.deviceId && userData.deviceId !== currentDevice) { alert('Linked to another device.'); return; }
-                if (!userData.deviceId) { await db.collection('allowed_users').doc(input).update({ deviceId: currentDevice }); }
-                isAdmin = false; loggedInUserEmail = input; loggedInUserName = userData.name || "Approved User";
+                isAdmin = false; loggedInUserEmail = input; loggedInUserName = userDoc.data().name || "Approved User";
                 localStorage.setItem('soferUserEmail', input); localStorage.setItem('soferUserName', loggedInUserName);
                 unlockApp();
             } else { alert('Access Denied.'); }
         }
 
-        function autoLogin(email) {
-            if (email === "mw6559154@gmail.com") { isAdmin = true; unlockApp(); } else { unlockApp(); }
-        }
+        function autoLogin(email) { if (email === "mw6559154@gmail.com") { isAdmin = true; unlockApp(); } else { unlockApp(); } }
 
         async function unlockApp() {
             document.getElementById('lockScreen').style.display = 'none';
@@ -521,42 +453,16 @@
             if(isAdmin) {
                 document.getElementById('adminPanelBtn').style.display = 'block';
                 document.getElementById('adminEditorBox').style.display = 'block';
-                quillEditor = new Quill('#editor-container', {
-                    modules: { toolbar: [['bold', 'italic', 'underline'], [{ 'color': [] }, { 'background': [] }], ['image', 'link']] },
-                    theme: 'snow'
-                });
+                quillEditor = new Quill('#editor-container', { modules: { toolbar: [['bold', 'italic', 'underline']] }, theme: 'snow' });
             }
-            document.getElementById('userDisplayBadge').innerText = `${loggedInUserName} (${loggedInUserEmail})`;
+            document.getElementById('userDisplayBadge').innerText = `${loggedInUserName}`;
             
-            playerInstance = videojs('my-video', {
-                playbackRates: [0.5, 1, 1.25, 1.5, 1.75, 2],
-                responsive: true,
-                fluid: true,
-                controlBar: {
-                    children: [
-                        'playToggle',
-                        'volumePanel',
-                        'currentTimeDisplay',
-                        'timeDivider',
-                        'durationDisplay',
-                        'progressControl',
-                        'liveDisplay',
-                        'playbackRateMenuButton',
-                        'subsCapsButton',
-                        'audioTrackButton',
-                        'fullscreenToggle'
-                    ]
-                }
-            });
-
+            playerInstance = videojs('my-video', { playbackRates: [0.5, 1, 1.25, 1.5, 2], responsive: true, fluid: true });
             playerInstance.on('timeupdate', function() {
                 if (currentPlayingFileId && playerInstance.duration()) {
                     const progress = (playerInstance.currentTime() / playerInstance.duration()) * 100;
-                    if (progress > 2 && progress < 98) {
-                        saveVideoProgress(currentPlayingFileId, playerInstance.currentTime(), playerInstance.duration());
-                    } else if (progress >= 98) {
-                        clearVideoProgress(currentPlayingFileId);
-                    }
+                    if (progress > 2 && progress < 98) saveVideoProgress(currentPlayingFileId, playerInstance.currentTime(), playerInstance.duration());
+                    else if (progress >= 98) clearVideoProgress(currentPlayingFileId);
                 }
             });
 
@@ -569,86 +475,81 @@
             setTimeout(() => { setupCustomButtons(); }, 1000);
         }
 
-        // --- פולע גלאבאלע סעירטש פונעם גאנצן גוגל דרייוו ---
+        /* --- גלאבאלע סעירטש סיסטעם --- */
         function filterGlobalCloudContent() {
             clearTimeout(currentSearchTimeout);
             const query = document.getElementById('cloudSearchInput').value.toLowerCase().trim();
             
             if(query === "") {
                 const curFolder = folderHistory[folderHistory.length - 1] || { id: START_FOLDER_ID, name: "Home" };
-                folderHistory.pop(); 
-                loadFolder(curFolder.id, curFolder.name);
-                return;
+                folderHistory.pop(); loadFolder(curFolder.id, curFolder.name); return;
             }
 
             currentSearchTimeout = setTimeout(async () => {
                 const foldersGrid = document.getElementById('foldersGrid');
                 const videosGrid = document.getElementById('videosGrid');
-                foldersGrid.innerHTML = 'Searching entire cloud architecture...';
-                videosGrid.innerHTML = 'Searching entire cloud architecture...';
+                foldersGrid.innerHTML = '<p>Searching total system cloud archive...</p>';
+                videosGrid.innerHTML = '<p>Searching total system cloud archive...</p>';
 
                 try {
                     const escapedQuery = query.replace(/'/g, "\\'");
-                    // זוכט יעדע זאך אינעם גאנצן דרייוו וואס קומט פונעםSTART_FOLDER_ID
                     const url = `https://www.googleapis.com/drive/v3/files?q=name+contains+'${escapedQuery}'+and+trashed=false&fields=files(id,name,mimeType,thumbnailLink)&key=${API_KEY}`;
-                    const res = await fetch(url);
-                    const data = await res.json();
+                    const res = await fetch(url); const data = await res.json();
                     
-                    foldersGrid.innerHTML = '';
-                    videosGrid.innerHTML = '';
+                    foldersGrid.innerHTML = ''; videosGrid.innerHTML = '';
                     let favs = JSON.parse(localStorage.getItem('sofer_favs') || '[]');
 
                     if (data.files && data.files.length > 0) {
                         data.files.forEach(file => {
                             const card = document.createElement('div');
-                            card.setAttribute('data-id', file.id);
-                            card.setAttribute('data-name', file.name);
+                            card.setAttribute('data-id', file.id); card.setAttribute('data-name', file.name);
                             card.setAttribute('data-thumb', savedThumbnails[file.id] || file.thumbnailLink || '');
-                            const adminStyle = isAdmin ? 'style="display:block;"' : '';
-                            const adminOverlay = `<div class="admin-card-overlay" ${adminStyle} onclick="changeThumbnailPrompt('${file.id}', event)">⚙️ Edit Thumbnail</div>`;
-                            const currentThumb = savedThumbnails[file.id] || file.thumbnailLink;
                             const isFav = favs.some(f => f.id === file.id) ? '❤️' : '🤍';
+                            const adminOverlayHtml = isAdmin ? `<div class="admin-card-overlay" style="display:block;" onclick="changeThumbnailPrompt('${file.id}', event)">⚙️ Thumbnail</div><div class="admin-popular-overlay" style="display:block;" onclick="markAsPopularManual('${file.id}', '${file.name.replace(/'/g, "\\'")}', event)">⭐ Set Popular</div>` : '';
 
                             if (file.mimeType === 'application/vnd.google-apps.folder') {
                                 card.className = 'card folder';
                                 card.onclick = () => { document.getElementById('cloudSearchInput').value = ''; loadFolder(file.id, file.name); };
-                                card.innerHTML = `${adminOverlay}<div class="thumbnail-placeholder" id="thumb-${file.id}">${savedThumbnails[file.id] ? `<img src="${savedThumbnails[file.id]}" style="width:100%;height:100%;object-fit:cover;">` : '📁'}</div><div class="card-info"><p class="card-title">${file.name}</p></div>`;
+                                card.innerHTML = `${adminOverlayHtml}<div class="thumbnail-placeholder">${savedThumbnails[file.id] ? `<img src="${savedThumbnails[file.id]}" style="width:100%;height:100%;object-fit:cover;">` : '📁'}</div><div class="card-info"><p class="card-title">${file.name}</p></div>`;
                                 foldersGrid.appendChild(card);
                             } else if (file.mimeType.startsWith('video/')) {
                                 card.className = 'card video';
-                                card.onclick = (e) => { if(!e.target.classList.contains('download-icon-btn') && !e.target.classList.contains('admin-card-overlay') && !e.target.classList.contains('fav-btn')) playVideo(file.id); };
-                                card.innerHTML = `${adminOverlay}<button class="fav-btn" onclick="toggleFavorite('${file.id}', event)">${isFav}</button><div class="thumbnail-placeholder" id="thumb-${file.id}"><img src="${currentThumb || '🎬'}" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='https://via.placeholder.com/220x130?text=Video'"></div><div class="card-info"><p class="card-title">${file.name}</p></div><button class="download-icon-btn" onclick="downloadVideo('${file.id}')">↓</button>`;
+                                card.onclick = (e) => { if(!e.target.classList.contains('download-icon-btn') && !e.target.classList.contains('admin-card-overlay') && !e.target.classList.contains('admin-popular-overlay') && !e.target.classList.contains('fav-btn')) playVideo(file.id); };
+                                card.innerHTML = `${adminOverlayHtml}<button class="fav-btn" onclick="toggleFavorite('${file.id}', event)">${isFav}</button><div class="thumbnail-placeholder"><img src="${savedThumbnails[file.id] || file.thumbnailLink || '🎬'}" style="width:100%;height:100%;object-fit:cover;"></div><div class="card-info"><p class="card-title">${file.name}</p></div><button class="download-icon-btn" onclick="downloadVideo('${file.id}')">↓</button>`;
                                 videosGrid.appendChild(card);
                             }
                         });
                     }
-                    if(foldersGrid.innerHTML === '') foldersGrid.innerHTML = '<p>No matching folders found.</p>';
-                    if(videosGrid.innerHTML === '') videosGrid.innerHTML = '<p>No matching videos found.</p>';
+                    if(foldersGrid.innerHTML === '') foldersGrid.innerHTML = '<p>No folders found matching search.</p>';
+                    if(videosGrid.innerHTML === '') videosGrid.innerHTML = '<p>No videos found matching search.</p>';
                 } catch (e) {}
-            }, 500);
+            }, 600);
         }
 
-        // --- האלט מיט וואו דו האלטסט ---
+        async function markAsPopularManual(fileId, title, event) {
+            event.stopPropagation();
+            const cardEl = document.querySelector(`[data-id="${fileId}"]`);
+            const thumb = cardEl ? cardEl.getAttribute('data-thumb') : '';
+            await db.collection('trending_videos').doc(fileId).set({ title: title, thumb: thumb || '', views: 100 });
+            alert('Pinned to Trending & Popular list!'); loadTrendingVideos();
+        }
+
         function saveVideoProgress(fileId, time, duration) {
             let progressList = JSON.parse(localStorage.getItem('sofer_progress') || '{}');
             const cardEl = document.querySelector(`[data-id="${fileId}"]`);
             const title = cardEl ? cardEl.getAttribute('data-name') : 'Video';
             const thumb = cardEl ? cardEl.getAttribute('data-thumb') : '';
-
             progressList[fileId] = { time: time, duration: duration, title: title, thumb: thumb, timestamp: Date.now() };
             localStorage.setItem('sofer_progress', JSON.stringify(progressList));
         }
 
         function clearVideoProgress(fileId) {
             let progressList = JSON.parse(localStorage.getItem('sofer_progress') || '{}');
-            delete progressList[fileId];
-            localStorage.setItem('sofer_progress', JSON.stringify(progressList));
+            delete progressList[fileId]; localStorage.setItem('sofer_progress', JSON.stringify(progressList));
         }
 
         function removeContinueItem(fileId, event) {
-            event.stopPropagation();
-            clearVideoProgress(fileId);
-            renderContinueWatching();
+            event.stopPropagation(); clearVideoProgress(fileId); renderContinueWatching();
         }
 
         function renderContinueWatching() {
@@ -656,28 +557,22 @@
             const wrapper = document.getElementById('continueWatchingWrapper');
             const currentFolder = folderHistory[folderHistory.length - 1];
             
-            if (!currentFolder || currentFolder.id !== START_FOLDER_ID) {
-                wrapper.style.display = 'none';
-                return;
-            }
-
+            if (!currentFolder || currentFolder.id !== START_FOLDER_ID) { wrapper.style.display = 'none'; return; }
             container.innerHTML = '';
             let progressList = JSON.parse(localStorage.getItem('sofer_progress') || '{}');
-            let items = Object.keys(progressList).sort((a,b) => progressList[b].timestamp - progressList[a].timestamp);
+            let items = Object.keys(progressList);
 
             if (items.length === 0) { wrapper.style.display = 'none'; return; }
             wrapper.style.display = 'block';
 
             items.forEach(id => {
-                const item = progressList[id];
-                const pct = (item.time / item.duration) * 100;
-                const card = document.createElement('div');
-                card.className = 'card video';
+                const item = progressList[id]; const pct = (item.time / item.duration) * 100;
+                const card = document.createElement('div'); card.className = 'card video';
                 card.onclick = () => { playVideo(id); setTimeout(() => { playerInstance.currentTime(item.time); }, 800); };
                 card.innerHTML = `
                     <button class="close-continue-btn" onclick="removeContinueItem('${id}', event)">×</button>
                     <div class="thumbnail-placeholder">
-                        <img src="${item.thumb || '🎬'}" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='https://via.placeholder.com/220x130?text=Video'">
+                        <img src="${item.thumb || '🎬'}" style="width:100%;height:100%;object-fit:cover;">
                         <div class="continue-progress-bg"><div class="continue-progress-fill" style="width: ${pct}%"></div></div>
                     </div>
                     <div class="card-info"><p class="card-title">${item.title}</p></div>
@@ -686,438 +581,118 @@
             });
         }
 
-        // --- Trending / Popular Top 5 Logic ---
-        async function incrementVideoViewCount(fileId, title, thumb) {
-            const ref = db.collection('trending_videos').doc(fileId);
-            const doc = await ref.get();
-            if(!doc.exists) {
-                await ref.set({ title: title, thumb: thumb || '', views: 1 });
-            } else {
-                await ref.update({ views: firebase.firestore.FieldValue.increment(1) });
-            }
-        }
         function loadTrendingVideos() {
             const container = document.getElementById('trendingGrid');
             const currentFolder = folderHistory[folderHistory.length - 1];
-            
-            if (!currentFolder || currentFolder.id !== START_FOLDER_ID) {
-                document.getElementById('trendingVideosWrapper').style.display = 'none';
-                return;
-            }
+            if (!currentFolder || currentFolder.id !== START_FOLDER_ID) { document.getElementById('trendingVideosWrapper').style.display = 'none'; return; }
             document.getElementById('trendingVideosWrapper').style.display = 'block';
 
             db.collection('trending_videos').orderBy('views', 'desc').limit(5).onSnapshot(snap => {
                 container.innerHTML = '';
-                if(snap.empty) { container.innerHTML = '<p>No trending media recorded yet.</p>'; return; }
+                if(snap.empty) { container.innerHTML = '<p>No popular trends pinned by Administrator.</p>'; return; }
                 snap.forEach(doc => {
-                    const data = doc.data();
-                    const card = document.createElement('div');
-                    card.className = 'card video';
+                    const data = doc.data(); const card = document.createElement('div'); card.className = 'card video';
                     card.onclick = () => playVideo(doc.id);
-                    card.innerHTML = `
-                        <div class="thumbnail-placeholder">
-                            <img src="${data.thumb || '🎬'}" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='https://via.placeholder.com/220x130?text=Video'">
-                            <div style="position:absolute; top:5px; left:5px; background:rgba(0,0,0,0.7); padding:2px 6px; border-radius:4px; font-size:11px; color:var(--drive-yellow);">🔥 ${data.views} views</div>
-                        </div>
-                        <div class="card-info"><p class="card-title">${data.title}</p></div>
-                    `;
+                    card.innerHTML = `<div class="thumbnail-placeholder"><img src="${data.thumb || '🎬'}" style="width:100%;height:100%;object-fit:cover;"></div><div class="card-info"><p class="card-title">${data.title}</p></div>`;
                     container.appendChild(card);
                 });
             });
         }
 
-        // --- קאמענטארן און רעאקציעס פאר ווידעאוס ---
+        /* --- קאמענטארן לאגיק אונטער ווידעאוס --- */
         function loadVideoCommentsAndReactions(fileId) {
-            // רעאקציעס רודערן
             const recRow = document.getElementById('videoReactionsRow');
             db.collection('video_metadata').doc(fileId).onSnapshot(doc => {
-                recRow.innerHTML = '';
-                const data = doc.exists ? doc.data() : {};
-                const list = ['thumb', 'heart', 'fire', 'wow'];
-                const map = { thumb: '👍', heart: '❤️', fire: '🔥', wow: '😮' };
-                
-                list.forEach(type => {
+                recRow.innerHTML = ''; const data = doc.exists ? doc.data() : {};
+                ['thumb', 'heart', 'fire', 'wow'].forEach(type => {
                     const count = data['react_' + type] ? Object.keys(data['react_' + type]).length : 0;
-                    const users = data['react_' + type] ? Object.values(data['react_' + type]).join(', ') : 'No reactions';
-                    recRow.innerHTML += `
-                        <button class="react-btn" onclick="toggleVideoReaction('${fileId}', '${type}')">
-                            ${map[type]} <span>${count}</span>
-                            <div class="react-tooltip">Reacted: ${users}</div>
-                        </button>
-                    `;
+                    recRow.innerHTML += `<button class="react-btn" onclick="toggleVideoReaction('${fileId}', '${type}')">${type==='thumb'?'👍':type==='heart'?'❤️':type==='fire'?'🔥':'😮'} <span>${count}</span></button>`;
                 });
             });
-
-            // קאמענטארן רענדערן
             const comList = document.getElementById('videoCommentsList');
             db.collection('video_metadata').doc(fileId).collection('comments').orderBy('timestamp', 'asc').onSnapshot(snap => {
-                comList.innerHTML = '';
-                if(snap.empty) { comList.innerHTML = '<p style="color:var(--text-muted); font-size:13px;">No comments on this video yet.</p>'; return; }
-                snap.forEach(cDoc => {
-                    const c = cDoc.data();
-                    comList.innerHTML += `
-                        <div class="comment-box" style="margin-top:5px; padding:8px;">
-                            <div class="comment-meta"><span class="comment-user">${c.userName}</span></div>
-                            <div class="comment-text" style="margin-bottom:0; font-size:13px;">${c.text}</div>
-                        </div>
-                    `;
-                });
+                comList.innerHTML = ''; if(snap.empty) { comList.innerHTML = '<p style="font-size:12px; color:var(--text-muted);">No comments yet.</p>'; return; }
+                snap.forEach(cDoc => { const c = cDoc.data(); comList.innerHTML += `<div class="comment-box"><div class="comment-meta"><span class="comment-user">${c.userName}</span></div><div class="comment-text">${c.text}</div></div>`; });
             });
         }
+
         async function toggleVideoReaction(fileId, type) {
-            const ref = db.collection('video_metadata').doc(fileId);
-            const doc = await ref.get();
-            let data = doc.exists ? doc.data() : {};
-            let current = data['react_' + type] || {};
-            if(current[loggedInUserEmail]) { delete current[loggedInUserEmail]; } 
-            else { current[loggedInUserEmail] = loggedInUserName; }
+            const ref = db.collection('video_metadata').doc(fileId); const doc = await ref.get();
+            let data = doc.exists ? doc.data() : {}; let current = data['react_' + type] || {};
+            if(current[loggedInUserEmail]) delete current[loggedInUserEmail]; else current[loggedInUserEmail] = loggedInUserName;
             await ref.set({ ['react_' + type]: current }, { merge: true });
         }
+
         async function submitVideoComment() {
-            const input = document.getElementById('videoCommentInput');
-            const text = input.value.trim(); if(!text) return;
-            await db.collection('video_metadata').doc(currentPlayingFileId).collection('comments').add({
-                userName: loggedInUserName, userEmail: loggedInUserEmail, text: text, timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            });
+            const input = document.getElementById('videoCommentInput'); const text = input.value.trim(); if(!text) return;
+            await db.collection('video_metadata').doc(currentPlayingFileId).collection('comments').add({ userName: loggedInUserName, text: text, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
             input.value = '';
         }
 
-        // --- פייוואריטס אפציעס ---
         function toggleFavorite(fileId, event) {
-            event.stopPropagation();
-            let favs = JSON.parse(localStorage.getItem('sofer_favs') || '[]');
+            event.stopPropagation(); let favs = JSON.parse(localStorage.getItem('sofer_favs') || '[]');
             const cardEl = document.querySelector(`[data-id="${fileId}"]`);
             const title = cardEl ? cardEl.getAttribute('data-name') : 'Video';
             const thumb = cardEl ? cardEl.getAttribute('data-thumb') : '';
-            
             const index = favs.findIndex(f => f.id === fileId);
-            
-            if (index === -1) {
-                favs.push({ id: fileId, title: title, thumb: thumb });
-                event.target.innerText = '❤️';
-            } else {
-                favs.splice(index, 1);
-                event.target.innerText = '🤍';
-            }
+            if (index === -1) { favs.push({ id: fileId, title: title, thumb: thumb }); event.target.innerText = '❤️'; } 
+            else { favs.splice(index, 1); event.target.innerText = '🤍'; }
             localStorage.setItem('sofer_favs', JSON.stringify(favs));
-            updateFavMenuButtonVisibility();
-        }
-
-        function updateFavMenuButtonVisibility() {
-            let favs = JSON.parse(localStorage.getItem('sofer_favs') || '[]');
-            const currentFolder = folderHistory[folderHistory.length - 1];
-            const btn = document.getElementById('favMenuBtn');
-            
-            if(favs.length > 0 && currentFolder && currentFolder.id === START_FOLDER_ID) {
-                btn.style.display = 'inline-block';
-            } else {
-                btn.style.display = 'none';
-            }
         }
 
         function renderFavorites() {
-            const container = document.getElementById('favoritesGrid');
-            container.innerHTML = '';
-
+            const container = document.getElementById('favoritesGrid'); container.innerHTML = '';
             let favs = JSON.parse(localStorage.getItem('sofer_favs') || '[]');
             if (favs.length === 0) { container.innerHTML = '<p>No favorites added yet.</p>'; return; }
-
             favs.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'card video';
-                card.onclick = () => playVideo(item.id);
-                card.innerHTML = `
-                    <button class="fav-btn" onclick="toggleFavorite('${item.id}', event); renderFavorites();">❤️</button>
-                    <div class="thumbnail-placeholder">
-                        <img src="${item.thumb || '🎬'}" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='https://via.placeholder.com/220x130?text=Video'">
-                    </div>
-                    <div class="card-info"><p class="card-title">${item.title}</p></div>
-                    <button class="download-icon-btn" onclick="downloadVideo('${item.id}')">↓</button>
-                `;
+                const card = document.createElement('div'); card.className = 'card video'; card.onclick = () => playVideo(item.id);
+                card.innerHTML = `<button class="fav-btn" onclick="toggleFavorite('${item.id}', event); renderFavorites();">❤️</button><div class="thumbnail-placeholder"><img src="${item.thumb || '🎬'}" style="width:100%;height:100%;object-fit:cover;"></div><div class="card-info"><p class="card-title">${item.title}</p></div>`;
                 container.appendChild(card);
             });
         }
 
+        /* --- קאמיוניטי פארום לאגיק --- */
         async function publishAdminUpdate() {
-            const htmlContent = quillEditor.root.innerHTML;
-            if(quillEditor.getText().trim().length === 0) { alert('Please write something first.'); return; }
-
-            if(currentEditingPostId) {
-                await db.collection('forum_posts').doc(currentEditingPostId).update({ content: htmlContent });
-                cancelAdminEditing();
-            } else {
-                await db.collection('forum_posts').add({
-                    content: htmlContent,
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                });
-            }
-            quillEditor.setText('');
-            loadBlogPosts();
-        }
-
-        function setupRichEditMainPost(postId, currentHtml) {
-            currentEditingPostId = postId;
-            quillEditor.root.innerHTML = currentHtml;
-            document.getElementById('editorBoxTitle').innerText = "✏️ Edit Existing Update";
-            document.getElementById('submitPostBtn').innerText = "Save Changes";
-            document.getElementById('submitPostBtn').style.backgroundColor = "var(--drive-yellow)";
-            document.getElementById('cancelEditBtn').style.display = "inline-block";
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function cancelAdminEditing() {
-            currentEditingPostId = null;
-            quillEditor.setText('');
-            document.getElementById('editorBoxTitle').innerText = "Publish a Rich Update";
-            document.getElementById('submitPostBtn').innerText = "Publish Post";
-            document.getElementById('submitPostBtn').style.backgroundColor = "var(--drive-green)";
-            document.getElementById('cancelEditBtn').style.display = "none";
-        }
-
-        async function deleteMainPost(postId) {
-            if(confirm("Are you sure you want to delete this main update permanently?")) {
-                await db.collection('forum_posts').doc(postId).delete();
-                loadBlogPosts();
-            }
+            const htmlContent = quillEditor.root.innerHTML; if(quillEditor.getText().trim().length === 0) return;
+            await db.collection('forum_posts').add({ content: htmlContent, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
+            quillEditor.setText(''); loadBlogPosts();
         }
 
         function loadBlogPosts() {
-            const listContainer = document.getElementById('blogPostsList');
-            listContainer.innerHTML = 'Loading threads...';
+            const listContainer = document.getElementById('blogPostsList'); listContainer.innerHTML = 'Loading threads...';
             db.collection('forum_posts').orderBy('timestamp', 'desc').onSnapshot(snapshot => {
                 listContainer.innerHTML = '';
                 snapshot.forEach(doc => {
                     const postData = doc.data(); const postId = doc.id;
                     const timeString = postData.timestamp ? postData.timestamp.toDate().toLocaleString() : 'Just now';
-                    
-                    const emojiList = ['thumb', 'heart', 'laugh', 'wow', 'sad', 'fire', 'party', 'pray'];
-                    let emojiCounts = {};
-                    let emojiUsers = {};
-                    
-                    emojiList.forEach(type => {
-                        emojiCounts[type] = postData['react_' + type] ? Object.keys(postData['react_' + type]).length : 0;
-                        emojiUsers[type] = postData['react_' + type] ? Object.values(postData['react_' + type]).join(', ') : 'No one yet';
-                    });
-
-                    const adminActionsHtml = isAdmin ? `
-                        <div style="display:inline-flex; gap:10px; margin-left:15px;">
-                            <span class="action-link" onclick="setupRichEditMainPost('${postId}', \`${postData.content.replace(/`/g, "\\`").replace(/\${/g, "\\${")}\`)">Edit Update</span>
-                            <span class="action-link delete-link" onclick="deleteMainPost('${postId}')">Delete Update</span>
-                        </div>
-                    ` : '';
-
-                    const postElement = document.createElement('div');
-                    postElement.className = 'blog-post';
+                    const postElement = document.createElement('div'); postElement.className = 'blog-post';
                     postElement.innerHTML = `
-                        <div class="blog-time">
-                            <span>📅 Published: ${timeString} ${adminActionsHtml}</span>
-                        </div>
+                        <div class="blog-time"><span>📅 Published: ${timeString}</span></div>
                         <div class="blog-body">${postData.content}</div>
-                        
-                        <div class="reaction-row" style="margin-top:15px; border-bottom: 1px dashed #25334a; padding-bottom:15px;">
-                            <button class="react-btn" onclick="toggleMainPostReaction('${postId}', 'thumb')">👍 <span>${emojiCounts['thumb']}</span><div class="react-tooltip">Liked by: ${emojiUsers['thumb']}</div></button>
-                            <button class="react-btn" onclick="toggleMainPostReaction('${postId}', 'heart')">❤️ <span>${emojiCounts['heart']}</span><div class="react-tooltip">Loved by: ${emojiUsers['heart']}</div></button>
-                            <button class="react-btn" onclick="toggleMainPostReaction('${postId}', 'laugh')">😂 <span>${emojiCounts['laugh']}</span><div class="react-tooltip">Reacted by: ${emojiUsers['laugh']}</div></button>
-                            <button class="react-btn" onclick="toggleMainPostReaction('${postId}', 'wow')">😮 <span>${emojiCounts['wow']}</span><div class="react-tooltip">Reacted by: ${emojiUsers['wow']}</div></button>
-                            <button class="react-btn" onclick="toggleMainPostReaction('${postId}', 'sad')">😢 <span>${emojiCounts['sad']}</span><div class="react-tooltip">Reacted by: ${emojiUsers['sad']}</div></button>
-                            <button class="react-btn" onclick="toggleMainPostReaction('${postId}', 'fire')">🔥 <span>${emojiCounts['fire']}</span><div class="react-tooltip">Reacted by: ${emojiUsers['fire']}</div></button>
-                            <button class="react-btn" onclick="toggleMainPostReaction('${postId}', 'party')">🎉 <span>${emojiCounts['party']}</span><div class="react-tooltip">Reacted by: ${emojiUsers['party']}</div></button>
-                            <button class="react-btn" onclick="toggleMainPostReaction('${postId}', 'pray')">🙏 <span>${emojiCounts['pray']}</span><div class="react-tooltip">Reacted by: ${emojiUsers['pray']}</div></button>
-                        </div>
-
                         <div class="thread-section">
-                            <h4>Conversation Thread</h4>
                             <div id="comments-list-${postId}">Loading posts...</div>
                             <div class="comment-input-row">
-                                <input type="text" id="input-${postId}" placeholder="Write a message in this thread...">
-                                <button onclick="submitComment('${postId}', 'root')">Post Message</button>
+                                <input type="text" id="input-${postId}" placeholder="Write a message in thread...">
+                                <button onclick="submitComment('${postId}')">Post</button>
                             </div>
-                        </div>
-                    `;
-                    listContainer.appendChild(postElement);
-                    loadCommentsForPost(postId);
+                        </div>`;
+                    listContainer.appendChild(postElement); loadCommentsForPost(postId);
                 });
             });
         }
 
-        async function toggleMainPostReaction(postId, type) {
-            const ref = db.collection('forum_posts').doc(postId);
-            const doc = await ref.get(); if(!doc.exists) return;
-            const data = doc.data();
-            let currentReacts = data['react_' + type] || {};
-            if(currentReacts[loggedInUserEmail]) { delete currentReacts[loggedInUserEmail]; } 
-            else { currentReacts[loggedInUserEmail] = loggedInUserName; }
-            await ref.update({ ['react_' + type]: currentReacts });
-        }
-
-        async function submitComment(postId, parentId) {
-            const inputField = parentId === 'root' ? document.getElementById(`input-${postId}`) : document.getElementById(`inline-input-${parentId}`);
-            const text = inputField.value.trim(); if(!text) return;
-
-            await db.collection('forum_posts').doc(postId).collection('comments').add({
-                userName: loggedInUserName, userEmail: loggedInUserEmail, commentText: text, parentId: parentId,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            });
+        async function submitComment(postId) {
+            const inputField = document.getElementById(`input-${postId}`); const text = inputField.value.trim(); if(!text) return;
+            await db.collection('forum_posts').doc(postId).collection('comments').add({ userName: loggedInUserName, commentText: text, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
             inputField.value = '';
-            if(parentId !== 'root') document.getElementById(`inline-replybox-${parentId}`).style.display = "none";
         }
 
         function loadCommentsForPost(postId) {
             const container = document.getElementById(`comments-list-${postId}`);
             db.collection('forum_posts').doc(postId).collection('comments').orderBy('timestamp', 'asc').onSnapshot(snap => {
-                container.innerHTML = '';
-                if(snap.empty) { container.innerHTML = '<p style="color:var(--text-muted); font-size:13px; margin:0;">No comments in this thread yet.</p>'; return; }
-                
-                let commentMap = {}; let rootComments = [];
-                snap.forEach(cDoc => {
-                    let data = cDoc.data(); data.id = cDoc.id; data.replies = [];
-                    commentMap[data.id] = data;
-                    if (data.parentId === 'root' || !data.parentId) { rootComments.push(data); }
-                });
-                snap.forEach(cDoc => {
-                    let data = commentMap[cDoc.id];
-                    if (data.parentId && data.parentId !== 'root' && commentMap[data.parentId]) {
-                        commentMap[data.parentId].replies.push(data);
-                    }
-                });
-                rootComments.forEach(rootComment => { buildRecursiveHTMLNode(container, rootComment, postId); });
+                container.innerHTML = ''; if(snap.empty) { container.innerHTML = '<p style="font-size:12px; color:var(--text-muted);">No thread replies yet.</p>'; return; }
+                snap.forEach(cDoc => { const c = cDoc.data(); container.innerHTML += `<div class="comment-box"><div class="comment-meta"><span class="comment-user">${c.userName}</span></div><div class="comment-text">${c.commentText}</div></div>`; });
             });
-        }
-
-        function buildRecursiveHTMLNode(parentElement, c, postId) {
-            const cTime = c.timestamp ? c.timestamp.toDate().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'Now';
-            const emojiList = ['thumb', 'heart', 'laugh', 'wow', 'sad', 'fire', 'party', 'pray'];
-            let emojiButtonsHtml = '';
-            const emojisMap = { thumb: '👍', heart: '❤️', laugh: '😂', wow: '😮', sad: '😢', fire: '🔥', party: '🎉', pray: '🙏' };
-            
-            emojiList.forEach(type => {
-                const count = c['react_' + type] ? Object.keys(c['react_' + type]).length : 0;
-                const users = c['react_' + type] ? Object.values(c['react_' + type]).join(', ') : 'No one yet';
-                emojiButtonsHtml += `
-                    <button class="react-btn" onclick="toggleReaction('${postId}', '${c.id}', '${type}')">
-                        ${emojisMap[type]} <span>${count}</span>
-                        <div class="react-tooltip">Reacted by: ${users}</div>
-                    </button>
-                `;
-            });
-
-            const isOwner = (c.userEmail === loggedInUserEmail);
-            const editHtml = isOwner ? `<span class="action-link" onclick="editCommentPrompt('${postId}', '${c.id}', '${c.commentText.replace(/'/g, "\\'")}')">Edit</span>` : '';
-            const deleteHtml = (isOwner || isAdmin) ? `<span class="action-link delete-link" onclick="deleteCommentAction('${postId}', '${c.id}')">Delete</span>` : '';
-
-            const wrapper = document.createElement('div'); wrapper.className = 'comment-wrapper';
-            wrapper.innerHTML = `
-                <div class="comment-box">
-                    <div class="comment-meta">
-                        <span class="comment-user">${c.userName} (${c.userEmail}) <span class="comment-actions">${editHtml} ${deleteHtml}</span></span>
-                        <span class="comment-time">${cTime}</span>
-                    </div>
-                    <div class="comment-text">${c.commentText}</div>
-                    <div class="reaction-row">
-                        ${emojiButtonsHtml}
-                        <span class="reply-trigger" onclick="openInlineReplyBox('${postId}', '${c.id}')">Reply</span>
-                    </div>
-                    <div id="inline-replybox-${c.id}" style="margin-top:10px; display:none;"></div>
-                </div>
-            `;
-            const subRepliesContainer = document.createElement('div'); subRepliesContainer.className = 'replies-container';
-            wrapper.appendChild(subRepliesContainer); parentElement.appendChild(wrapper);
-            if (c.replies && c.replies.length > 0) { c.replies.forEach(subReply => { buildRecursiveHTMLNode(subRepliesContainer, subReply, postId); }); }
-        }
-
-        function openInlineReplyBox(postId, commentId) {
-            const box = document.getElementById(`inline-replybox-${commentId}`); box.style.display = "block";
-            box.innerHTML = `<div class="comment-input-row"><input type="text" id="inline-input-${commentId}" placeholder="Reply to this message..."><button onclick="submitComment('${postId}', '${commentId}')">Post Reply</button></div>`;
-        }
-
-        async function editCommentPrompt(postId, commentId, oldText) {
-            const newText = prompt("Edit your message:", oldText);
-            if(newText && newText.trim() !== "") {
-                await db.collection('forum_posts').doc(postId).collection('comments').doc(commentId).update({ commentText: newText.trim() });
-            }
-        }
-
-        async function deleteCommentAction(postId, commentId) {
-            if(confirm("Are you sure you want to delete this message permanently?")) {
-                await db.collection('forum_posts').doc(postId).collection('comments').doc(commentId).delete();
-            }
-        }
-
-        async function toggleReaction(postId, commentId, type) {
-            const ref = db.collection('forum_posts').doc(postId).collection('comments').doc(commentId);
-            const doc = await ref.get(); if(!doc.exists) return; const data = doc.data();
-            let currentReacts = data['react_' + type] || {};
-            if(currentReacts[loggedInUserEmail]) { delete currentReacts[loggedInUserEmail]; } else { currentReacts[loggedInUserEmail] = loggedInUserName; }
-            await ref.update({ ['react_' + type]: currentReacts });
-        }
-
-        async function sendMessageToAdmin() {
-            const text = document.getElementById('footerMessageText').value.trim(); if(!text) { alert('Please type a message.'); return; }
-            await db.collection('admin_messages').add({ name: loggedInUserName, email: loggedInUserEmail, message: text, status: "unread", timestamp: firebase.firestore.FieldValue.serverTimestamp() });
-            alert('Message sent to Admin Panel!'); document.getElementById('footerMessageText').value = ""; 
-        }
-
-        async function markMessageAsRead(msgId, currentStatus) { if(currentStatus === "unread") { await db.collection('admin_messages').doc(msgId).update({ status: "read" }); fetchAdminData(); } }
-
-        function listenForUpdates() {
-            db.collection('access_requests').onSnapshot(snap => { if(!snap.empty && isAdmin) document.getElementById('adminPanelBtn').classList.add('badge-red'); });
-            db.collection('admin_messages').where("status", "==", "unread").onSnapshot(snap => { 
-                if(!snap.empty && isAdmin) { document.getElementById('adminPanelBtn').classList.add('badge-red'); document.getElementById('tabMsgBtn').classList.add('tab-badge-red'); } 
-                else { document.getElementById('tabMsgBtn').classList.remove('tab-badge-red'); }
-            });
-            db.collection('forum_posts').orderBy('timestamp', 'desc').limit(1).onSnapshot(snap => {
-                if(!snap.empty) {
-                    const latestPost = snap.docs[0].data(); const lastViewed = localStorage.getItem('lastViewedPostTime') || 0;
-                    const postTime = latestPost.timestamp ? latestPost.timestamp.toDate().getTime() : Date.now();
-                    if(postTime > lastViewed) { document.getElementById('updatesMenuBtn').classList.add('badge-red'); }
-                }
-            });
-        }
-
-        async function submitAccessRequest() {
-            const name = document.getElementById('reqName').value.trim(); const email = document.getElementById('reqEmail').value.trim().toLowerCase(); const note = document.getElementById('reqNote').value.trim();
-            await db.collection('access_requests').doc(email).set({ name: name, email: email, note: note, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
-            alert('Verified request submitted!'); togglePanels(false);
-        }
-
-        function switchAdminTab(tab) {
-            document.getElementById('tabReqBtn').className = 'tab-btn'; document.getElementById('tabUsersBtn').className = 'tab-btn'; document.getElementById('tabMsgBtn').className = 'tab-btn';
-            document.getElementById('secRequests').className = 'panel-section'; document.getElementById('secUsers').className = 'panel-section'; document.getElementById('secMessages').className = 'panel-section';
-            if(tab === 'requests') { document.getElementById('tabReqBtn').classList.add('active'); document.getElementById('secRequests').classList.add('active'); } 
-            else if(tab === 'users') { document.getElementById('tabUsersBtn').classList.add('active'); document.getElementById('secUsers').classList.add('active'); } 
-            else { document.getElementById('tabMsgBtn').classList.add('active'); document.getElementById('secMessages').className = 'panel-section active'; document.getElementById('tabMsgBtn').classList.remove('tab-badge-red'); }
-        }
-
-        async function openAdminPanel() { document.getElementById('adminPanelBtn').classList.remove('badge-red'); document.getElementById('adminModal').style.display = 'flex'; switchAdminTab('requests'); fetchAdminData(); }
-
-        async function fetchAdminData() {
-            const reqSection = document.getElementById('secRequests'); const usersSection = document.getElementById('secUsers'); const msgSection = document.getElementById('secMessages');
-            reqSection.innerHTML = 'Loading...'; usersSection.innerHTML = 'Loading...'; msgSection.innerHTML = 'Loading...';
-            try {
-                const reqSnapshot = await db.collection('access_requests').get();
-                reqSection.innerHTML = reqSnapshot.empty ? '<p>No pending requests.</p>' : '';
-                reqSnapshot.forEach(doc => { const d = doc.data(); const div = document.createElement('div'); div.className = 'list-item'; div.innerHTML = `<div><strong>${d.name}</strong> (${d.email})</div><button style="cursor:pointer; background:var(--drive-green); color:white; border:none; padding:5px; border-radius:4px;" onclick="approveUser('${d.email}', '${d.name}')">Approve</button>`; reqSection.appendChild(div); });
-
-                const usersSnapshot = await db.collection('allowed_users').get();
-                usersSection.innerHTML = usersSnapshot.empty ? '<p>No active users.</p>' : ''; document.getElementById('userCount').innerText = usersSnapshot.size;
-                usersSnapshot.forEach(doc => { const email = doc.id; const d = doc.data(); const div = document.createElement('div'); div.className = 'list-item approved'; div.innerHTML = `<div><strong>${d.name || 'User'}</strong> (${email})</div><button style="cursor:pointer; background:var(--drive-red); color:white; border:none; padding:5px; border-radius:4px;" onclick="revokeUser('${email}')">Revoke</button>`; usersSection.appendChild(div); });
-
-                const msgSnapshot = await db.collection('admin_messages').orderBy('timestamp', 'desc').get();
-                msgSection.innerHTML = msgSnapshot.empty ? '<p>Inbox empty.</p>' : '';
-                msgSnapshot.forEach(doc => {
-                    const d = doc.data(); const isUnread = (d.status === "unread"); const itemClass = isUnread ? 'list-item msg-item unread' : 'list-item msg-item'; const badge = isUnread ? '<span class="unread-badge">NEW</span>' : '';
-                    const div = document.createElement('div'); div.className = itemClass; div.onclick = () => markMessageAsRead(doc.id, d.status); div.innerHTML = `<div style="width:100%; display:flex; justify-content:space-between; color:var(--drive-yellow);"><strong>From: ${d.name} (${d.email}) ${badge}</strong><button style="cursor:pointer; background:rgba(234,67,53,0.2); color:var(--drive-red); border:none; padding:3px 8px; font-size:11px;" onclick="event.stopPropagation(); deleteMessage('${doc.id}')">Delete</button></div><div style="color:white; margin-top:5px; font-size:14px; line-height:1.4;">${d.message}</div>`; msgSection.appendChild(div);
-                });
-            } catch(error) { console.log(error); }
-        }
-
-        async function approveUser(email, name) { await db.collection('allowed_users').doc(email).set({ approved: true, name: name, deviceId: null }); await db.collection('access_requests').doc(email).delete(); fetchAdminData(); }
-        async function revokeUser(email) { if(confirm(`Remove ${email}?`)) { await db.collection('allowed_users').doc(email).delete(); fetchAdminData(); } }
-        async function deleteMessage(msgId) { if(confirm('Delete message?')) { await db.collection('admin_messages').doc(msgId).delete(); fetchAdminData(); } }
-
-        async function changeThumbnailPrompt(fileId, event) {
-            event.stopPropagation(); const newImgUrl = prompt("Enter image URL:");
-            if (newImgUrl) { await db.collection('custom_thumbnails').doc(fileId).set({ url: newImgUrl }); savedThumbnails[fileId] = newImgUrl; const container = document.getElementById(`thumb-${fileId}`); container.innerHTML = `<img src="${newImgUrl}" style="width:100%;height:100%;object-fit:cover;">`; }
         }
 
         async function loadFolder(folderId, folderName) {
@@ -1127,80 +702,60 @@
             const res = await fetch(url); const data = await res.json();
             const foldersGrid = document.getElementById('foldersGrid'); const videosGrid = document.getElementById('videosGrid');
             foldersGrid.innerHTML = ''; videosGrid.innerHTML = '';
-            
             let favs = JSON.parse(localStorage.getItem('sofer_favs') || '[]');
 
             if (data.files && data.files.length > 0) {
                 data.files.forEach(file => {
-                    const card = document.createElement('div'); 
-                    card.setAttribute('data-id', file.id);
-                    card.setAttribute('data-name', file.name);
-                    card.setAttribute('data-thumb', savedThumbnails[file.id] || file.thumbnailLink || '');
-                    const adminStyle = isAdmin ? 'style="display:block;"' : ''; 
-                    const adminOverlay = `<div class="admin-card-overlay" ${adminStyle} onclick="changeThumbnailPrompt('${file.id}', event)">⚙️ Edit Thumbnail</div>`; 
-                    const currentThumb = savedThumbnails[file.id] || file.thumbnailLink;
+                    const card = document.createElement('div'); card.setAttribute('data-id', file.id); card.setAttribute('data-name', file.name); card.setAttribute('data-thumb', savedThumbnails[file.id] || file.thumbnailLink || '');
                     const isFav = favs.some(f => f.id === file.id) ? '❤️' : '🤍';
-                    
+                    const adminOverlayHtml = isAdmin ? `<div class="admin-card-overlay" style="display:block;" onclick="changeThumbnailPrompt('${file.id}', event)">⚙️ Thumbnail</div><div class="admin-popular-overlay" style="display:block;" onclick="markAsPopularManual('${file.id}', '${file.name.replace(/'/g, "\\'")}', event)">⭐ Set Popular</div>` : '';
+
                     if (file.mimeType === 'application/vnd.google-apps.folder') {
-                        card.className = 'card folder'; 
-                        card.onclick = () => { showAppPage('library'); loadFolder(file.id, file.name); };
-                        card.innerHTML = `${adminOverlay}<div class="thumbnail-placeholder" id="thumb-${file.id}">${savedThumbnails[file.id] ? `<img src="${savedThumbnails[file.id]}" style="width:100%;height:100%;object-fit:cover;">` : '📁'}</div><div class="card-info"><p class="card-title">${file.name}</p></div>`; 
+                        card.className = 'card folder'; card.onclick = () => loadFolder(file.id, file.name);
+                        card.innerHTML = `${adminOverlayHtml}<div class="thumbnail-placeholder">${savedThumbnails[file.id] ? `<img src="${savedThumbnails[file.id]}" style="width:100%;height:100%;object-fit:cover;">` : '📁'}</div><div class="card-info"><p class="card-title">${file.name}</p></div>`;
                         foldersGrid.appendChild(card);
                     } else if (file.mimeType.startsWith('video/')) {
-                        card.className = 'card video'; 
-                        card.onclick = (e) => { if(!e.target.classList.contains('download-icon-btn') && !e.target.classList.contains('admin-card-overlay') && !e.target.classList.contains('fav-btn')) playVideo(file.id); };
-                        card.innerHTML = `${adminOverlay}<button class="fav-btn" onclick="toggleFavorite('${file.id}', event)">${isFav}</button><div class="thumbnail-placeholder" id="thumb-${file.id}"><img src="${currentThumb || '🎬'}" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='https://via.placeholder.com/220x130?text=Video'"></div><div class="card-info"><p class="card-title">${file.name}</p></div><button class="download-icon-btn" onclick="downloadVideo('${file.id}')">↓</button>`; 
+                        card.className = 'card video';
+                        card.onclick = (e) => { if(!e.target.classList.contains('download-icon-btn') && !e.target.classList.contains('admin-card-overlay') && !e.target.classList.contains('admin-popular-overlay') && !e.target.classList.contains('fav-btn')) playVideo(file.id); };
+                        card.innerHTML = `${adminOverlayHtml}<button class="fav-btn" onclick="toggleFavorite('${file.id}', event)">${isFav}</button><div class="thumbnail-placeholder"><img src="${savedThumbnails[file.id] || file.thumbnailLink || '🎬'}" style="width:100%;height:100%;object-fit:cover;"></div><div class="card-info"><p class="card-title">${file.name}</p></div><button class="download-icon-btn" onclick="downloadVideo('${file.id}')">↓</button>`;
                         videosGrid.appendChild(card);
                     }
                 });
-            } else { foldersGrid.innerHTML = '<p>No folders.</p>'; videosGrid.innerHTML = '<p>No videos.</p>'; }
-            
-            renderContinueWatching();
-            loadTrendingVideos();
-            updateFavMenuButtonVisibility();
-        }
-        
-        function playVideo(id) { 
-            currentPlayingFileId = id;
-            const modal = document.getElementById('playerModal');
-            modal.style.display = 'flex'; 
-            
-            // אויב מ'עפנט א ווידעא נארמאל, נעמען אראפ PIP אויב ס'איז געווען אקטיוו
-            modal.classList.remove('pip-mode');
-            isPipActive = false;
-
-            playerInstance.src({type: 'video/mp4', src: `https://www.googleapis.com/drive/v3/files/${id}?alt=media&key=${API_KEY}`}); 
-            playerInstance.play(); 
-
-            // שלעפן די טיטל און טאַמבנעיל פאר די פאפולערסטע רשימה
-            const cardEl = document.querySelector(`[data-id="${id}"]`);
-            if(cardEl) {
-                const title = cardEl.getAttribute('data-name');
-                const thumb = cardEl.getAttribute('data-thumb');
-                incrementVideoViewCount(id, title, thumb);
             }
+            renderContinueWatching(); loadTrendingVideos();
+        }
 
-            loadVideoCommentsAndReactions(id);
-        }
-        
-        function closeVideo() { 
-            document.getElementById('playerModal').style.display = 'none'; 
-            document.getElementById('playerModal').classList.remove('pip-mode');
-            playerInstance.pause(); 
-            currentPlayingFileId = null;
-            isPipActive = false;
-            renderContinueWatching();
-        }
-        
+        function playVideo(id) { currentPlayingFileId = id; const modal = document.getElementById('playerModal'); modal.style.display = 'flex'; modal.classList.remove('pip-mode'); isPipActive = false; playerInstance.src({type: 'video/mp4', src: `https://www.googleapis.com/drive/v3/files/${id}?alt=media&key=${API_KEY}`}); playerInstance.play(); loadVideoCommentsAndReactions(id); }
+        function closeVideo() { document.getElementById('playerModal').style.display = 'none'; playerInstance.pause(); currentPlayingFileId = null; isPipActive = false; renderContinueWatching(); }
         function closeVideoFromOutside(event) { if(!isPipActive) closeVideo(); }
         function downloadVideo(fileId) { window.open(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${API_KEY}`, '_blank'); }
         function updateBreadcrumbs() { const container = document.getElementById('breadcrumbs'); let html = ''; folderHistory.forEach((folder, idx) => { if (idx === folderHistory.length - 1) { html += `<span>${folder.name}</span>`; } else { html += `<a href="#" onclick="showAppPage('library'); loadFolder('${folder.id}', '${folder.name}')">${folder.name}</a> / `; } }); container.innerHTML = html; }
         function goBack() { if (folderHistory.length > 1) { folderHistory.pop(); const prev = folderHistory[folderHistory.length - 1]; folderHistory.pop(); showAppPage('library'); loadFolder(prev.id, prev.name); } }
+        
+        async function changeThumbnailPrompt(fileId, event) { event.stopPropagation(); const newImgUrl = prompt("Enter image URL:"); if (newImgUrl) { await db.collection('custom_thumbnails').doc(fileId).set({ url: newImgUrl }); savedThumbnails[fileId] = newImgUrl; loadFolder(folderHistory[folderHistory.length-1].id, folderHistory[folderHistory.length-1].name); } }
+        function openAdminPanel() { document.getElementById('adminModal').style.display = 'flex'; switchAdminTab('requests'); fetchAdminData(); }
+        function switchAdminTab(tab) { document.getElementById('secRequests').style.display = tab==='requests'?'block':'none'; document.getElementById('secUsers').style.display = tab==='users'?'block':'none'; document.getElementById('secMessages').style.display = tab==='messages'?'block':'none'; }
+        
+        async function fetchAdminData() { 
+            const reqSection = document.getElementById('secRequests'); const usersSection = document.getElementById('secUsers'); const msgSection = document.getElementById('secMessages');
+            reqSection.innerHTML = ''; usersSection.innerHTML = ''; msgSection.innerHTML = '';
+            const reqSnapshot = await db.collection('access_requests').get();
+            reqSnapshot.forEach(doc => { const d = doc.data(); reqSection.innerHTML += `<div class="list-item"><div><strong>${d.name}</strong> (${d.email})</div><button onclick="approveUser('${d.email}', '${d.name}')">Approve</button></div>`; });
+            const usersSnapshot = await db.collection('allowed_users').get(); document.getElementById('userCount').innerText = usersSnapshot.size;
+            usersSnapshot.forEach(doc => { const email = doc.id; const d = doc.data(); usersSection.innerHTML += `<div class="list-item approved"><div><strong>${d.name || 'User'}</strong> (${email})</div></div>`; });
+            const msgSnapshot = await db.collection('admin_messages').get();
+            msgSnapshot.forEach(doc => { const d = doc.data(); msgSection.innerHTML += `<div class="list-item"><div><strong>From: ${d.name}</strong><p>${d.message}</p></div></div>`; });
+        }
+        async function approveUser(email, name) { await db.collection('allowed_users').doc(email).set({ approved: true, name: name }); await db.collection('access_requests').doc(email).delete(); fetchAdminData(); }
+
+        function listenForUpdates() {}
+        async function sendMessageToAdmin() { const text = document.getElementById('footerMessageText').value.trim(); if(!text) return; await db.collection('admin_messages').add({ name: loggedInUserName, message: text, timestamp: firebase.firestore.FieldValue.serverTimestamp() }); alert('Message sent!'); document.getElementById('footerMessageText').value=''; }
+        
         function setupCustomButtons() {
             if(!playerInstance) return;
             const controlBar = playerInstance.controlBar; const volumeControl = controlBar.volumePanel.el();
-            const backBtn = document.createElement('button'); backBtn.className = 'vjs-control vjs-button vjs-skip-button'; backBtn.innerHTML = '⏪'; backBtn.onclick = function() { playerInstance.currentTime(playerInstance.currentTime() - 10); };
-            const fwdBtn = document.createElement('button'); fwdBtn.className = 'vjs-control vjs-button vjs-skip-button'; fwdBtn.innerHTML = '⏩'; fwdBtn.onclick = function() { playerInstance.currentTime(playerInstance.currentTime() + 10); };
+            const backBtn = document.createElement('button'); backBtn.className = 'vjs-control vjs-button'; backBtn.innerHTML = '⏪'; backBtn.onclick = function() { playerInstance.currentTime(playerInstance.currentTime() - 10); };
+            const fwdBtn = document.createElement('button'); fwdBtn.className = 'vjs-control vjs-button'; fwdBtn.innerHTML = '⏩'; fwdBtn.onclick = function() { playerInstance.currentTime(playerInstance.currentTime() + 10); };
             volumeControl.parentNode.insertBefore(backBtn, volumeControl.nextSibling); volumeControl.parentNode.insertBefore(fwdBtn, backBtn.nextSibling);
         }
     </script>
