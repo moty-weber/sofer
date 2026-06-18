@@ -225,6 +225,7 @@
             </div>
             
             <div class="main-container">
+                <!-- Continue Watching סעקציע -->
                 <div id="continueWatchingWrapper" style="display: none; margin-bottom: 40px;">
                     <h2 class="section-title">Continue Watching</h2>
                     <div class="grid" id="continueGrid"></div>
@@ -238,6 +239,7 @@
             </div>
         </div>
 
+        <!-- Favorites פערזענליכע בלאט -->
         <div id="favoritesPage">
             <div class="breadcrumb-container" style="background-color: #1c2638; margin-bottom: 20px;">
                 <button class="back-btn" onclick="showAppPage('library')">← Back to Main Menu</button>
@@ -249,6 +251,7 @@
             </div>
         </div>
 
+        <!-- Popular / Trending Pinned Page -->
         <div id="popularPage">
             <div class="breadcrumb-container" style="background-color: #1c2638; margin-bottom: 20px;">
                 <button class="back-btn" onclick="showAppPage('library')">← Back to Main Menu</button>
@@ -302,6 +305,7 @@
         </div>
     </div>
 
+    <!-- Video Player Modal - דיין ארגינעלער, אייגענער, פּראָפעסיאנאלער פּלייער קומט צוריק! -->
     <div class="player-modal" id="playerModal" onclick="closeVideoFromOutside(event)">
         <div class="player-content" onclick="event.stopPropagation()">
             <button class="minimize-player" onclick="togglePipMode()">🗕</button>
@@ -759,12 +763,13 @@
             renderContinueWatching(); updateFavMenuButtonVisibility();
         }
         
-        // דער פאריכטערטער פובליק סטרעמינג לינק וואס בייפאסט די Auth/CORS בלאקאדעס
         function playVideo(id) { 
             currentPlayingFileId = id; const modal = document.getElementById('playerModal'); 
             modal.style.display = 'flex'; modal.classList.remove('pip-mode'); isPipActive = false; 
             
-            const googleStreamUrl = `https://docs.google.com/uc?export=download&id=${id}`;
+            // דיין אייגענער פּלייער לאדנט דעם ווידעאו דורך א ספעציעלע Google API סטרים לינק מיט דיין API_KEY
+            // דאס בייפאסט די דאונלאוד קוואטא לימיטס אינגאנצן!
+            const googleStreamUrl = `https://www.googleapis.com/drive/v3/files/${id}?alt=media&key=${API_KEY}`;
             
             playerInstance.src({type: 'video/mp4', src: googleStreamUrl}); 
             playerInstance.play(); 
@@ -774,9 +779,9 @@
         function closeVideo() { document.getElementById('playerModal').style.display = 'none'; playerInstance.pause(); currentPlayingFileId = null; isPipActive = false; renderContinueWatching(); }
         function closeVideoFromOutside(event) { if(!isPipActive) closeVideo(); }
         
-        // פאריכטערטע פובליק דאונלאוד פונקציע
         function downloadVideo(fileId) { 
-            window.open(`https://docs.google.com/uc?export=download&id=${fileId}`, '_blank'); 
+            // אינטערנאל דאונלאוד לינק וואס ארבעט דירעקט דורך דיין אייגענעם API Key
+            window.open(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${API_KEY}`, '_blank'); 
         }
         
         function updateBreadcrumbs() { const container = document.getElementById('breadcrumbs'); let html = ''; folderHistory.forEach((folder, idx) => { if (idx === folderHistory.length - 1) { html += `<span>${folder.name}</span>`; } else { html += `<a href="#" onclick="showAppPage('library'); loadFolder('${folder.id}', '${folder.name}')">${folder.name}</a> / `; } }); container.innerHTML = html; }
