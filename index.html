@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>sofer video cloud</title>
-    <!-- פראפעסיאנאלע ווידעאו פלעיער סטילינג -->
     <link href="https://vjs.zencdn.net/8.3.0/video-js.css" rel="stylesheet" />
     
     <style>
@@ -19,7 +18,7 @@
             --text-muted: #9aa0a6;
         }
 
-        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: var(--bg-dark); color: var(--text-light); margin: 0; padding: 0; position: relative; min-height: 100vh; padding-bottom: 120px; /* פלאץ פארן קאנטאקט באר אונטן */ box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: var(--bg-dark); color: var(--text-light); margin: 0; padding: 0; position: relative; min-height: 100vh; padding-bottom: 120px; box-sizing: border-box; }
         #mainApp { display: none; }
 
         header { background-color: var(--card-bg); border-bottom: 3px solid var(--drive-blue); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
@@ -29,19 +28,7 @@
         .nav-btn { background-color: #25334a; border: 1px solid rgba(255,255,255,0.1); color: white; padding: 8px 16px; border-radius: 6px; cursor: pointer; text-decoration: none; font-weight: bold; font-size: 14px; position: relative; }
         .nav-btn:hover { background-color: var(--drive-blue); }
         #adminPanelBtn { display: none; background-color: #7b1fa2; }
-
-        /* דער רויטער נאָטיפיקאַציע באַדזש אויפן קנעפל */
-        .badge-red::after {
-            content: '';
-            position: absolute;
-            top: -3px;
-            right: -3px;
-            width: 10px;
-            height: 10px;
-            background-color: var(--drive-red);
-            border-radius: 50%;
-            border: 2px solid var(--bg-dark);
-        }
+        .badge-red::after { content: ''; position: absolute; top: -3px; right: -3px; width: 10px; height: 10px; background-color: var(--drive-red); border-radius: 50%; border: 2px solid var(--bg-dark); }
 
         .profile-pic { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--drive-blue); object-fit: cover; background-color: white; }
 
@@ -70,21 +57,22 @@
 
         /* לאגין סקרין */
         .lock-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-dark); display: flex; justify-content: center; align-items: center; z-index: 2000; }
-        .lock-box { background-color: var(--card-bg); padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); text-align: center; width: 90%; max-width: 400px; border-top: 4px solid var(--drive-blue); }
+        .lock-box { background-color: var(--card-bg); padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); text-align: center; width: 90%; max-width: 420px; border-top: 4px solid var(--drive-blue); }
         .lock-box input, .lock-box textarea { width: 100%; padding: 12px; margin: 10px 0; background-color: var(--bg-dark); border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 6px; box-sizing: border-box; }
         .lock-box button { width: 100%; padding: 12px; background-color: var(--drive-blue); color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px; }
         .lock-box button:hover { background-color: var(--drive-green); }
         .switch-link { color: var(--drive-yellow); cursor: pointer; display: inline-block; margin-top: 15px; font-size: 14px; }
+        
+        /* וועריפיקאציע קנעפל פנים */
+        .verify-row { display: flex; gap: 10px; align-items: center; }
+        .verify-row button { width: auto; font-size: 12px; padding: 12px 15px; margin: 0; white-space: nowrap; background-color: #25334a; }
 
         /* מאדאלס */
         .player-modal, .admin-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center; }
         .player-content, .admin-content { width: 80%; max-width: 900px; position: relative; background-color: var(--bg-dark); padding: 25px; border-radius: 8px; color: white; }
         .close-player { position: absolute; top: -40px; right: 0; color: white; font-size: 30px; background: none; border: none; cursor: pointer; z-index: 1010; }
-        .video-wrapper { position: relative; width: 100%; }
-        .video-watermark { position: absolute; bottom: 55px; right: 15px; width: 50px; height: 50px; opacity: 0.6; pointer-events: none; z-index: 10; object-fit: contain; }
-        .vjs-skip-button { font-size: 1.5em; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #ccc; }
 
-        /* עדמין פאנעל פנים */
+        /* פאנעל ליסטע */
         .admin-tabs { display: flex; gap: 10px; margin-bottom: 15px; border-bottom: 1px solid #25334a; padding-bottom: 10px; }
         .tab-btn { background: #25334a; border: none; color: white; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: bold; }
         .tab-btn.active { background-color: var(--drive-blue); }
@@ -95,32 +83,17 @@
         .list-item.msg-item { border-left-color: var(--drive-yellow); align-items: flex-start; flex-direction: column; gap: 5px; }
         .action-btn { padding: 6px 12px; border-radius: 4px; border: none; color: white; font-weight: bold; cursor: pointer; }
 
-        /* די קאנטאקט באר פארן שיקן מעסעדזשעס אונטן */
-        .footer-contact-bar {
-            position: fixed;
-            bottom: 0; left: 0; width: 100%;
-            background-color: var(--card-bg);
-            border-top: 3px solid var(--drive-yellow);
-            padding: 15px 25px;
-            box-sizing: border-box;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            z-index: 900;
-            box-shadow: 0 -5px 15px rgba(0,0,0,0.3);
-        }
-        .footer-contact-bar span { font-weight: bold; color: var(--drive-yellow); font-size: 15px; white-space: nowrap; }
-        .footer-contact-bar input { background-color: var(--bg-dark); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 10px; border-radius: 6px; font-size: 14px; }
-        .footer-contact-bar .input-name { width: 180px; }
-        .footer-contact-bar .input-msg { flex-grow: 1; max-width: 600px; }
-        .footer-contact-bar button { background-color: var(--drive-yellow); color: #121824; border: none; padding: 10px 20px; font-weight: bold; border-radius: 6px; cursor: pointer; font-size: 14px; white-space: nowrap; }
+        /* קאנטאקט באר אונטן */
+        .footer-contact-bar { position: fixed; bottom: 0; left: 0; width: 100%; background-color: var(--card-bg); border-top: 3px solid var(--drive-yellow); padding: 15px 25px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; gap: 15px; z-index: 900; box-shadow: 0 -5px 15px rgba(0,0,0,0.3); }
+        .footer-contact-bar span { font-weight: bold; color: var(--text-light); font-size: 14px; }
+        .footer-contact-bar .user-badge { background-color: #25334a; color: var(--drive-yellow); padding: 8px 14px; border-radius: 6px; font-weight: bold; font-size: 13px; border: 1px solid rgba(255,255,255,0.05); }
+        .footer-contact-bar input { background-color: var(--bg-dark); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 11px; border-radius: 6px; font-size: 14px; flex-grow: 1; max-width: 650px; box-sizing: border-box; }
+        .footer-contact-bar button { background-color: var(--drive-yellow); color: #121824; border: none; padding: 11px 22px; font-weight: bold; border-radius: 6px; cursor: pointer; font-size: 14px; white-space: nowrap; }
         .footer-contact-bar button:hover { background-color: var(--drive-green); color: white; }
     </style>
 </head>
 <body>
 
-    <!-- לאגין סקרין -->
     <div class="lock-screen" id="lockScreen">
         <div class="lock-box" id="loginPanel">
             <h2 style="margin-top:0; color: var(--drive-yellow);">sofer cloud access</h2>
@@ -132,22 +105,29 @@
 
         <div class="lock-box" id="requestPanel" style="display: none;">
             <h2 style="margin-top:0; color: var(--drive-blue);">Request Access</h2>
-            <p style="color: var(--text-muted); font-size: 14px;">Your request will be sent directly to the Admin Panel.</p>
+            <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 15px;">Verify your email first to submit an access request.</p>
+            
             <input type="text" id="reqName" placeholder="Your Full Name...">
-            <input type="email" id="reqEmail" placeholder="Your Email Address...">
-            <textarea id="reqNote" placeholder="Reason for request..." rows="3"></textarea>
-            <button onclick="submitAccessRequest()">Submit Request</button>
+            
+            <div class="verify-row">
+                <input type="email" id="reqEmail" placeholder="Your Email Address...">
+                <button type="button" id="sendOtpBtn" onclick="sendVerificationCode()">Get Code</button>
+            </div>
+            
+            <input type="text" id="reqOtpInput" placeholder="Enter 6-Digit Verification Code..." style="display:none; border-color: var(--drive-yellow);">
+            <button type="button" id="verifyOtpBtn" onclick="verifyInsertedCode()" style="display:none; background-color: var(--drive-green);">Verify Code</button>
+
+            <textarea id="reqNote" placeholder="Reason for request (optional)..." rows="2" style="margin-top:15px;"></textarea>
+            <button type="button" id="finalSubmitBtn" onclick="submitAccessRequest()" style="background-color: #25334a; cursor: not-allowed;" disabled>Submit Request (Verify Email First)</button>
             <span class="switch-link" onclick="togglePanels(false)">Already requested? Log In</span>
         </div>
     </div>
 
-    <!-- הויפט אפפ -->
     <div id="mainApp">
         <header>
             <div class="brand-area"><h1>sofer video cloud</h1></div>
             <div class="menu-area">
                 <a href="about.html" class="nav-btn">About Me</a>
-                <!-- עדמין פאנעל קנעפל מיט נאָטיפיקאַציע סיסטעם -->
                 <button id="adminPanelBtn" class="nav-btn" onclick="openAdminPanel()">Admin Panel</button>
                 <img src="logo.png" class="profile-pic" alt="Profile" onerror="this.src='https://via.placeholder.com/45?text=sofer'">
             </div>
@@ -166,39 +146,29 @@
             <div class="grid" id="videosGrid"></div>
         </div>
 
-        <!-- פערמאַנענטע מעסעדזש באר אונטן פאר באנוצער -->
         <div class="footer-contact-bar" id="footerContactBar">
-            <span>Contact Admin:</span>
-            <input type="text" id="footerSenderName" class="input-name" placeholder="Your Name...">
-            <input type="text" id="footerMessageText" class="input-msg" placeholder="Type your message to the administrator here...">
+            <span>Logged in as:</span>
+            <div class="user-badge" id="userDisplayBadge">Loading User...</div>
+            <input type="text" id="footerMessageText" placeholder="Type your message directly to the administrator panel here...">
             <button onclick="sendMessageToAdmin()">Send Message</button>
         </div>
     </div>
 
-    <!-- פראפעסיאנאלע עדמין פאנעל מיט דריי טאבס -->
     <div class="admin-modal" id="adminModal">
         <div class="admin-content">
             <button class="close-player" onclick="document.getElementById('adminModal').style.display='none'">×</button>
             <h2 style="color: var(--drive-yellow); margin-top:0; margin-bottom: 20px;">sofer Cloud Admin Panel</h2>
-            
             <div class="admin-tabs">
                 <button class="tab-btn active" id="tabReqBtn" onclick="switchAdminTab('requests')">Pending Requests</button>
                 <button class="tab-btn" id="tabUsersBtn" onclick="switchAdminTab('users')">Approved Users (<span id="userCount">0</span>)</button>
                 <button class="tab-btn" id="tabMsgBtn" onclick="switchAdminTab('messages')">Inbox Messages</button>
             </div>
-
-            <!-- טאב 1: בקשות -->
             <div id="secRequests" class="panel-section active">Loading requests...</div>
-            
-            <!-- טאב 2: באשטעטיגטע באנוצער -->
             <div id="secUsers" class="panel-section">Loading active users...</div>
-
-            <!-- טאב 3: מעסעדזשעס פון באנוצער -->
             <div id="secMessages" class="panel-section">Loading inbox...</div>
         </div>
     </div>
 
-    <!-- ווידעאו פלעיער -->
     <div class="player-modal" id="playerModal" onclick="closeVideoFromOutside(event)">
         <div class="player-content" onclick="event.stopPropagation()">
             <button class="close-player" onclick="closeVideo()">×</button>
@@ -213,11 +183,12 @@
 
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script src="https://vjs.zencdn.net/8.3.0/video.min.js"></script>
     
     <script>
         // ************************************************************
-        // 1) לייג אריין דיין Google Drive API Key פונקטליך דא:
+        // 1) דא קומט דיין Google Drive API Key פונקטליך דא:
         const API_KEY = "AIzaSyDEkcoogK9_8e4HOf7vSWFWEHKct21gjdE"; 
         const START_FOLDER_ID = "14v9raW-BX5EkdfK2-Yj8wDA5kGok2Tda"; 
 
@@ -232,17 +203,26 @@
             measurementId: "G-FCFZWE5LD4"
         };
 
+        // 3) דיינע נייע פולע EmailJS קליענט אינפארמאציע זענען דא פערפעקט:
+        const EMAILJS_PUBLIC_KEY = "2VeSFXHu7Jhf2qE-O";
+        const EMAILJS_SERVICE_ID = "service_0pgs1vp"; 
+        const EMAILJS_TEMPLATE_ID = "template_tq4bhu7";
+
         const ADMIN_TOKEN = "soferadmin"; 
         // ************************************************************
 
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
+        emailjs.init(EMAILJS_PUBLIC_KEY);
 
         let folderHistory = [{ id: START_FOLDER_ID, name: "Home" }];
         let playerInstance = null;
         let isAdmin = false;
         let savedThumbnails = {};
-        let currentUserEmail = "";
+        
+        let loggedInUserEmail = "";
+        let loggedInUserName = "User";
+        let generatedVerificationCode = ""; 
 
         function getDeviceFingerprint() {
             return navigator.userAgent + (navigator.hardwareConcurrency || 2) + (navigator.deviceMemory || 4);
@@ -250,9 +230,12 @@
 
         window.onload = function() {
             const savedEmail = localStorage.getItem('soferUserEmail');
-            if (savedEmail) { autoLogin(savedEmail); }
-            
-            // אקטיווירן די פאקטישע פליסיגע מעלדונג רויטע-פינקטעלע לאגיק (Realtime Listeners)
+            const savedName = localStorage.getItem('soferUserName') || "Approved User";
+            if (savedEmail) { 
+                loggedInUserEmail = savedEmail;
+                loggedInUserName = savedName;
+                autoLogin(savedEmail); 
+            }
             listenForUpdates();
         };
 
@@ -261,14 +244,58 @@
             document.getElementById('requestPanel').style.display = showRequest ? 'block' : 'none';
         }
 
+        function sendVerificationCode() {
+            const name = document.getElementById('reqName').value.trim();
+            const email = document.getElementById('reqEmail').value.trim().toLowerCase();
+
+            if (!name || !email) { alert('Please fill in your Name and Email first.'); return; }
+
+            generatedVerificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+            document.getElementById('sendOtpBtn').innerText = "Sending...";
+
+            emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+                to_name: name,
+                to_email: email,
+                verification_code: generatedVerificationCode
+            }).then(() => {
+                alert(`A verification code has been successfully sent to ${email}. Please check your inbox!`);
+                document.getElementById('sendOtpBtn').style.display = "none";
+                document.getElementById('reqOtpInput').style.display = "block";
+                document.getElementById('verifyOtpBtn').style.display = "block";
+            }, (err) => {
+                alert('EmailJS Error. Check your setup.');
+                document.getElementById('sendOtpBtn').innerText = "Get Code";
+            });
+        }
+
+        function verifyInsertedCode() {
+            const insertedCode = document.getElementById('reqOtpInput').value.trim();
+            if (insertedCode === generatedVerificationCode && generatedVerificationCode !== "") {
+                alert('Email successfully verified! You can now submit your request to the admin.');
+                
+                const submitBtn = document.getElementById('finalSubmitBtn');
+                submitBtn.disabled = false;
+                submitBtn.style.backgroundColor = "var(--drive-blue)";
+                submitBtn.style.cursor = "pointer";
+                submitBtn.innerText = "Submit Request";
+                
+                document.getElementById('reqOtpInput').disabled = true;
+                document.getElementById('verifyOtpBtn').style.display = "none";
+            } else {
+                alert('Invalid verification code! Please try again.');
+            }
+        }
+
         async function checkAccess() {
             const input = document.getElementById('accessEmailInput').value.trim().toLowerCase();
             if (!input) { alert('Please enter an email.'); return; }
 
             if (input === ADMIN_TOKEN || input === "mw6559154@gmail.com") {
                 isAdmin = true;
-                currentUserEmail = "mw6559154@gmail.com";
+                loggedInUserEmail = "mw6559154@gmail.com";
+                loggedInUserName = "Platform Administrator";
                 localStorage.setItem('soferUserEmail', "mw6559154@gmail.com");
+                localStorage.setItem('soferUserName', "Platform Administrator");
                 unlockApp();
                 return;
             }
@@ -288,8 +315,10 @@
                 }
 
                 isAdmin = false;
-                currentUserEmail = input;
+                loggedInUserEmail = input;
+                loggedInUserName = userData.name || "Approved User";
                 localStorage.setItem('soferUserEmail', input);
+                localStorage.setItem('soferUserName', loggedInUserName);
                 unlockApp();
             } else {
                 alert('Access Denied. Email not approved.');
@@ -297,7 +326,6 @@
         }
 
         function autoLogin(email) {
-            currentUserEmail = email;
             if (email === "mw6559154@gmail.com") { isAdmin = true; unlockApp(); } 
             else { unlockApp(); }
         }
@@ -307,6 +335,8 @@
             document.getElementById('mainApp').style.display = 'block';
             if(isAdmin) document.getElementById('adminPanelBtn').style.display = 'block';
             
+            document.getElementById('userDisplayBadge').innerText = `${loggedInUserName} (${loggedInUserEmail})`;
+
             playerInstance = videojs('my-video');
             setupCustomButtons();
             
@@ -318,71 +348,47 @@
             loadFolder(START_FOLDER_ID, "Home");
         }
 
-        // שיקן א מעסעדזש צום עדמין פאלדער
         async function sendMessageToAdmin() {
-            const name = document.getElementById('footerSenderName').value.trim();
             const text = document.getElementById('footerMessageText').value.trim();
-
-            if(!name || !text) { alert('Please fill out both your Name and Message before sending.'); return; }
+            if(!text) { alert('Please type a message before sending.'); return; }
 
             await db.collection('admin_messages').add({
-                name: name,
-                email: currentUserEmail || "Unknown",
+                name: loggedInUserName,
+                email: loggedInUserEmail,
                 message: text,
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             });
 
             alert('Your message has been sent successfully directly to the administrator panel!');
-            document.getElementById('footerMessageText').value = ""; // רייניגן דעם קעסטל
+            document.getElementById('footerMessageText').value = ""; 
         }
 
-        // פליסיגע ליסטענער צו באקומען די רויטע פינקטעלע אויב עפעס טוישט זיך פערמאַנענט
         function listenForUpdates() {
-            // קוקן אויף בקשות
-            db.collection('access_requests').onSnapshot(snap => {
-                if(!snap.empty && isAdmin) document.getElementById('adminPanelBtn').classList.add('badge-red');
-            });
-            // קוקן אויף מעסעדזשעס
-            db.collection('admin_messages').onSnapshot(snap => {
-                if(!snap.empty && isAdmin) document.getElementById('adminPanelBtn').classList.add('badge-red');
-            });
+            db.collection('access_requests').onSnapshot(snap => { if(!snap.empty && isAdmin) document.getElementById('adminPanelBtn').classList.add('badge-red'); });
+            db.collection('admin_messages').onSnapshot(snap => { if(!snap.empty && isAdmin) document.getElementById('adminPanelBtn').classList.add('badge-red'); });
         }
 
         async function submitAccessRequest() {
             const name = document.getElementById('reqName').value.trim();
             const email = document.getElementById('reqEmail').value.trim().toLowerCase();
             const note = document.getElementById('reqNote').value.trim();
-            if(!name || !email) { alert('Fill fields.'); return; }
 
             await db.collection('access_requests').doc(email).set({
                 name: name, email: email, note: note, timestamp: firebase.firestore.FieldValue.serverTimestamp()
             });
-            alert('Request submitted to Admin!');
+            alert('Your verified request has been submitted to the Admin Panel!');
             togglePanels(false);
         }
 
         function switchAdminTab(tab) {
-            document.getElementById('tabReqBtn').className = 'tab-btn';
-            document.getElementById('tabUsersBtn').className = 'tab-btn';
-            document.getElementById('tabMsgBtn').className = 'tab-btn';
-            document.getElementById('secRequests').className = 'panel-section';
-            document.getElementById('secUsers').className = 'panel-section';
-            document.getElementById('secMessages').className = 'panel-section';
-
-            if(tab === 'requests') {
-                document.getElementById('tabReqBtn').classList.add('active');
-                document.getElementById('secRequests').classList.add('active');
-            } else if(tab === 'users') {
-                document.getElementById('tabUsersBtn').classList.add('active');
-                document.getElementById('secUsers').classList.add('active');
-            } else {
-                document.getElementById('tabMsgBtn').classList.add('active');
-                document.getElementById('secMessages').classList.add('active');
-            }
+            document.getElementById('tabReqBtn').className = 'tab-btn'; document.getElementById('tabUsersBtn').className = 'tab-btn'; document.getElementById('tabMsgBtn').className = 'tab-btn';
+            document.getElementById('secRequests').className = 'panel-section'; document.getElementById('secUsers').className = 'panel-section'; document.getElementById('secMessages').className = 'panel-section';
+            if(tab === 'requests') { document.getElementById('tabReqBtn').classList.add('active'); document.getElementById('secRequests').classList.add('active'); } 
+            else if(tab === 'users') { document.getElementById('tabUsersBtn').classList.add('active'); document.getElementById('secUsers').classList.add('active'); } 
+            else { document.getElementById('tabMsgBtn').classList.add('active'); document.getElementById('secMessages').classList.add('active'); }
         }
 
         async function openAdminPanel() {
-            // אויסלעשן דעם רויטן באַדזש ווען דער עדמין עפנט דעם פאנעל
             document.getElementById('adminPanelBtn').classList.remove('badge-red');
             document.getElementById('adminModal').style.display = 'flex';
             switchAdminTab('requests');
@@ -390,54 +396,34 @@
         }
 
         async function fetchAdminData() {
-            const reqSection = document.getElementById('secRequests');
-            const usersSection = document.getElementById('secUsers');
-            const msgSection = document.getElementById('secMessages');
-            
-            reqSection.innerHTML = 'Loading requests...'; 
-            usersSection.innerHTML = 'Loading active users...';
-            msgSection.innerHTML = 'Loading inbox...';
+            const reqSection = document.getElementById('secRequests'); const usersSection = document.getElementById('secUsers'); const msgSection = document.getElementById('secMessages');
+            reqSection.innerHTML = 'Loading requests...'; usersSection.innerHTML = 'Loading active users...'; msgSection.innerHTML = 'Loading inbox...';
 
             try {
-                // 1. בקשות
                 const reqSnapshot = await db.collection('access_requests').get();
                 reqSection.innerHTML = reqSnapshot.empty ? '<p style="color:var(--text-muted)">No pending requests.</p>' : '';
                 reqSnapshot.forEach(doc => {
-                    const d = doc.data();
-                    const div = document.createElement('div'); div.className = 'list-item';
-                    div.innerHTML = `<div><strong>${d.name}</strong> (${d.email})</div>
-                                     <button class="action-btn" style="background-color:var(--drive-green)" onclick="approveUser('${d.email}', '${d.name}')">Approve</button>`;
+                    const d = doc.data(); const div = document.createElement('div'); div.className = 'list-item';
+                    div.innerHTML = `<div><strong>${d.name}</strong> (${d.email})</div><button class="action-btn" style="background-color:var(--drive-green)" onclick="approveUser('${d.email}', '${d.name}')">Approve</button>`;
                     reqSection.appendChild(div);
                 });
 
-                // 2. באנוצער
                 const usersSnapshot = await db.collection('allowed_users').get();
                 usersSection.innerHTML = usersSnapshot.empty ? '<p style="color:var(--text-muted)">No approved users found.</p>' : '';
                 document.getElementById('userCount').innerText = usersSnapshot.size;
                 usersSnapshot.forEach(doc => {
-                    const email = doc.id; const d = doc.data();
-                    const div = document.createElement('div'); div.className = 'list-item approved';
-                    div.innerHTML = `<div><strong>${d.name || 'User'}</strong> (${email}) <br><small style="color:var(--text-muted)">${d.deviceId ? '🔒 Linked to Device' : '⏳ Waiting first login'}</small></div>
-                                     <button class="action-btn" style="background-color:var(--drive-red)" onclick="revokeUser('${email}')">Revoke Access</button>`;
+                    const email = doc.id; const d = doc.data(); const div = document.createElement('div'); div.className = 'list-item approved';
+                    div.innerHTML = `<div><strong>${d.name || 'User'}</strong> (${email}) <br><small style="color:var(--text-muted)">${d.deviceId ? '🔒 Linked to Device' : '⏳ Waiting first login'}</small></div><button class="action-btn" style="background-color:var(--drive-red)" onclick="revokeUser('${email}')">Revoke Access</button>`;
                     usersSection.appendChild(div);
                 });
 
-                // 3. אינבוקס מעסעדזשעס פונעם דריטן טאב
                 const msgSnapshot = await db.collection('admin_messages').orderBy('timestamp', 'desc').get();
                 msgSection.innerHTML = msgSnapshot.empty ? '<p style="color:var(--text-muted)">Your inbox is completely empty.</p>' : '';
                 msgSnapshot.forEach(doc => {
-                    const d = doc.data();
-                    const div = document.createElement('div'); div.className = 'list-item msg-item';
-                    div.innerHTML = `
-                        <div style="width:100%; display:flex; justify-content:space-between; color:var(--drive-yellow);">
-                            <strong>From: ${d.name} (${d.email})</strong>
-                            <button class="action-btn" style="background-color:rgba(234,67,53,0.2); color:var(--drive-red); padding:3px 8px; font-size:11px;" onclick="deleteMessage('${doc.id}')">Delete</button>
-                        </div>
-                        <div style="color:white; margin-top:5px; font-size:14px; line-height:1.4;">${d.message}</div>
-                    `;
+                    const d = doc.data(); const div = document.createElement('div'); div.className = 'list-item msg-item';
+                    div.innerHTML = `<div style="width:100%; display:flex; justify-content:space-between; color:var(--drive-yellow);"><strong>From: ${d.name} (${d.email})</strong><button class="action-btn" style="background-color:rgba(234,67,53,0.2); color:var(--drive-red); padding:3px 8px; font-size:11px;" onclick="deleteMessage('${doc.id}')">Delete</button></div><div style="color:white; margin-top:5px; font-size:14px; line-height:1.4;">${d.message}</div>`;
                     msgSection.appendChild(div);
                 });
-
             } catch(error) { console.log(error); }
         }
 
@@ -447,19 +433,8 @@
             fetchAdminData();
         }
 
-        async function revokeUser(email) {
-            if(confirm(`Are you sure you want to remove access for ${email}?`)) {
-                await db.collection('allowed_users').doc(email).delete();
-                fetchAdminData();
-            }
-        }
-
-        async function deleteMessage(msgId) {
-            if(confirm('Delete this message permanently?')) {
-                await db.collection('admin_messages').doc(msgId).delete();
-                fetchAdminData();
-            }
-        }
+        async function revokeUser(email) { if(confirm(`Are you sure you want to remove access for ${email}?`)) { await db.collection('allowed_users').doc(email).delete(); fetchAdminData(); } }
+        async function deleteMessage(msgId) { if(confirm('Delete this message permanently?')) { await db.collection('admin_messages').doc(msgId).delete(); fetchAdminData(); } }
 
         async function changeThumbnailPrompt(fileId, event) {
             event.stopPropagation();
@@ -479,15 +454,12 @@
             else { folderHistory.push({ id: folderId, name: folderName }); }
 
             updateBreadcrumbs();
-            const foldersGrid = document.getElementById('foldersGrid');
-            const videosGrid = document.getElementById('videosGrid');
+            const foldersGrid = document.getElementById('foldersGrid'); const videosGrid = document.getElementById('videosGrid');
             foldersGrid.innerHTML = 'Loading...'; videosGrid.innerHTML = 'Loading...';
 
             try {
                 const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+trashed=false&fields=files(id,name,mimeType,thumbnailLink)&key=${API_KEY}`;
-                const response = await fetch(url);
-                const data = await response.json();
-
+                const response = await fetch(url); const data = await response.json();
                 foldersGrid.innerHTML = ''; videosGrid.innerHTML = '';
 
                 if (data.files && data.files.length > 0) {
