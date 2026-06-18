@@ -155,7 +155,7 @@
                 <button type="button" id="sendOtpBtn" onclick="sendVerificationCode()">Get Code</button>
             </div>
             <input type="text" id="reqOtpInput" placeholder="Enter 6-Digit Verification Code..." style="display:none; border-color: var(--drive-yellow);">
-            <button type="button" id="verifyOtpBtn" onclick="verifyInsertedCode()" style="display:none; background-color: var(--drive-green);">Verify Code</button>
+            <button type="button" id="verifyOtpBtn" onclick="verifyInsertedCode()" style="background-color: var(--drive-green); display:none;">Verify Code</button>
             <textarea id="reqNote" placeholder="Reason for request (optional)..." rows="2" style="margin-top:15px;"></textarea>
             <button type="button" id="finalSubmitBtn" onclick="submitAccessRequest()" style="background-color: #25334a; cursor: not-allowed;" disabled>Submit Request (Verify Email First)</button>
             <span class="switch-link" onclick="togglePanels(false)">Already requested? Log In</span>
@@ -284,7 +284,6 @@
         let loggedInUserName = "User";
         let generatedVerificationCode = ""; 
 
-        // פאר דעם פראפעסיאנאלן עדיט סיסטעם
         let currentEditingPostId = null;
 
         function getDeviceFingerprint() {
@@ -396,19 +395,14 @@
             loadFolder(START_FOLDER_ID, "Home");
         }
 
-        // פובליקאציע אדער סעיוון אן עקזעסטירנדע פאסט
         async function publishAdminUpdate() {
             const htmlContent = quillEditor.root.innerHTML;
             if(quillEditor.getText().trim().length === 0) { alert('Please write something first.'); return; }
 
             if(currentEditingPostId) {
-                // סעיוון די שינויים געהעריג אינעם פירבעיס!
-                await db.collection('forum_posts').doc(currentEditingPostId).update({
-                    content: htmlContent
-                });
+                await db.collection('forum_posts').doc(currentEditingPostId).update({ content: htmlContent });
                 cancelAdminEditing();
             } else {
-                // פאסטן א גאנציגע נייע פאסט
                 await db.collection('forum_posts').add({
                     content: htmlContent,
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
@@ -418,18 +412,13 @@
             loadBlogPosts();
         }
 
-        // לאדן א פאסט צוריק אריין אינעם רייכן עדיטאר אויבן געהעריג!
         function setupRichEditMainPost(postId, currentHtml) {
             currentEditingPostId = postId;
             quillEditor.root.innerHTML = currentHtml;
-            
-            // טוישן די קנעפּלעך אויבן פונקטליך
             document.getElementById('editorBoxTitle').innerText = "✏️ Edit Existing Update";
             document.getElementById('submitPostBtn').innerText = "Save Changes";
             document.getElementById('submitPostBtn').style.backgroundColor = "var(--drive-yellow)";
             document.getElementById('cancelEditBtn').style.display = "inline-block";
-            
-            // סקראָלן גלייך גלאַט אויבן צומ עדיטאר
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -452,24 +441,11 @@
         function loadBlogPosts() {
             const listContainer = document.getElementById('blogPostsList');
             listContainer.innerHTML = 'Loading threads...';
-
             db.collection('forum_posts').orderBy('timestamp', 'desc').onSnapshot(snapshot => {
                 listContainer.innerHTML = '';
                 snapshot.forEach(doc => {
                     const postData = doc.data(); const postId = doc.id;
                     const timeString = postData.timestamp ? postData.timestamp.toDate().toLocaleString() : 'Just now';
-                    
-                    // אויסרעכענען עמאדזשיס מיט די נייע ברייטע ליסטע
-                    const emojiList = ['thumb', 'heart', 'laugh', 'wow', 'sad', 'fire', 'party', 'pray'];
-                    let emojiCounts = {};
-                    let emojiUsers = {};
-                    
-                    emojiList.forEach(type => {
-                        emojiCounts[type] = postData['react_' + type] ? Object.keys(postData['react_' + type]).length : 0;
-                        emojiUsers[type] = postData['react_' + type] ? Object.values(postData['react_' + type]).join(', ') : 'No one yet';
-                    });
-
-                    // צוגעפאסט דעם Rich Edit קנעפל
                     const adminActionsHtml = isAdmin ? `
                         <div style="display:inline-flex; gap:10px; margin-left:15px;">
                             <span class="action-link" onclick="setupRichEditMainPost('${postId}', \`${postData.content.replace(/`/g, "\\`").replace(/\${/g, "\\${")}\`)">Edit Update</span>
@@ -480,22 +456,8 @@
                     const postElement = document.createElement('div');
                     postElement.className = 'blog-post';
                     postElement.innerHTML = `
-                        <div class="blog-time">
-                            <span>📅 Published: ${timeString} ${adminActionsHtml}</span>
-                        </div>
+                        <div class="blog-time"><span>📅 Published: ${timeString} ${adminActionsHtml}</span></div>
                         <div class="blog-body">${postData.content}</div>
-                        
-                        <div class="reaction-row" style="margin-top:15px; border-bottom: 1px dashed #25334a; padding-bottom:15px;">
-                            <button class="react-btn" onclick="toggleMainPostReaction('${postId}', 'thumb')">👍 <span>${emojiCounts['thumb']}</span><div class="react-tooltip">Liked by: ${emojiUsers['thumb']}</div></button>
-                            <button class="react-btn" onclick="toggleMainPostReaction('${postId}', 'heart')">❤️ <span>${emojiCounts['heart']}</span><div class="react-tooltip">Loved by: ${emojiUsers['heart']}</div></button>
-                            <button class="react-btn" onclick="toggleMainPostReaction('${postId}', 'laugh')">😂 <span>${emojiCounts['laugh']}</span><div class="react-tooltip">Reacted by: ${emojiUsers['laugh']}</div></button>
-                            <button class="react-btn" onclick="toggleMainPostReaction('${postId}', 'wow')">😮 <span>${emojiCounts['wow']}</span><div class="react-tooltip">Reacted by: ${emojiUsers['wow']}</div></button>
-                            <button class="react-btn" onclick="toggleMainPostReaction('${postId}', 'sad')">😢 <span>${emojiCounts['sad']}</span><div class="react-tooltip">Reacted by: ${emojiUsers['sad']}</div></button>
-                            <button class="react-btn" onclick="toggleMainPostReaction('${postId}', 'fire')">🔥 <span>${emojiCounts['fire']}</span><div class="react-tooltip">Reacted by: ${emojiUsers['fire']}</div></button>
-                            <button class="react-btn" onclick="toggleMainPostReaction('${postId}', 'party')">🎉 <span>${emojiCounts['party']}</span><div class="react-tooltip">Reacted by: ${emojiUsers['party']}</div></button>
-                            <button class="react-btn" onclick="toggleMainPostReaction('${postId}', 'pray')">🙏 <span>${emojiCounts['pray']}</span><div class="react-tooltip">Reacted by: ${emojiUsers['pray']}</div></button>
-                        </div>
-
                         <div class="thread-section">
                             <h4>Conversation Thread</h4>
                             <div id="comments-list-${postId}">Loading posts...</div>
@@ -509,16 +471,6 @@
                     loadCommentsForPost(postId);
                 });
             });
-        }
-
-        async function toggleMainPostReaction(postId, type) {
-            const ref = db.collection('forum_posts').doc(postId);
-            const doc = await ref.get(); if(!doc.exists) return;
-            const data = doc.data();
-            let currentReacts = data['react_' + type] || {};
-            if(currentReacts[loggedInUserEmail]) { delete currentReacts[loggedInUserEmail]; } 
-            else { currentReacts[loggedInUserEmail] = loggedInUserName; }
-            await ref.update({ ['react_' + type]: currentReacts });
         }
 
         async function submitComment(postId, parentId) {
@@ -538,197 +490,120 @@
             db.collection('forum_posts').doc(postId).collection('comments').orderBy('timestamp', 'asc').onSnapshot(snap => {
                 container.innerHTML = '';
                 if(snap.empty) { container.innerHTML = '<p style="color:var(--text-muted); font-size:13px; margin:0;">No comments in this thread yet.</p>'; return; }
-                
                 let commentMap = {}; let rootComments = [];
-                snap.forEach(cDoc => {
-                    let data = cDoc.data(); data.id = cDoc.id; data.replies = [];
-                    commentMap[data.id] = data;
-                    if (data.parentId === 'root' || !data.parentId) { rootComments.push(data); }
-                });
-                snap.forEach(cDoc => {
-                    let data = commentMap[cDoc.id];
-                    if (data.parentId && data.parentId !== 'root' && commentMap[data.parentId]) {
-                        commentMap[data.parentId].replies.push(data);
-                    }
-                });
+                snap.forEach(cDoc => { let data = cDoc.data(); data.id = cDoc.id; data.replies = []; commentMap[data.id] = data; if (data.parentId === 'root' || !data.parentId) rootComments.push(data); });
+                snap.forEach(cDoc => { let data = commentMap[cDoc.id]; if (data.parentId && data.parentId !== 'root' && commentMap[data.parentId]) commentMap[data.parentId].replies.push(data); });
                 rootComments.forEach(rootComment => { buildRecursiveHTMLNode(container, rootComment, postId); });
             });
         }
 
         function buildRecursiveHTMLNode(parentElement, c, postId) {
-            const cTime = c.timestamp ? c.timestamp.toDate().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'Now';
-            
-            // די גאנצע עמאדזשי ליסטע פאר די קאמענטארן געהעריג
-            const emojiList = ['thumb', 'heart', 'laugh', 'wow', 'sad', 'fire', 'party', 'pray'];
-            let emojiButtonsHtml = '';
-            
-            const emojisMap = { thumb: '👍', heart: '❤️', laugh: '😂', wow: '😮', sad: '😢', fire: '🔥', party: '🎉', pray: '🙏' };
-            
-            emojiList.forEach(type => {
-                const count = c['react_' + type] ? Object.keys(c['react_' + type]).length : 0;
-                const users = c['react_' + type] ? Object.values(c['react_' + type]).join(', ') : 'No one yet';
-                emojiButtonsHtml += `
-                    <button class="react-btn" onclick="toggleReaction('${postId}', '${c.id}', '${type}')">
-                        ${emojisMap[type]} <span>${count}</span>
-                        <div class="react-tooltip">Reacted by: ${users}</div>
-                    </button>
-                `;
-            });
-
-            const isOwner = (c.userEmail === loggedInUserEmail);
-            const editHtml = isOwner ? `<span class="action-link" onclick="editCommentPrompt('${postId}', '${c.id}', '${c.commentText.replace(/'/g, "\\'")}')">Edit</span>` : '';
-            const deleteHtml = (isOwner || isAdmin) ? `<span class="action-link delete-link" onclick="deleteCommentAction('${postId}', '${c.id}')">Delete</span>` : '';
-
             const wrapper = document.createElement('div'); wrapper.className = 'comment-wrapper';
             wrapper.innerHTML = `
                 <div class="comment-box">
                     <div class="comment-meta">
-                        <span class="comment-user">${c.userName} (${c.userEmail}) <span class="comment-actions">${editHtml} ${deleteHtml}</span></span>
-                        <span class="comment-time">${cTime}</span>
+                        <span class="comment-user">${c.userName} (${c.userEmail})</span>
+                        <span class="comment-time">${c.timestamp ? c.timestamp.toDate().toLocaleTimeString() : 'Now'}</span>
                     </div>
                     <div class="comment-text">${c.commentText}</div>
-                    <div class="reaction-row">
-                        ${emojiButtonsHtml}
-                        <span class="reply-trigger" onclick="openInlineReplyBox('${postId}', '${c.id}')">Reply</span>
-                    </div>
+                    <span class="reply-trigger" onclick="openInlineReplyBox('${postId}', '${c.id}')">Reply</span>
                     <div id="inline-replybox-${c.id}" style="margin-top:10px; display:none;"></div>
                 </div>
             `;
             const subRepliesContainer = document.createElement('div'); subRepliesContainer.className = 'replies-container';
             wrapper.appendChild(subRepliesContainer); parentElement.appendChild(wrapper);
-            if (c.replies && c.replies.length > 0) { c.replies.forEach(subReply => { buildRecursiveHTMLNode(subRepliesContainer, subReply, postId); }); }
+            if (c.replies) c.replies.forEach(subReply => buildRecursiveHTMLNode(subRepliesContainer, subReply, postId));
         }
 
         function openInlineReplyBox(postId, commentId) {
             const box = document.getElementById(`inline-replybox-${commentId}`); box.style.display = "block";
-            box.innerHTML = `<div class="comment-input-row"><input type="text" id="inline-input-${commentId}" placeholder="Reply to this message..."><button onclick="submitComment('${postId}', '${commentId}')">Post Reply</button></div>`;
-        }
-
-        async function editCommentPrompt(postId, commentId, oldText) {
-            const newText = prompt("Edit your message:", oldText);
-            if(newText && newText.trim() !== "") {
-                await db.collection('forum_posts').doc(postId).collection('comments').doc(commentId).update({ commentText: newText.trim() });
-            }
-        }
-
-        async function deleteCommentAction(postId, commentId) {
-            if(confirm("Are you sure you want to delete this message permanently?")) {
-                await db.collection('forum_posts').doc(postId).collection('comments').doc(commentId).delete();
-            }
-        }
-
-        async function toggleReaction(postId, commentId, type) {
-            const ref = db.collection('forum_posts').doc(postId).collection('comments').doc(commentId);
-            const doc = await ref.get(); if(!doc.exists) return; const data = doc.data();
-            let currentReacts = data['react_' + type] || {};
-            if(currentReacts[loggedInUserEmail]) { delete currentReacts[loggedInUserEmail]; } else { currentReacts[loggedInUserEmail] = loggedInUserName; }
-            await ref.update({ ['react_' + type]: currentReacts });
+            box.innerHTML = `<div class="comment-input-row"><input type="text" id="inline-input-${commentId}" placeholder="Reply..."><button onclick="submitComment('${postId}', '${commentId}')">Post</button></div>`;
         }
 
         async function sendMessageToAdmin() {
-            const text = document.getElementById('footerMessageText').value.trim(); if(!text) { alert('Please type a message.'); return; }
+            const text = document.getElementById('footerMessageText').value.trim(); if(!text) return;
             await db.collection('admin_messages').add({ name: loggedInUserName, email: loggedInUserEmail, message: text, status: "unread", timestamp: firebase.firestore.FieldValue.serverTimestamp() });
-            alert('Message sent to Admin Panel!'); document.getElementById('footerMessageText').value = ""; 
-        }
-
-        async function markMessageAsRead(msgId, currentStatus) { if(currentStatus === "unread") { await db.collection('admin_messages').doc(msgId).update({ status: "read" }); fetchAdminData(); } }
-
-        function listenForUpdates() {
-            db.collection('access_requests').onSnapshot(snap => { if(!snap.empty && isAdmin) document.getElementById('adminPanelBtn').classList.add('badge-red'); });
-            db.collection('admin_messages').where("status", "==", "unread").onSnapshot(snap => { 
-                if(!snap.empty && isAdmin) { document.getElementById('adminPanelBtn').classList.add('badge-red'); document.getElementById('tabMsgBtn').classList.add('tab-badge-red'); } 
-                else { document.getElementById('tabMsgBtn').classList.remove('tab-badge-red'); }
-            });
-            db.collection('forum_posts').orderBy('timestamp', 'desc').limit(1).onSnapshot(snap => {
-                if(!snap.empty) {
-                    const latestPost = snap.docs[0].data(); const lastViewed = localStorage.getItem('lastViewedPostTime') || 0;
-                    const postTime = latestPost.timestamp ? latestPost.timestamp.toDate().getTime() : Date.now();
-                    if(postTime > lastViewed) { document.getElementById('updatesMenuBtn').classList.add('badge-red'); }
-                }
-            });
-        }
-
-        async function submitAccessRequest() {
-            const name = document.getElementById('reqName').value.trim(); const email = document.getElementById('reqEmail').value.trim().toLowerCase(); const note = document.getElementById('reqNote').value.trim();
-            await db.collection('access_requests').doc(email).set({ name: name, email: email, note: note, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
-            alert('Verified request submitted!'); togglePanels(false);
+            alert('Sent!'); document.getElementById('footerMessageText').value = ""; 
         }
 
         function switchAdminTab(tab) {
-            document.getElementById('tabReqBtn').className = 'tab-btn'; document.getElementById('tabUsersBtn').className = 'tab-btn'; document.getElementById('tabMsgBtn').className = 'tab-btn';
-            document.getElementById('secRequests').className = 'panel-section'; document.getElementById('secUsers').className = 'panel-section'; document.getElementById('secMessages').className = 'panel-section';
-            if(tab === 'requests') { document.getElementById('tabReqBtn').classList.add('active'); document.getElementById('secRequests').classList.add('active'); } 
-            else if(tab === 'users') { document.getElementById('tabUsersBtn').classList.add('active'); document.getElementById('secUsers').classList.add('active'); } 
-            else { document.getElementById('tabMsgBtn').classList.add('active'); document.getElementById('secMessages').className = 'panel-section'; document.getElementById('tabMsgBtn').classList.remove('tab-badge-red'); }
+            document.querySelectorAll('.panel-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            if(tab === 'requests') { document.getElementById('secRequests').classList.add('active'); document.getElementById('tabReqBtn').classList.add('active'); }
+            else if(tab === 'users') { document.getElementById('secUsers').classList.add('active'); document.getElementById('tabUsersBtn').classList.add('active'); }
+            else { document.getElementById('secMessages').classList.add('active'); document.getElementById('tabMsgBtn').classList.add('active'); }
         }
 
-        async function openAdminPanel() { document.getElementById('adminPanelBtn').classList.remove('badge-red'); document.getElementById('adminModal').style.display = 'flex'; switchAdminTab('requests'); fetchAdminData(); }
+        async function openAdminPanel() { document.getElementById('adminModal').style.display = 'flex'; switchAdminTab('requests'); fetchAdminData(); }
 
         async function fetchAdminData() {
-            const reqSection = document.getElementById('secRequests'); const usersSection = document.getElementById('secUsers'); const msgSection = document.getElementById('secMessages');
-            reqSection.innerHTML = 'Loading...'; usersSection.innerHTML = 'Loading...'; msgSection.innerHTML = 'Loading...';
-            try {
-                const reqSnapshot = await db.collection('access_requests').get();
-                reqSection.innerHTML = reqSnapshot.empty ? '<p>No pending requests.</p>' : '';
-                reqSnapshot.forEach(doc => { const d = doc.data(); const div = document.createElement('div'); div.className = 'list-item'; div.innerHTML = `<div><strong>${d.name}</strong> (${d.email})</div><button style="cursor:pointer; background:var(--drive-green); color:white; border:none; padding:5px; border-radius:4px;" onclick="approveUser('${d.email}', '${d.name}')">Approve</button>`; reqSection.appendChild(div); });
+            const reqSection = document.getElementById('secRequests');
+            const userSection = document.getElementById('secUsers');
+            const msgSection = document.getElementById('secMessages');
+            
+            reqSection.innerHTML = 'Loading...';
+            userSection.innerHTML = 'Loading...';
+            msgSection.innerHTML = 'Loading...';
 
-                const usersSnapshot = await db.collection('allowed_users').get();
-                usersSection.innerHTML = usersSnapshot.empty ? '<p>No active users.</p>' : ''; document.getElementById('userCount').innerText = usersSnapshot.size;
-                usersSnapshot.forEach(doc => { const email = doc.id; const d = doc.data(); const div = document.createElement('div'); div.className = 'list-item approved'; div.innerHTML = `<div><strong>${d.name || 'User'}</strong> (${email})</div><button style="cursor:pointer; background:var(--drive-red); color:white; border:none; padding:5px; border-radius:4px;" onclick="revokeUser('${email}')">Revoke</button>`; usersSection.appendChild(div); });
+            const reqs = await db.collection('access_requests').get();
+            reqSection.innerHTML = reqs.empty ? 'No pending requests.' : '';
+            reqs.forEach(doc => { const d = doc.data(); reqSection.insertAdjacentHTML('beforeend', `<div class="list-item"><strong>${d.name}</strong> (${d.email})<button onclick="approveUser('${d.email}', '${d.name}')">Approve</button></div>`); });
 
-                const msgSnapshot = await db.collection('admin_messages').orderBy('timestamp', 'desc').get();
-                msgSection.innerHTML = msgSnapshot.empty ? '<p>Inbox empty.</p>' : '';
-                msgSection.style.display = 'block'; // פארזיכערן אז ס'זעט זיך ווען מען עפנט
-                msgSnapshot.forEach(doc => {
-                    const d = doc.data(); const isUnread = (d.status === "unread"); const itemClass = isUnread ? 'list-item msg-item unread' : 'list-item msg-item'; const badge = isUnread ? '<span class="unread-badge">NEW</span>' : '';
-                    const div = document.createElement('div'); div.className = itemClass; div.onclick = () => markMessageAsRead(doc.id, d.status); div.innerHTML = `<div style="width:100%; display:flex; justify-content:space-between; color:var(--drive-yellow);"><strong>From: ${d.name} (${d.email}) ${badge}</strong><button style="cursor:pointer; background:rgba(234,67,53,0.2); color:var(--drive-red); border:none; padding:3px 8px; font-size:11px;" onclick="event.stopPropagation(); deleteMessage('${doc.id}')">Delete</button></div><div style="color:white; margin-top:5px; font-size:14px; line-height:1.4;">${d.message}</div>`; msgSection.appendChild(div);
-                });
-            } catch(error) { console.log(error); }
+            const users = await db.collection('allowed_users').get();
+            userSection.innerHTML = users.empty ? 'No active users.' : '';
+            document.getElementById('userCount').innerText = users.size;
+            users.forEach(doc => { userSection.insertAdjacentHTML('beforeend', `<div class="list-item"><strong>${doc.data().name}</strong> (${doc.id})<button onclick="revokeUser('${doc.id}')">Revoke</button></div>`); });
+
+            const msgs = await db.collection('admin_messages').orderBy('timestamp', 'desc').get();
+            msgSection.innerHTML = msgs.empty ? 'Inbox empty.' : '';
+            msgs.forEach(doc => {
+                const d = doc.data();
+                const div = document.createElement('div');
+                div.className = 'list-item msg-item';
+                div.innerHTML = `<div style="width:100%; display:flex; justify-content:space-between;"><strong>From: ${d.name} (${d.email})</strong><button onclick="deleteMessage('${doc.id}')">Delete</button></div><div>${d.message}</div>`;
+                msgSection.appendChild(div);
+            });
         }
 
-        async function approveUser(email, name) { await db.collection('allowed_users').doc(email).set({ approved: true, name: name, deviceId: null }); await db.collection('access_requests').doc(email).delete(); fetchAdminData(); }
-        async function revokeUser(email) { if(confirm(`Remove ${email}?`)) { await db.collection('allowed_users').doc(email).delete(); fetchAdminData(); } }
-        async function deleteMessage(msgId) { if(confirm('Delete message?')) { await db.collection('admin_messages').doc(msgId).delete(); fetchAdminData(); } }
-
-        async function changeThumbnailPrompt(fileId, event) {
-            event.stopPropagation(); const newImgUrl = prompt("Enter image URL:");
-            if (newImgUrl) { await db.collection('custom_thumbnails').doc(fileId).set({ url: newImgUrl }); savedThumbnails[fileId] = newImgUrl; const container = document.getElementById(`thumb-${fileId}`); container.innerHTML = `<img src="${newImgUrl}" style="width:100%;height:100%;object-fit:cover;">`; }
-        }
-
+        async function approveUser(email, name) { await db.collection('allowed_users').doc(email).set({ approved: true, name: name }); await db.collection('access_requests').doc(email).delete(); fetchAdminData(); }
+        async function revokeUser(email) { await db.collection('allowed_users').doc(email).delete(); fetchAdminData(); }
+        async function deleteMessage(id) { await db.collection('admin_messages').doc(id).delete(); fetchAdminData(); }
+        
         async function loadFolder(folderId, folderName) {
             const index = folderHistory.findIndex(f => f.id === folderId); if (index !== -1) { folderHistory = folderHistory.slice(0, index + 1); } else { folderHistory.push({ id: folderId, name: folderName }); }
-            updateBreadcrumbs(); const foldersGrid = document.getElementById('foldersGrid'); const videosGrid = document.getElementById('videosGrid'); foldersGrid.innerHTML = 'Loading...'; videosGrid.innerHTML = 'Loading...';
-            try {
-                const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+trashed=false&fields=files(id,name,mimeType,thumbnailLink)&key=${API_KEY}`;
-                const response = await fetch(url); const data = await response.json(); foldersGrid.innerHTML = ''; videosGrid.innerHTML = '';
-                if (data.files && data.files.length > 0) {
-                    data.files.forEach(file => {
-                        const card = document.createElement('div'); const adminStyle = isAdmin ? 'style="display:block;"' : ''; const adminOverlay = `<div class="admin-card-overlay" ${adminStyle} onclick="changeThumbnailPrompt('${file.id}', event)">⚙️ Edit Thumbnail</div>`; const currentThumb = savedThumbnails[file.id] || file.thumbnailLink;
-                        if (file.mimeType === 'application/vnd.google-apps.folder') {
-                            card.className = 'card folder'; card.onclick = () => { showAppPage('library'); loadFolder(file.id, file.name); };
-                            card.innerHTML = `${adminOverlay}<div class="thumbnail-placeholder" id="thumb-${file.id}">${savedThumbnails[file.id] ? `<img src="${savedThumbnails[file.id]}" style="width:100%;height:100%;object-fit:cover;">` : '📁'}</div><div class="card-info"><p class="card-title">${file.name}</p></div>`; foldersGrid.appendChild(card);
-                        } else if (file.mimeType.startsWith('video/')) {
-                            card.className = 'card video'; card.onclick = (e) => { if(!e.target.classList.contains('download-icon-btn') && !e.target.classList.contains('admin-card-overlay')) playVideo(file.id); };
-                            card.innerHTML = `${adminOverlay}<div class="thumbnail-placeholder" id="thumb-${file.id}"><img src="${currentThumb || '🎬'}" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='https://via.placeholder.com/220x130?text=Video'"></div><div class="card-info"><p class="card-title">${file.name}</p></div><button class="download-icon-btn" onclick="downloadVideo('${file.id}')">↓</button>`; videosGrid.appendChild(card);
-                        }
-                    });
-                } else { foldersGrid.innerHTML = '<p>No folders.</p>'; videosGrid.innerHTML = '<p>No videos.</p>'; }
-            } catch (error) { }
+            updateBreadcrumbs();
+            const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+trashed=false&fields=files(id,name,mimeType,thumbnailLink)&key=${API_KEY}`;
+            const res = await fetch(url); const data = await res.json();
+            const foldersGrid = document.getElementById('foldersGrid'); const videosGrid = document.getElementById('videosGrid');
+            foldersGrid.innerHTML = ''; videosGrid.innerHTML = '';
+            
+            if (data.files && data.files.length > 0) {
+                data.files.forEach(file => {
+                    const card = document.createElement('div'); 
+                    const adminStyle = isAdmin ? 'style="display:block;"' : ''; 
+                    const adminOverlay = `<div class="admin-card-overlay" ${adminStyle} onclick="changeThumbnailPrompt('${file.id}', event)">⚙️ Edit Thumbnail</div>`; 
+                    const currentThumb = savedThumbnails[file.id] || file.thumbnailLink;
+                    
+                    if (file.mimeType === 'application/vnd.google-apps.folder') {
+                        card.className = 'card folder'; 
+                        card.onclick = () => { showAppPage('library'); loadFolder(file.id, file.name); };
+                        card.innerHTML = `${adminOverlay}<div class="thumbnail-placeholder" id="thumb-${file.id}">${savedThumbnails[file.id] ? `<img src="${savedThumbnails[file.id]}" style="width:100%;height:100%;object-fit:cover;">` : '📁'}</div><div class="card-info"><p class="card-title">${file.name}</p></div>`; 
+                        foldersGrid.appendChild(card);
+                    } else if (file.mimeType.startsWith('video/')) {
+                        card.className = 'card video'; 
+                        card.onclick = (e) => { if(!e.target.classList.contains('download-icon-btn') && !e.target.classList.contains('admin-card-overlay')) playVideo(file.id); };
+                        card.innerHTML = `${adminOverlay}<div class="thumbnail-placeholder" id="thumb-${file.id}"><img src="${currentThumb || '🎬'}" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='https://via.placeholder.com/220x130?text=Video'"></div><div class="card-info"><p class="card-title">${file.name}</p></div><button class="download-icon-btn" onclick="downloadVideo('${file.id}')">↓</button>`; 
+                        videosGrid.appendChild(card);
+                    }
+                });
+            } else { foldersGrid.innerHTML = '<p>No folders.</p>'; videosGrid.innerHTML = '<p>No videos.</p>'; }
         }
-
-        function setupCustomButtons() {
-            const controlBar = playerInstance.controlBar; const volumeControl = controlBar.volumePanel.el();
-            const backBtn = document.createElement('button'); backBtn.className = 'vjs-control vjs-button vjs-skip-button'; backBtn.innerHTML = '⏪'; backBtn.onclick = function() { playerInstance.currentTime(playerInstance.currentTime() - 10); };
-            const fwdBtn = document.createElement('button'); fwdBtn.className = 'vjs-control vjs-button vjs-skip-button'; fwdBtn.innerHTML = '⏩'; fwdBtn.onclick = function() { playerInstance.currentTime(playerInstance.currentTime() + 10); };
-            volumeControl.parentNode.insertBefore(backBtn, volumeControl.nextSibling); volumeControl.parentNode.insertBefore(fwdBtn, backBtn.nextSibling);
-        }
-
-        function goBack() { if (folderHistory.length > 1) { folderHistory.pop(); const prev = folderHistory[folderHistory.length - 1]; folderHistory.pop(); showAppPage('library'); loadFolder(prev.id, prev.name); } }
-        function updateBreadcrumbs() { const container = document.getElementById('breadcrumbs'); let html = ''; folderHistory.forEach((folder, idx) => { if (idx === folderHistory.length - 1) { html += `<span>${folder.name}</span>`; } else { html += `<a href="#" onclick="showAppPage('library'); loadFolder('${folder.id}', '${folder.name}')">${folder.name}</a> / `; } }); container.innerHTML = html; }
-        function playVideo(fileId) { document.getElementById('playerModal').style.display = 'flex'; playerInstance.src({ type: 'video/mp4', src: `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${API_KEY}` }); playerInstance.play(); }
-        function closeVideoFromOutside(event) { closeVideo(); }
+        function playVideo(id) { document.getElementById('playerModal').style.display = 'flex'; playerInstance.src({type: 'video/mp4', src: `https://www.googleapis.com/drive/v3/files/${id}?alt=media&key=${API_KEY}`}); playerInstance.play(); }
         function closeVideo() { document.getElementById('playerModal').style.display = 'none'; playerInstance.pause(); }
+        function closeVideoFromOutside(event) { closeVideo(); }
         function downloadVideo(fileId) { window.open(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${API_KEY}`, '_blank'); }
+        function updateBreadcrumbs() { const container = document.getElementById('breadcrumbs'); let html = ''; folderHistory.forEach((folder, idx) => { if (idx === folderHistory.length - 1) { html += `<span>${folder.name}</span>`; } else { html += `<a href="#" onclick="showAppPage('library'); loadFolder('${folder.id}', '${folder.name}')">${folder.name}</a> / `; } }); container.innerHTML = html; }
+        function goBack() { if (folderHistory.length > 1) { folderHistory.pop(); const prev = folderHistory[folderHistory.length - 1]; folderHistory.pop(); showAppPage('library'); loadFolder(prev.id, prev.name); } }
     </script>
 </body>
 </html>
