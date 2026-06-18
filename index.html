@@ -64,7 +64,7 @@
 
         /* מאדאלס */
         .player-modal, .admin-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center; }
-        .player-content, .admin-content { width: 80%; max-width: 900px; position: relative; background-color: var(--bg-dark); padding: 20px; border-radius: 8px; color: white; }
+        .player-content, .admin-content { width: 80%; max-width: 900px; position: relative; background-color: var(--bg-dark); padding: 25px; border-radius: 8px; color: white; }
         .close-player { position: absolute; top: -40px; right: 0; color: white; font-size: 30px; background: none; border: none; cursor: pointer; z-index: 1010; }
         .video-wrapper { position: relative; width: 100%; }
         .video-watermark { position: absolute; bottom: 55px; right: 15px; width: 50px; height: 50px; opacity: 0.6; pointer-events: none; z-index: 10; object-fit: contain; }
@@ -130,7 +130,7 @@
     <div class="admin-modal" id="adminModal">
         <div class="admin-content">
             <button class="close-player" onclick="document.getElementById('adminModal').style.display='none'">×</button>
-            <h2 style="color: var(--drive-yellow); margin-top:0;">sofer Cloud Admin Panel</h2>
+            <h2 style="color: var(--drive-yellow); margin-top:0; margin-bottom: 20px;">sofer Cloud Admin Panel</h2>
             
             <div class="admin-tabs">
                 <button class="tab-btn active" id="tabReqBtn" onclick="switchAdminTab('requests')">Pending Requests</button>
@@ -187,7 +187,6 @@
         let isAdmin = false;
         let savedThumbnails = {};
 
-        // גענערייט א קליינע סודיע'דיגע דעווייס-איידי פונעם קאמפיוטער
         function getDeviceFingerprint() {
             return navigator.userAgent + (navigator.hardwareConcurrency || 2) + (navigator.deviceMemory || 4);
         }
@@ -218,13 +217,11 @@
                 const currentDevice = getDeviceFingerprint();
                 const userData = userDoc.data();
 
-                // Device Lock לאגיק - קאנטראלירן אויב דער אימעיל איז שוין פארכאפט דורך אן אנדערן בראוזער
                 if (userData.deviceId && userData.deviceId !== currentDevice) {
-                    alert('Access Denied! This account is already linked to another device. You cannot share accounts.');
+                    alert('Access Denied! This account is already linked to another device.');
                     return;
                 }
 
-                // אויב דאס איז דאס ערשטע מאל, פארשליס דעם אימעיל צו דעם דעווייס
                 if (!userData.deviceId) {
                     await db.collection('allowed_users').doc(input).update({ deviceId: currentDevice });
                 }
@@ -271,7 +268,6 @@
             togglePanels(false);
         }
 
-        // עפענען דעם באנייטן פאנעל מיט די צוויי טאבס
         function switchAdminTab(tab) {
             if(tab === 'requests') {
                 document.getElementById('tabReqBtn').className = 'tab-btn active';
@@ -288,39 +284,54 @@
 
         async function openAdminPanel() {
             document.getElementById('adminModal').style.display = 'flex';
-            switchAdminTab('requests');
+            switchAdminTab('requests'); // עפענען אויטאמאטיש אויפן ערשטן טאב
             fetchAdminData();
         }
 
+        // פארראכטן: די פונקציע שטעלט אויס ביידע טאבס שטענדיג פולקאם
         async function fetchAdminData() {
             const reqSection = document.getElementById('secRequests');
             const usersSection = document.getElementById('secUsers');
-            reqSection.innerHTML = 'Loading...'; usersSection.innerHTML = 'Loading...';
+            reqSection.innerHTML = 'Loading requests...'; 
+            usersSection.innerHTML = 'Loading active users...';
 
-            // 1. פעטשן בקשות
-            const reqSnapshot = await db.collection('access_requests').get();
-            reqSection.innerHTML = reqSnapshot.empty ? '<p>No pending requests.</p>' : '';
-            reqSnapshot.forEach(doc => {
-                const d = doc.data();
-                const div = document.createElement('div'); div.className = 'list-item';
-                div.innerHTML = `<div><strong>${d.name}</strong> (${d.email})</div>
-                                 <button class="action-btn" style="background-color:var(--drive-green)" onclick="approveUser('${d.email}', '${d.name}')">Approve</button>`;
-                reqSection.appendChild(div);
-            });
+            try {
+                // 1. פעטשן פענדינג בקשות
+                const reqSnapshot = await db.collection('access_requests').get();
+                reqSection.innerHTML = '';
+                if (reqSnapshot.empty) {
+                    reqSection.innerHTML = '<p style="color:var(--text-muted)">No pending requests.</p>';
+                } else {
+                    reqSnapshot.forEach(doc => {
+                        const d = doc.data();
+                        const div = document.createElement('div'); div.className = 'list-item';
+                        div.innerHTML = `<div><strong>${d.name}</strong> (${d.email})</div>
+                                         <button class="action-btn" style="background-color:var(--drive-green)" onclick="approveUser('${d.email}', '${d.name}')">Approve</button>`;
+                        reqSection.appendChild(div);
+                    });
+                }
 
-            // 2. פעטשן עקזיסטירנדיגע באנוצער פארן ארויסווארפן סיסטעם
-            const usersSnapshot = await db.collection('allowed_users').get();
-            usersSection.innerHTML = usersSnapshot.empty ? '<p>No active users.</p>' : '';
-            document.getElementById('userCount').innerText = usersSnapshot.size;
-            
-            usersSnapshot.forEach(doc => {
-                const email = doc.id;
-                const d = doc.data();
-                const div = document.createElement('div'); div.className = 'list-item approved';
-                div.innerHTML = `<div><strong>${d.name || 'User'}</strong> (${email}) <br><small style="color:var(--text-muted)">${d.deviceId ? '🔒 Linked to Device' : '⏳ Waiting first login'}</small></div>
-                                 <button class="action-btn" style="background-color:var(--drive-red)" onclick="revokeUser('${email}')">Revoke Access</button>`;
-                usersSection.appendChild(div);
-            });
+                // 2. פעטשן אקצעפטירטע באנוצער (פארשליסט דעם באג - איצט וועט עס אלעמאל לאדן!)
+                const usersSnapshot = await db.collection('allowed_users').get();
+                usersSection.innerHTML = '';
+                document.getElementById('userCount').innerText = usersSnapshot.size;
+                
+                if (usersSnapshot.empty) {
+                    usersSection.innerHTML = '<p style="color:var(--text-muted)">No approved users found.</p>';
+                } else {
+                    usersSnapshot.forEach(doc => {
+                        const email = doc.id;
+                        const d = doc.data();
+                        const div = document.createElement('div'); div.className = 'list-item approved';
+                        div.innerHTML = `<div><strong>${d.name || 'User'}</strong> (${email}) <br><small style="color:var(--text-muted)">${d.deviceId ? '🔒 Linked to Device' : '⏳ Waiting first login'}</small></div>
+                                         <button class="action-btn" style="background-color:var(--drive-red)" onclick="revokeUser('${email}')">Revoke Access</button>`;
+                        usersSection.appendChild(div);
+                    });
+                }
+            } catch(error) {
+                reqSection.innerHTML = '<p style="color:red">Error loading data.</p>';
+                usersSection.innerHTML = '<p style="color:red">Error loading data.</p>';
+            }
         }
 
         async function approveUser(email, name) {
@@ -329,7 +340,6 @@
             fetchAdminData();
         }
 
-        // די פונקציע וואס ווארפט ארויס א מענטש פערמאַנענט און רעסעטעד זיין דעווייס לאק
         async function revokeUser(email) {
             if(confirm(`Are you sure you want to remove access for ${email}?`)) {
                 await db.collection('allowed_users').doc(email).delete();
@@ -340,7 +350,7 @@
 
         async function changeThumbnailPrompt(fileId, event) {
             event.stopPropagation();
-            const newImgUrl = prompt("Enter the absolute URL of the new image thumbnail (from ImgBB / Postimages):");
+            const newImgUrl = prompt("Enter the absolute URL of the new image thumbnail:");
             if (newImgUrl) {
                 await db.collection('custom_thumbnails').doc(fileId).set({ url: newImgUrl });
                 savedThumbnails[fileId] = newImgUrl;
@@ -392,7 +402,7 @@
             const controlBar = playerInstance.controlBar; const volumeControl = controlBar.volumePanel.el();
             const backBtn = document.createElement('button'); backBtn.className = 'vjs-control vjs-button vjs-skip-button'; backBtn.innerHTML = '⏪'; backBtn.onclick = function() { playerInstance.currentTime(playerInstance.currentTime() - 10); };
             const fwdBtn = document.createElement('button'); fwdBtn.className = 'vjs-control vjs-button vjs-skip-button'; fwdBtn.innerHTML = '⏩'; fwdBtn.onclick = function() { playerInstance.currentTime(playerInstance.currentTime() + 10); };
-            volumeControl.parentNode.insertBefore(backBtn, volumeControl.nextSibling); backBtn.parentNode.insertBefore(fwdBtn, backBtn.nextSibling);
+            volumeControl.parentNode.insertBefore(backBtn, volumeControl.nextSibling); volumeControl.parentNode.insertBefore(fwdBtn, backBtn.nextSibling);
         }
 
         function goBack() { if (folderHistory.length > 1) { folderHistory.pop(); const prev = folderHistory[folderHistory.length - 1]; folderHistory.pop(); loadFolder(prev.id, prev.name); } }
