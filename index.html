@@ -51,11 +51,24 @@
         .card.video { border-top: 4px solid var(--drive-green); }
 
         .thumbnail-placeholder { height: 130px; background: #25334a; display: flex; align-items: center; justify-content: center; font-size: 40px; position: relative; }
-        .card-info { padding: 12px; }
+        .card-info { padding: 12px; position: relative; padding-right: 40px; }
         .card-title { font-size: 15px; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 600; }
 
         .admin-card-overlay { display: none; position: absolute; top: 5px; left: 5px; background: rgba(0,0,0,0.8); padding: 4px 8px; border-radius: 4px; font-size: 11px; color: var(--drive-yellow); z-index: 5; }
         .download-icon-btn { position: absolute; bottom: 10px; right: 10px; background-color: var(--drive-blue); color: white; border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; z-index: 2; }
+        
+        /* פייוואריטס הארץ קנעפּל */
+        .fav-btn { position: absolute; top: 10px; right: 10px; background: none; border: none; font-size: 18px; cursor: pointer; z-index: 3; filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.5)); transition: transform 0.2s; }
+        .fav-btn:hover { transform: scale(1.2); }
+
+        /* זוך באַר סטיל */
+        .search-wrapper { max-width: 500px; margin: 0 auto 25px auto; }
+        .search-input { width: 100%; padding: 12px 20px; background-color: var(--card-bg); border: 1px solid rgba(255,255,255,0.1); border-radius: 30px; color: white; font-size: 15px; box-sizing: border-box; outline: none; transition: border-color 0.2s; }
+        .search-input:focus { border-color: var(--drive-blue); }
+
+        /* פראגרעס באַר פאר ממשיך זיין צו קוקן */
+        .continue-progress-bg { position: absolute; bottom: 0; left: 0; width: 100%; height: 5px; background: rgba(255,255,255,0.2); }
+        .continue-progress-fill { height: 100%; background: var(--drive-red); width: 0%; }
 
         /* לאגין סקרין */
         .lock-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-dark); display: flex; justify-content: center; align-items: center; z-index: 2000; }
@@ -76,7 +89,6 @@
         .video-wrapper { position: relative; width: 100%; }
         .video-watermark { position: absolute; bottom: 55px; right: 20px; width: 50px; height: 50px; object-fit: contain; pointer-events: none; z-index: 10; opacity: 0.85; }
 
-        /* פונקציעס פאר מעניוז אויף די ווידעאו פלעיער קאנטראלס */
         .video-js .vjs-playback-rate { display: block !important; }
         .video-js .vjs-subs-caps-button { display: block !important; }
 
@@ -187,7 +199,25 @@
                 <button class="back-btn" onclick="goBack()">← Back</button>
                 <div class="breadcrumbs" id="breadcrumbs"></div>
             </div>
+            
             <div class="main-container">
+                <!-- זוך קנעפּל סיסטעם -->
+                <div class="search-wrapper">
+                    <input type="text" id="cloudSearchInput" class="search-input" placeholder="Search for files, movies or music..." oninput="filterCloudContent()">
+                </div>
+
+                <!-- Continue Watching סעקציע -->
+                <div id="continueWatchingWrapper" style="display: none; margin-bottom: 40px;">
+                    <h2 class="section-title">Continue Watching</h2>
+                    <div class="grid" id="continueGrid"></div>
+                </div>
+
+                <!-- Favorites סעקציע -->
+                <div id="favoritesWrapper" style="display: none; margin-bottom: 40px;">
+                    <h2 class="section-title">My Favorites</h2>
+                    <div class="grid" id="favoritesGrid"></div>
+                </div>
+
                 <h2 class="section-title">Folders</h2>
                 <div class="grid" id="foldersGrid"></div>
                 <div style="margin-top: 40px;"></div>
@@ -292,6 +322,7 @@
         let loggedInUserEmail = "";
         let loggedInUserName = "User";
         let generatedVerificationCode = ""; 
+        let currentPlayingFileId = null;
 
         let currentEditingPostId = null;
 
@@ -318,6 +349,8 @@
             } else {
                 document.getElementById('librarySection').style.display = 'block';
                 document.getElementById('updatesPage').style.display = 'none';
+                renderContinueWatching();
+                renderFavorites();
             }
         }
 
@@ -398,7 +431,6 @@
             }
             document.getElementById('userDisplayBadge').innerText = `${loggedInUserName} (${loggedInUserEmail})`;
             
-            // איניציאליזאציע פונעם פלעיער מיט שנעלקייט און סובטייטל אפציעס געבויט אינעווייניג
             playerInstance = videojs('my-video', {
                 playbackRates: [0.5, 1, 1.25, 1.5, 1.75, 2],
                 responsive: true,
@@ -420,12 +452,122 @@
                 }
             });
 
+            // האלטן מיט וואו מ'האלט שורש אויף די ווידעאו צייט
+            playerInstance.on('timeupdate', function() {
+                if (currentPlayingFileId && playerInstance.duration()) {
+                    const progress = (playerInstance.currentTime() / playerInstance.duration()) * 100;
+                    if (progress > 2 && progress < 98) {
+                        saveVideoProgress(currentPlayingFileId, playerInstance.currentTime(), playerInstance.duration());
+                    } else if (progress >= 98) {
+                        clearVideoProgress(currentPlayingFileId);
+                    }
+                }
+            });
+
             try {
                 const thumbSnapshot = await db.collection('custom_thumbnails').get();
                 thumbSnapshot.forEach(doc => { savedThumbnails[doc.id] = doc.data().url; });
             } catch(e) {}
             loadFolder(START_FOLDER_ID, "Home");
             setTimeout(() => { setupCustomButtons(); }, 1000);
+        }
+
+        // --- זוך פונקציע (Search Bar Logic) ---
+        function filterCloudContent() {
+            const query = document.getElementById('cloudSearchInput').value.toLowerCase().trim();
+            const cards = document.querySelectorAll('#foldersGrid .card, #videosGrid .card');
+            
+            cards.forEach(card => {
+                const title = card.querySelector('.card-title').innerText.toLowerCase();
+                if (title.includes(query)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // --- האלט מיט וואו דו האלטסט (Continue Watching Logic) ---
+        function saveVideoProgress(fileId, time, duration) {
+            let progressList = JSON.parse(localStorage.getItem('sofer_progress') || '{}');
+            const cardEl = document.querySelector(`[data-id="${fileId}"]`);
+            const title = cardEl ? cardEl.querySelector('.card-title').innerText : 'Video';
+            const thumb = cardEl ? cardEl.querySelector('img') ? cardEl.querySelector('img').src : '' : '';
+
+            progressList[fileId] = { time: time, duration: duration, title: title, thumb: thumb, timestamp: Date.now() };
+            localStorage.setItem('sofer_progress', JSON.stringify(progressList));
+        }
+
+        function clearVideoProgress(fileId) {
+            let progressList = JSON.parse(localStorage.getItem('sofer_progress') || '{}');
+            delete progressList[fileId];
+            localStorage.setItem('sofer_progress', JSON.stringify(progressList));
+        }
+
+        function renderContinueWatching() {
+            const container = document.getElementById('continueGrid');
+            const wrapper = document.getElementById('continueWatchingWrapper');
+            container.innerHTML = '';
+            
+            let progressList = JSON.parse(localStorage.getItem('sofer_progress') || '{}');
+            let items = Object.keys(progressList).sort((a,b) => progressList[b].timestamp - progressList[a].timestamp);
+
+            if (items.length === 0) { wrapper.style.display = 'none'; return; }
+            wrapper.style.display = 'block';
+
+            items.forEach(id => {
+                const item = progressList[id];
+                const pct = (item.time / item.duration) * 100;
+                const card = document.createElement('div');
+                card.className = 'card video';
+                card.onclick = () => { playVideo(id); setTimeout(() => { playerInstance.currentTime(item.time); }, 800); };
+                card.innerHTML = `
+                    <div class="thumbnail-placeholder">
+                        <img src="${item.thumb || '🎬'}" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='https://via.placeholder.com/220x130?text=Video'">
+                        <div class="continue-progress-bg"><div class="continue-progress-fill" style="width: ${pct}%"></div></div>
+                    </div>
+                    <div class="card-info"><p class="card-title">${item.title}</p></div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // --- פייוואריטס סיסטעם (Favorites System) ---
+        function toggleFavorite(fileId, event) {
+            event.stopPropagation();
+            let favs = JSON.parse(localStorage.getItem('sofer_favs') || '[]');
+            const index = favs.indexOf(fileId);
+            
+            if (index === -1) {
+                favs.push(fileId);
+                event.target.innerText = '❤️';
+            } else {
+                favs.splice(index, 1);
+                event.target.innerText = '🤍';
+            }
+            localStorage.setItem('sofer_favs', JSON.stringify(favs));
+            renderFavorites();
+        }
+
+        function renderFavorites() {
+            const container = document.getElementById('favoritesGrid');
+            const wrapper = document.getElementById('favoritesWrapper');
+            container.innerHTML = '';
+
+            let favs = JSON.parse(localStorage.getItem('sofer_favs') || '[]');
+            if (favs.length === 0) { wrapper.style.display = 'none'; return; }
+            wrapper.style.display = 'block';
+
+            favs.forEach(id => {
+                // שלעפן די אמת'ע קארד אינפארמאציע פונעם קראנטן גריד אויב עס עקזיסטירט
+                const originalCard = document.querySelector(`.card.video[data-id="${id}"]`);
+                if (originalCard) {
+                    const card = originalCard.cloneNode(true);
+                    card.onclick = () => playVideo(id);
+                    card.querySelector('.fav-btn').onclick = (e) => toggleFavorite(id, e);
+                    container.appendChild(card);
+                }
+            });
         }
 
         async function publishAdminUpdate() {
@@ -718,12 +860,16 @@
             const foldersGrid = document.getElementById('foldersGrid'); const videosGrid = document.getElementById('videosGrid');
             foldersGrid.innerHTML = ''; videosGrid.innerHTML = '';
             
+            let favs = JSON.parse(localStorage.getItem('sofer_favs') || '[]');
+
             if (data.files && data.files.length > 0) {
                 data.files.forEach(file => {
                     const card = document.createElement('div'); 
+                    card.setAttribute('data-id', file.id);
                     const adminStyle = isAdmin ? 'style="display:block;"' : ''; 
                     const adminOverlay = `<div class="admin-card-overlay" ${adminStyle} onclick="changeThumbnailPrompt('${file.id}', event)">⚙️ Edit Thumbnail</div>`; 
                     const currentThumb = savedThumbnails[file.id] || file.thumbnailLink;
+                    const isFav = favs.includes(file.id) ? '❤️' : '🤍';
                     
                     if (file.mimeType === 'application/vnd.google-apps.folder') {
                         card.className = 'card folder'; 
@@ -732,15 +878,32 @@
                         foldersGrid.appendChild(card);
                     } else if (file.mimeType.startsWith('video/')) {
                         card.className = 'card video'; 
-                        card.onclick = (e) => { if(!e.target.classList.contains('download-icon-btn') && !e.target.classList.contains('admin-card-overlay')) playVideo(file.id); };
-                        card.innerHTML = `${adminOverlay}<div class="thumbnail-placeholder" id="thumb-${file.id}"><img src="${currentThumb || '🎬'}" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='https://via.placeholder.com/220x130?text=Video'"></div><div class="card-info"><p class="card-title">${file.name}</p></div><button class="download-icon-btn" onclick="downloadVideo('${file.id}')">↓</button>`; 
+                        card.onclick = (e) => { if(!e.target.classList.contains('download-icon-btn') && !e.target.classList.contains('admin-card-overlay') && !e.target.classList.contains('fav-btn')) playVideo(file.id); };
+                        card.innerHTML = `${adminOverlay}<button class="fav-btn" onclick="toggleFavorite('${file.id}', event)">${isFav}</button><div class="thumbnail-placeholder" id="thumb-${file.id}"><img src="${currentThumb || '🎬'}" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='https://via.placeholder.com/220x130?text=Video'"></div><div class="card-info"><p class="card-title">${file.name}</p></div><button class="download-icon-btn" onclick="downloadVideo('${file.id}')">↓</button>`; 
                         videosGrid.appendChild(card);
                     }
                 });
             } else { foldersGrid.innerHTML = '<p>No folders.</p>'; videosGrid.innerHTML = '<p>No videos.</p>'; }
+            
+            // רענדערן די ספּעציעלע סעקציעס אויבן
+            renderContinueWatching();
+            renderFavorites();
         }
-        function playVideo(id) { document.getElementById('playerModal').style.display = 'flex'; playerInstance.src({type: 'video/mp4', src: `https://www.googleapis.com/drive/v3/files/${id}?alt=media&key=${API_KEY}`}); playerInstance.play(); }
-        function closeVideo() { document.getElementById('playerModal').style.display = 'none'; playerInstance.pause(); }
+        
+        function playVideo(id) { 
+            currentPlayingFileId = id;
+            document.getElementById('playerModal').style.display = 'flex'; 
+            playerInstance.src({type: 'video/mp4', src: `https://www.googleapis.com/drive/v3/files/${id}?alt=media&key=${API_KEY}`}); 
+            playerInstance.play(); 
+        }
+        
+        function closeVideo() { 
+            document.getElementById('playerModal').style.display = 'none'; 
+            playerInstance.pause(); 
+            currentPlayingFileId = null;
+            renderContinueWatching();
+        }
+        
         function closeVideoFromOutside(event) { closeVideo(); }
         function downloadVideo(fileId) { window.open(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${API_KEY}`, '_blank'); }
         function updateBreadcrumbs() { const container = document.getElementById('breadcrumbs'); let html = ''; folderHistory.forEach((folder, idx) => { if (idx === folderHistory.length - 1) { html += `<span>${folder.name}</span>`; } else { html += `<a href="#" onclick="showAppPage('library'); loadFolder('${folder.id}', '${folder.name}')">${folder.name}</a> / `; } }); container.innerHTML = html; }
