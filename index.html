@@ -31,7 +31,6 @@
         .brand-area h1 { margin: 0; font-size: 24px; cursor: pointer; }
         .menu-area { display: flex; align-items: center; gap: 15px; }
         
-        /* יוניפארם קנעפּלעך אויסזען - אלע קנעפּלעך זענען יעצט אייניג */
         .nav-btn { background-color: #25334a; border: 1px solid rgba(255,255,255,0.1); color: white; padding: 8px 16px; border-radius: 6px; cursor: pointer; text-decoration: none; font-weight: bold; font-size: 14px; position: relative; display: inline-block; box-sizing: border-box; }
         .nav-btn:hover { background-color: var(--drive-blue); }
         #adminPanelBtn { display: none; background-color: #7b1fa2; }
@@ -73,17 +72,13 @@
         .close-continue-btn { position: absolute; top: 5px; right: 5px; background: rgba(0,0,0,0.8); color: white; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; font-size: 14px; z-index: 10; display: flex; align-items: center; justify-content: center; font-weight: bold; }
         .close-continue-btn:hover { background: var(--drive-red); }
 
-        .search-wrapper { max-width: 500px; margin: 0 auto 25px auto; }
-        .search-input { width: 100%; padding: 12px 20px; background-color: var(--card-bg); border: 1px solid rgba(255,255,255,0.1); border-radius: 30px; color: white; font-size: 15px; box-sizing: border-box; outline: none; transition: border-color 0.2s; }
-        .search-input:focus { border-color: var(--drive-blue); }
-
         .continue-progress-bg { position: absolute; bottom: 0; left: 0; width: 100%; height: 5px; background: rgba(255,255,255,0.2); }
         .continue-progress-fill { height: 100%; background: var(--drive-red); width: 0%; }
 
         /* לאגין סקרין */
         .lock-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-dark); display: flex; justify-content: center; align-items: center; z-index: 2000; }
         .lock-box { background-color: var(--card-bg); padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); text-align: center; width: 90%; max-width: 420px; border-top: 4px solid var(--drive-blue); }
-        .lock-box input, .lock-box textarea { width: 100%; padding: 12px; margin: 10px 0; background-color: var(--bg-dark); border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 6px; box-sizing: border-box; }
+        .lock-screen input, .lock-screen textarea { width: 100%; padding: 12px; margin: 10px 0; background-color: var(--bg-dark); border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 6px; box-sizing: border-box; }
         .lock-box button { width: 100%; padding: 12px; background-color: var(--drive-blue); color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px; }
         .lock-box button:hover { background-color: var(--drive-green); }
         .switch-link { color: var(--drive-yellow); cursor: pointer; display: inline-block; margin-top: 15px; font-size: 14px; }
@@ -165,13 +160,21 @@
         .react-btn { background: #25334a; border: none; color: white; padding: 4px 8px; border-radius: 4px; cursor: pointer; position: relative; font-size: 12px; display: flex; align-items: center; gap: 4px; transition: background 0.2s; }
         .react-btn:hover { background: var(--drive-blue); }
         .react-btn.active { background: #0d47a1; border: 1px solid var(--drive-blue); }
-        .react-tooltip { display: none; position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.9); color: white; padding: 5px 10px; border-radius: 4px; font-size: 11px; white-space: nowrap; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); }
-        .react-btn:hover .react-tooltip { display: block; }
 
         .reply-trigger { color: var(--drive-yellow); font-size: 12px; cursor: pointer; font-weight: bold; margin-left: 10px; text-decoration: underline; }
         .comment-input-row { display: flex; gap: 10px; margin-top: 15px; width: 100%; box-sizing: border-box; }
         .comment-input-row input { flex-grow: 1; background: #121824; border: 1px solid #25334a; border-radius: 6px; padding: 10px; color: white; font-size: 14px; }
         .comment-input-row button { background: var(--drive-blue); color: white; border: none; padding: 0 15px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        
+        /* סטילס פאר ווידעאו ריפליי לייקס און דיליט */
+        .video-comment-item { border-bottom: 1px solid #1c2638; padding: 10px 0; display: flex; flex-direction: column; gap: 5px; }
+        .video-comment-actions { display: flex; gap: 12px; align-items: center; margin-top: 5px; }
+        .v-action-btn { background: none; border: none; color: var(--text-muted); font-size: 11px; cursor: pointer; padding: 0; text-decoration: underline; }
+        .v-action-btn:hover { color: white; }
+        .v-action-btn.v-delete { color: var(--drive-red); }
+        .v-action-btn.v-delete:hover { color: #ff5252; }
+        .v-like-btn { background: #25334a; border: none; color: white; padding: 3px 6px; border-radius: 4px; font-size: 11px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; text-decoration: none; }
+        .v-like-btn.active { background: #0d47a1; border: 1px solid var(--drive-blue); }
     </style>
 </head>
 <body>
@@ -222,9 +225,7 @@
             </div>
             
             <div class="main-container">
-                <div class="search-wrapper">
-                    <input type="text" id="cloudSearchInput" class="search-input" placeholder="Search total cloud ecosystem (folders & videos)..." oninput="filterGlobalDriveSearch()">
-                </div>
+                <!-- סעירטש באר איז גענצליך אראפגענומען געווארן פון דא -->
 
                 <!-- Continue Watching סעקציע -->
                 <div id="continueWatchingWrapper" style="display: none; margin-bottom: 40px;">
@@ -312,7 +313,6 @@
             <button class="minimize-player" onclick="togglePipMode()">🗕</button>
             <button class="close-player" onclick="closeVideo()">×</button>
             <div class="video-wrapper">
-                <!-- crossorigin צוגעלייגט פארצוהיטן פלייבעק בלאקאדעס -->
                 <video id="my-video" class="video-js vjs-big-play-centered" controls preload="auto" width="900" height="500" crossorigin="anonymous"></video>
                 <img src="logo.png" class="video-watermark" alt="WM" onerror="this.style.display='none'">
             </div>
@@ -362,7 +362,7 @@
         let playerInstance = null; let isAdmin = false; let savedThumbnails = {}; let quillEditor = null;
         let loggedInUserEmail = ""; let loggedInUserName = "User"; let generatedVerificationCode = ""; 
         let currentPlayingFileId = null; let currentEditingPostId = null;
-        let searchTimeout = null; let isPipActive = false;
+        let isPipActive = false;
 
         function getDeviceFingerprint() { return navigator.userAgent + (navigator.hardwareConcurrency || 2) + (navigator.deviceMemory || 4); }
 
@@ -447,46 +447,6 @@
             loadFolder(START_FOLDER_ID, "Home"); setTimeout(() => { setupCustomButtons(); }, 1000);
         }
 
-        function filterGlobalDriveSearch() {
-            clearTimeout(searchTimeout);
-            const query = document.getElementById('cloudSearchInput').value.trim().toLowerCase();
-            if(!query) {
-                const currentFolder = folderHistory[folderHistory.length - 1] || { id: START_FOLDER_ID, name: "Home" };
-                folderHistory.pop(); loadFolder(currentFolder.id, currentFolder.name); return;
-            }
-
-            searchTimeout = setTimeout(async () => {
-                const foldersGrid = document.getElementById('foldersGrid'); const videosGrid = document.getElementById('videosGrid');
-                foldersGrid.innerHTML = 'Searching Drive archive system...'; videosGrid.innerHTML = 'Searching Drive archive system...';
-                
-                try {
-                    const escapedQuery = query.replace(/'/g, "\\'");
-                    const url = `https://www.googleapis.com/drive/v3/files?q=name+contains+'${escapedQuery}'+and+trashed=false&fields=files(id,name,mimeType,thumbnailLink)&key=${API_KEY}`;
-                    const res = await fetch(url); const data = await res.json();
-                    foldersGrid.innerHTML = ''; videosGrid.innerHTML = '';
-                    let favs = JSON.parse(localStorage.getItem('sofer_favs') || '[]');
-
-                    if (data.files && data.files.length > 0) {
-                        data.files.forEach(file => {
-                            const card = document.createElement('div'); card.setAttribute('data-id', file.id); card.setAttribute('data-name', file.name); card.setAttribute('data-thumb', savedThumbnails[file.id] || file.thumbnailLink || '');
-                            const isFav = favs.some(f => f.id === file.id) ? '❤️' : '🤍';
-                            const adminOverlayHtml = isAdmin ? `<div class="admin-card-overlay" style="display:block;" onclick="changeThumbnailPrompt('${file.id}', event)">⚙️ Edit Thumbnail</div><div class="admin-popular-overlay" style="display:block;" onclick="markAsPopularManual('${file.id}', '${file.name.replace(/'/g, "\\'")}', event)">⭐ Set Popular</div>` : '';
-
-                            if (file.mimeType === 'application/vnd.google-apps.folder') {
-                                card.className = 'card folder'; card.onclick = () => { document.getElementById('cloudSearchInput').value = ''; loadFolder(file.id, file.name); };
-                                card.innerHTML = `${adminOverlayHtml}<div class="thumbnail-placeholder" id="thumb-${file.id}">${savedThumbnails[file.id] ? `<img src="${savedThumbnails[file.id]}" style="width:100%;height:100%;object-fit:cover;">` : '📁'}</div><div class="card-info"><p class="card-title">${file.name}</p></div>`; foldersGrid.appendChild(card);
-                            } else if (file.mimeType.startsWith('video/')) {
-                                card.className = 'card video'; card.onclick = (e) => { if(!e.target.classList.contains('download-icon-btn') && !e.target.classList.contains('admin-card-overlay') && !e.target.classList.contains('admin-popular-overlay') && !e.target.classList.contains('fav-btn')) playVideo(file.id); };
-                                card.innerHTML = `${adminOverlayHtml}<button class="fav-btn" onclick="toggleFavorite('${file.id}', event)">${isFav}</button><div class="thumbnail-placeholder" id="thumb-${file.id}"><img src="${savedThumbnails[file.id] || file.thumbnailLink || '🎬'}" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='https://via.placeholder.com/220x130?text=Video'"></div><div class="card-info"><p class="card-title">${file.name}</p></div><button class="download-icon-btn" onclick="downloadVideo('${file.id}')">↓</button>`; videosGrid.appendChild(card);
-                            }
-                        });
-                    }
-                    if(foldersGrid.innerHTML === '') foldersGrid.innerHTML = '<p>No matching folders found.</p>';
-                    if(videosGrid.innerHTML === '') videosGrid.innerHTML = '<p>No matching videos found.</p>';
-                } catch(e) {}
-            }, 600);
-        }
-
         async function markAsPopularManual(fileId, title, event) {
             event.stopPropagation();
             const cardEl = document.querySelector(`[data-id="${fileId}"]`); const thumb = cardEl ? cardEl.getAttribute('data-thumb') : '';
@@ -515,6 +475,7 @@
             });
         }
 
+        /* --- ווידעאו קאמענטארן און רעאקציעס לאגיק מיט לייק און דיליט פאר ריפלייס --- */
         function loadVideoMetaAndComments(fileId) {
             const reactionContainer = document.getElementById('videoReactionsContainer');
             db.collection('video_reactions').doc(fileId).onSnapshot(doc => {
@@ -530,7 +491,21 @@
             db.collection('video_reactions').doc(fileId).collection('comments').orderBy('timestamp', 'asc').onSnapshot(snap => {
                 commentsList.innerHTML = ''; if(snap.empty) { commentsList.innerHTML = '<p style="color:var(--text-muted); font-size:12px; margin:0;">No replies or messages yet. Be the first!</p>'; return; }
                 snap.forEach(cDoc => {
-                    const c = cDoc.data(); commentsList.innerHTML += `<div style="margin-bottom:8px; border-bottom:1px solid #1c2638; padding-bottom:5px;"><strong style="color:var(--drive-yellow); font-size:13px;">${c.userName}:</strong> <span style="font-size:13px; color:#cbd5e1;">${c.text}</span></div>`;
+                    const c = cDoc.data(); const cid = cDoc.id;
+                    const likesMap = c.likes || {}; const likesCount = Object.keys(likesMap).length;
+                    const hasLiked = likesMap[loggedInUserEmail] ? 'active' : '';
+                    const isOwner = (c.userEmail === loggedInUserEmail || isAdmin);
+                    
+                    const deleteBtnHtml = isOwner ? `<button class="v-action-btn v-delete" onclick="deleteVideoComment('${fileId}', '${cid}')">Delete</button>` : '';
+
+                    commentsList.innerHTML += `
+                        <div class="video-comment-item">
+                            <div><strong style="color:var(--drive-yellow); font-size:13px;">${c.userName}:</strong> <span style="font-size:13px; color:#cbd5e1;">${c.text}</span></div>
+                            <div class="video-comment-actions">
+                                <button class="v-like-btn ${hasLiked}" onclick="toggleVideoCommentLike('${fileId}', '${cid}')">👍 <span>${likesCount}</span></button>
+                                ${deleteBtnHtml}
+                            </div>
+                        </div>`;
                 });
             });
         }
@@ -544,8 +519,28 @@
 
         async function submitVideoComment() {
             const input = document.getElementById('videoCommentInput'); const text = input.value.trim(); if(!text) return;
-            await db.collection('video_reactions').doc(currentPlayingFileId).collection('comments').add({ userName: loggedInUserName, text: text, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
+            await db.collection('video_reactions').doc(currentPlayingFileId).collection('comments').add({ 
+                userName: loggedInUserName, 
+                userEmail: loggedInUserEmail,
+                text: text, 
+                likes: {},
+                timestamp: firebase.firestore.FieldValue.serverTimestamp() 
+            });
             input.value = '';
+        }
+
+        async function toggleVideoCommentLike(fileId, commentId) {
+            const ref = db.collection('video_reactions').doc(fileId).collection('comments').doc(commentId);
+            const doc = await ref.get(); if(!doc.exists) return;
+            let data = doc.data(); let likesMap = data.likes || {};
+            if(likesMap[loggedInUserEmail]) delete likesMap[loggedInUserEmail]; else likesMap[loggedInUserEmail] = loggedInUserName;
+            await ref.update({ likes: likesMap });
+        }
+
+        async function deleteVideoComment(fileId, commentId) {
+            if(confirm("Are you sure you want to delete this comment permanently?")) {
+                await db.collection('video_reactions').doc(fileId).collection('comments').doc(commentId).delete();
+            }
         }
 
         function saveVideoProgress(fileId, time, duration) {
@@ -593,7 +588,6 @@
                     postElement.innerHTML = `
                         <div class="blog-time"><span>📅 Published: ${timeString} ${adminActionsHtml}</span></div>
                         <div class="blog-body">${postData.content}</div>
-                        <!-- גרויסע אויסווייל פון עמאוידזשעס פאר די הויפט פאסט -->
                         <div class="reaction-row" id="post-reactions-${postId}"></div>
                         <div class="thread-section">
                             <h4>Conversation Thread</h4>
@@ -640,19 +634,16 @@
                         <span class="comment-time">${cTime} <span class="reply-trigger" onclick="openInlineReplyBox('${postId}', '${c.id}')">Reply</span></span>
                     </div>
                     <div class="comment-text">${c.commentText}</div>
-                    <!-- גרויסע אויסווייל פון עמאוידזשעס פאר יעדע סאב-ריפליי -->
                     <div class="reaction-row" id="reply-reactions-${c.id}"></div>
                     <div id="inline-replybox-${c.id}" style="margin-top:10px; display:none;"></div>
                 </div>`;
             const repliesContainer = document.createElement('div'); repliesContainer.className = 'replies-container'; wrapper.appendChild(repliesContainer); parentElement.appendChild(wrapper);
             
-            // עפענען די רעאקציע ליסטענער פאר די ספעציפישע קאמענטאר
             setTimeout(() => { listenToReactions(`forum_posts/${postId}/comments`, c.id, `reply-reactions-${c.id}`); }, 50);
 
             if (c.replies && c.replies.length > 0) { c.replies.forEach(subReply => { buildRecursiveCommentNode(repliesContainer, subReply, postId); }); }
         }
 
-        /* --- גלאבאלע עמוזשי רעאקציעס פארן פארום (אדמין פאסטס + ריפלייס) --- */
         function listenToReactions(collectionPath, docId, targetElementId) {
             db.collection(collectionPath).doc(docId).onSnapshot(doc => {
                 const el = document.getElementById(targetElementId); if(!el) return;
@@ -779,7 +770,6 @@
             currentPlayingFileId = id; const modal = document.getElementById('playerModal'); 
             modal.style.display = 'flex'; modal.classList.remove('pip-mode'); isPipActive = false; 
             
-            // פארראכטן די גוגל דרייוו פלייבעק עראר לינק צו א גאראנטירטע עקספּאָרט פארמאט
             const videoUrl = `https://www.googleapis.com/drive/v3/files/${id}?alt=media&key=${API_KEY}&export=download`;
             playerInstance.src({type: 'video/mp4', src: videoUrl}); 
             playerInstance.play(); 
