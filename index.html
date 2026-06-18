@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Video Cloud</title>
+    <title>SoFeR Video Cloud</title>
     <link href="https://vjs.zencdn.net/8.3.0/video-js.css" rel="stylesheet" />
     
     <style>
@@ -28,23 +28,37 @@
         header {
             background-color: var(--card-bg);
             border-bottom: 3px solid var(--drive-blue);
-            padding: 20px;
+            padding: 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .profile-area {
+        .brand-area {
             display: flex;
-            gap: 15px;
+            align-items: center;
+            gap: 12px;
         }
 
-        .user-profile, .video-profile {
-            background: linear-gradient(135deg, var(--drive-green), var(--drive-blue));
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: bold;
+        .brand-area h1 {
+            margin: 0;
+            font-size: 24px;
+            letter-spacing: 0.5px;
+        }
+
+        /* פראפייל בילד אויבן רעכטס */
+        .profile-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .profile-pic {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: 2px solid var(--drive-blue);
+            object-fit: cover;
+            background-color: white;
         }
 
         .breadcrumb-container {
@@ -74,17 +88,16 @@
         .main-container { 
             padding: 25px; 
             max-width: 1400px; 
-            margin: 0 auto; /* האלט די גאנצע קאנטענט צענטראליזירט */
+            margin: 0 auto;
         }
 
         .section-title { border-left: 5px solid var(--drive-yellow); padding-left: 10px; margin-bottom: 20px; }
         
-        /* גריד אויסגעשטעלט צו זיין אינמיטן מיט גלייכע ספעיס ביידע זייטן */
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
             gap: 20px;
-            justify-content: center; /* צענטראליזירט די קארדס אינמיטן */
+            justify-content: center;
         }
 
         .card {
@@ -148,16 +161,46 @@
         }
 
         .player-content { width: 80%; max-width: 900px; position: relative; background-color: var(--bg-dark); padding: 10px; border-radius: 8px; }
-        .close-player { position: absolute; top: -40px; right: 0; color: white; font-size: 30px; background: none; border: none; cursor: pointer; }
+        .close-player { position: absolute; top: -40px; right: 0; color: white; font-size: 30px; background: none; border: none; cursor: pointer; z-index: 1010; }
+
+        /* וואטערמארק לאגיק אינעווייניג אינעם ווידעאו */
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .video-watermark {
+            position: absolute;
+            bottom: 55px; /* גענוג הויך נישט צו שטערן די קאנטראל באר */
+            right: 15px;
+            width: 50px;
+            height: 50px;
+            opacity: 0.6; /* א ביסל דורכזיכטיג ווי אן אמת'ע וואטערמארק */
+            pointer-events: none; /* מאכט זיכער עס שטערט נישט קליקס אויפן ווידעאו */
+            z-index: 10;
+            object-fit: contain;
+        }
+
+        /* קאסטום קנעפלעך פארן פלעיער באר */
+        .vjs-skip-button {
+            font-size: 1.5em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ccc;
+        }
+        .vjs-skip-button:hover { color: #fff; }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="brand"><h1>My Video Cloud</h1></div>
-        <div class="profile-area">
-            <div class="user-profile">My Profile</div>
-            <div class="video-profile">Video Stats</div>
+        <div class="brand-area">
+            <h1>SoFeR Video Cloud</h1>
+        </div>
+        <div class="profile-container">
+            <img src="logo.png" class="profile-pic" alt="Profile" onerror="this.src='https://via.placeholder.com/45?text=SoFeR'">
         </div>
     </header>
 
@@ -177,9 +220,12 @@
     <div class="player-modal" id="playerModal" onclick="closeVideoFromOutside(event)">
         <div class="player-content" onclick="event.stopPropagation()">
             <button class="close-player" onclick="closeVideo()">×</button>
-            <video id="my-video" class="video-js vjs-big-play-centered" controls preload="auto" width="900" height="500">
-                <p class="vjs-no-js">To view this video please enable JavaScript</p>
-            </video>
+            <div class="video-wrapper">
+                <video id="my-video" class="video-js vjs-big-play-centered" controls preload="auto" width="900" height="500">
+                    <p class="vjs-no-js">To view this video please enable JavaScript</p>
+                </video>
+                <img src="logo.png" class="video-watermark" alt="WM" onerror="this.style.display='none'">
+            </div>
         </div>
     </div>
 
@@ -194,15 +240,47 @@
         const START_FOLDER_ID = "14v9raW-BX5EkdfK2-Yj8wDA5kGok2Tda"; 
         // ************************************************************
 
-        // היסטאריע האלט יעצט אביעקטן מיט ID און שיינע נעמען פאר די ברעדקראמבס
         let folderHistory = [{ id: START_FOLDER_ID, name: "Home" }];
+        let playerInstance = null;
 
         window.onload = function() {
+            // אויפסטעטן דעם פלעיער איינמאל
+            playerInstance = videojs('my-video');
+            setupCustomButtons();
             loadFolder(START_FOLDER_ID, "Home");
         };
 
+        // פונקציע צו צולייגן די 10 סעקונדעס קנעפלעך אונטן נעבן סאונד
+        function setupCustomButtons() {
+            const controlBar = playerInstance.controlBar;
+            
+            // געפינען וואו צו פלאצירן (נעבן די Volume Panel)
+            const volumeControl = controlBar.volumePanel.el();
+
+            // קנעפל פאר 10 סעקונדעס צוריק
+            const backBtn = document.createElement('button');
+            backBtn.className = 'vjs-control vjs-button vjs-skip-button';
+            backBtn.innerHTML = '⏪';
+            backBtn.title = 'Backward 10s';
+            backBtn.onclick = function() {
+                playerInstance.currentTime(playerInstance.currentTime() - 10);
+            };
+
+            // קנעפל פאר 10 סעקונדעס פאראויס
+            const fwdBtn = document.createElement('button');
+            fwdBtn.className = 'vjs-control vjs-button vjs-skip-button';
+            fwdBtn.innerHTML = '⏩';
+            fwdBtn.title = 'Forward 10s';
+            fwdBtn.onclick = function() {
+                playerInstance.currentTime(playerInstance.currentTime() + 10);
+            };
+
+            // אריינלייגן די קנעפלעך אין די באר
+            volumeControl.parentNode.insertBefore(backBtn, volumeControl.nextSibling);
+            backBtn.parentNode.insertBefore(fwdBtn, backBtn.nextSibling);
+        }
+
         async function loadFolder(folderId, folderName) {
-            // אויב מען קליקט אויף א ברעדקראמב אינמיטן, שניידן די היסטאריע ביז אהין
             const index = folderHistory.findIndex(f => f.id === folderId);
             if (index !== -1) {
                 folderHistory = folderHistory.slice(0, index + 1);
@@ -231,9 +309,7 @@
                         
                         if (file.mimeType === 'application/vnd.google-apps.folder') {
                             card.className = 'card folder';
-                            card.onclick = () => {
-                                loadFolder(file.id, file.name);
-                            };
+                            card.onclick = () => loadFolder(file.id, file.name);
                             card.innerHTML = `<div class="thumbnail-placeholder">📁</div><div class="card-info"><p class="card-title">${file.name}</p></div>`;
                             foldersGrid.appendChild(card);
                         } else if (file.mimeType.startsWith('video/')) {
@@ -263,21 +339,19 @@
 
         function goBack() {
             if (folderHistory.length > 1) {
-                folderHistory.pop(); // אראפנעמען דעם יעצטיגן
+                folderHistory.pop();
                 const prev = folderHistory[folderHistory.length - 1];
-                // פאקטיש צוריקגיין אן דאפעלט אריינלייגן אין היסטאריע
                 folderHistory.pop(); 
                 loadFolder(prev.id, prev.name);
             }
         }
 
-        // בויט די פולע שיינע ברעדקראמבס וועג (למשל Home / Videos / Subfolder)
         function updateBreadcrumbs() {
             const container = document.getElementById('breadcrumbs');
             let html = '';
             folderHistory.forEach((folder, idx) => {
                 if (idx === folderHistory.length - 1) {
-                    html += `<span>${folder.name}</span>`; // דער לעצטער פאלדער איז נישט קיין לינק
+                    html += `<span>${folder.name}</span>`;
                 } else {
                     html += `<a href="#" onclick="loadFolder('${folder.id}', '${folder.name}')">${folder.name}</a> / `;
                 }
@@ -287,47 +361,41 @@
 
         function playVideo(fileId) {
             document.getElementById('playerModal').style.display = 'flex';
-            const player = videojs('my-video');
             
-            player.src({
+            playerInstance.src({
                 type: 'video/mp4',
                 src: `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${API_KEY}`
             });
-            player.playbackRates([0.5, 1, 1.25, 1.5, 2]);
-            player.play();
+            playerInstance.playbackRates([0.5, 1, 1.25, 1.5, 2]);
+            playerInstance.play();
 
-            // דאבל קליק לאגיק פאר 10 סעקונדעס פאראויס און צוריק
-            const videoEl = player.tech({ IWillNotUseThisInAMonth: true }).el();
-            
-            // דיסעיבלען די אלטע דאבל קליק פול-סקרין פונקציע
-            player.off('穩定', 'doubleclick'); 
-            player.off('dblclick');
+            // דאבל קליק אויפן ווידעאו לאגיק
+            const videoEl = playerInstance.tech({ IWillNotUseThisInAMonth: true }).el();
+            playerInstance.off('doubleclick'); 
+            playerInstance.off('dblclick');
 
             videoEl.ondblclick = function(e) {
                 e.preventDefault();
                 const rect = videoEl.getBoundingClientRect();
-                const clickX = e.clientX - rect.left; // וואו אויפן ווידעאו מען האט געקליקט
+                const clickX = e.clientX - rect.left;
                 const videoWidth = rect.width;
-                const currentTime = player.currentTime();
+                const currentTime = playerInstance.currentTime();
 
                 if (clickX > videoWidth / 2) {
-                    // געקליקט רעכטס -> 10 סעקונדעס פאראויס
-                    player.currentTime(currentTime + 10);
+                    playerInstance.currentTime(currentTime + 10);
                 } else {
-                    // געקליקט לינקס -> 10 סעקונדעס צוריק
-                    player.currentTime(currentTime - 10);
+                    playerInstance.currentTime(currentTime - 10);
                 }
             };
         }
 
-        // פארמאכן ביים קליקן אינדרויסן פונעם פלעיער קאנטענט
         function closeVideoFromOutside(event) {
             closeVideo();
         }
 
         function closeVideo() {
             document.getElementById('playerModal').style.display = 'none';
-            videojs('my-video').pause();
+            playerInstance.pause();
         }
 
         function downloadVideo(fileId) {
