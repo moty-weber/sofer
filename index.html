@@ -137,7 +137,6 @@
 </head>
 <body>
 
-    <!-- לאגין סקרין -->
     <div class="lock-screen" id="lockScreen">
         <div class="lock-box" id="loginPanel">
             <h2 style="margin-top:0; color: var(--drive-yellow);">sofer cloud access</h2>
@@ -163,7 +162,6 @@
         </div>
     </div>
 
-    <!-- הויפט אפפ סקרין -->
     <div id="mainApp">
         <header>
             <div class="brand-area"><h1 onclick="showAppPage('library')">sofer video cloud</h1></div>
@@ -190,7 +188,6 @@
         </div>
 
         <div id="updatesPage">
-            <!-- צוגעלייגט א "Back to Library" באַר אויבן פונקטליך -->
             <div class="breadcrumb-container" style="background-color: #1c2638; margin-bottom: 20px;">
                 <button class="back-btn" onclick="showAppPage('library')">← Back to Main Menu</button>
                 <span style="color: var(--text-muted); font-size:14px; margin-left: 10px;">Updates & Community Forum</span>
@@ -200,7 +197,6 @@
                 <div class="admin-editor-box" id="adminEditorBox">
                     <h3 style="margin-top:0; color:var(--drive-yellow);" id="editorBoxTitle">Publish a Rich Update</h3>
                     <div id="editor-container" style="height: 200px; margin-bottom: 15px;"></div>
-                    <!-- קנעפּל וואס טוישט זיך אויטאמאטיש ביי עדיטן -->
                     <button class="nav-btn" style="background-color: var(--drive-green);" id="submitPostBtn" onclick="publishAdminUpdate()">Publish Post</button>
                     <button class="nav-btn" style="background-color: var(--text-muted); display:none; margin-left:10px;" id="cancelEditBtn" onclick="cancelAdminEditing()">Cancel Edit</button>
                 </div>
@@ -217,7 +213,6 @@
         </div>
     </div>
 
-    <!-- עדמין פאנעל מאדאל -->
     <div class="admin-modal" id="adminModal">
         <div class="admin-content">
             <button class="close-player" onclick="document.getElementById('adminModal').style.display='none'">×</button>
@@ -233,7 +228,6 @@
         </div>
     </div>
 
-    <!-- ווידעאו פלעיער -->
     <div class="player-modal" id="playerModal" onclick="closeVideoFromOutside(event)">
         <div class="player-content" onclick="event.stopPropagation()">
             <button class="close-player" onclick="closeVideo()">×</button>
@@ -246,7 +240,6 @@
         </div>
     </div>
 
-    <!-- SDK Scripts -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
@@ -492,7 +485,6 @@
                         </div>
                         <div class="blog-body">${postData.content}</div>
                         
-                        <!-- די נייע ברייטע עמאדזשי באר דירעקט פארן הויפט פאסט -->
                         <div class="reaction-row" style="margin-top:15px; border-bottom: 1px dashed #25334a; padding-bottom:15px;">
                             <button class="react-btn" onclick="toggleMainPostReaction('${postId}', 'thumb')">👍 <span>${emojiCounts['thumb']}</span><div class="react-tooltip">Liked by: ${emojiUsers['thumb']}</div></button>
                             <button class="react-btn" onclick="toggleMainPostReaction('${postId}', 'heart')">❤️ <span>${emojiCounts['heart']}</span><div class="react-tooltip">Loved by: ${emojiUsers['heart']}</div></button>
@@ -678,17 +670,18 @@
             try {
                 const reqSnapshot = await db.collection('access_requests').get();
                 reqSection.innerHTML = reqSnapshot.empty ? '<p>No pending requests.</p>' : '';
-                reqSnapshot.forEach(doc => { const d = doc.data(); const div = document.createElement('div'); div.className = 'list-item'; div.innerHTML = `<div><strong>${d.name}</strong> (${d.email})</div><button class="action-btn" style="background-color:var(--drive-green)" onclick="approveUser('${d.email}', '${d.name}')">Approve</button>`; reqSection.appendChild(div); });
+                reqSnapshot.forEach(doc => { const d = doc.data(); const div = document.createElement('div'); div.className = 'list-item'; div.innerHTML = `<div><strong>${d.name}</strong> (${d.email})</div><button style="cursor:pointer; background:var(--drive-green); color:white; border:none; padding:5px; border-radius:4px;" onclick="approveUser('${d.email}', '${d.name}')">Approve</button>`; reqSection.appendChild(div); });
 
                 const usersSnapshot = await db.collection('allowed_users').get();
                 usersSection.innerHTML = usersSnapshot.empty ? '<p>No active users.</p>' : ''; document.getElementById('userCount').innerText = usersSnapshot.size;
-                usersSnapshot.forEach(doc => { const email = doc.id; const d = doc.data(); const div = document.createElement('div'); div.className = 'list-item approved'; div.innerHTML = `<div><strong>${d.name || 'User'}</strong> (${email}) <br><small style="color:var(--text-muted)">${d.deviceId ? '🔒 Linked to Device' : '⏳ Waiting login'}</small></div><button class="action-btn" style="background-color:var(--drive-red)" onclick="revokeUser('${email}')">Revoke</button>`; usersSection.appendChild(div); });
+                usersSnapshot.forEach(doc => { const email = doc.id; const d = doc.data(); const div = document.createElement('div'); div.className = 'list-item approved'; div.innerHTML = `<div><strong>${d.name || 'User'}</strong> (${email})</div><button style="cursor:pointer; background:var(--drive-red); color:white; border:none; padding:5px; border-radius:4px;" onclick="revokeUser('${email}')">Revoke</button>`; usersSection.appendChild(div); });
 
                 const msgSnapshot = await db.collection('admin_messages').orderBy('timestamp', 'desc').get();
                 msgSection.innerHTML = msgSnapshot.empty ? '<p>Inbox empty.</p>' : '';
+                msgSection.style.display = 'block'; // פארזיכערן אז ס'זעט זיך ווען מען עפנט
                 msgSnapshot.forEach(doc => {
                     const d = doc.data(); const isUnread = (d.status === "unread"); const itemClass = isUnread ? 'list-item msg-item unread' : 'list-item msg-item'; const badge = isUnread ? '<span class="unread-badge">NEW</span>' : '';
-                    const div = document.createElement('div'); div.className = itemClass; div.onclick = () => markMessageAsRead(doc.id, d.status); div.innerHTML = `<div style="width:100%; display:flex; justify-content:space-between; color:var(--drive-yellow);"><strong>From: ${d.name} (${d.email}) ${badge}</strong><button class="action-btn" style="background-color:rgba(234,67,53,0.2); color:var(--drive-red); padding:3px 8px; font-size:11px;" onclick="event.stopPropagation(); deleteMessage('${doc.id}')">Delete</button></div><div style="color:white; margin-top:5px; font-size:14px; line-height:1.4;">${d.message}</div>`; msgSection.appendChild(div);
+                    const div = document.createElement('div'); div.className = itemClass; div.onclick = () => markMessageAsRead(doc.id, d.status); div.innerHTML = `<div style="width:100%; display:flex; justify-content:space-between; color:var(--drive-yellow);"><strong>From: ${d.name} (${d.email}) ${badge}</strong><button style="cursor:pointer; background:rgba(234,67,53,0.2); color:var(--drive-red); border:none; padding:3px 8px; font-size:11px;" onclick="event.stopPropagation(); deleteMessage('${doc.id}')">Delete</button></div><div style="color:white; margin-top:5px; font-size:14px; line-height:1.4;">${d.message}</div>`; msgSection.appendChild(div);
                 });
             } catch(error) { console.log(error); }
         }
