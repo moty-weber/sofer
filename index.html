@@ -25,7 +25,7 @@
         body.theme-accent-purple { --drive-yellow: #9c27b0; --drive-blue: #6a1b9a; }
 
         body { font-family: 'Segoe UI', Arial, sans-serif; background-color: var(--bg-dark); color: var(--text-light); margin: 0; padding: 0; position: relative; min-height: 100vh; padding-bottom: 120px; box-sizing: border-box; transition: background 0.3s, color 0.3s; }
-        #mainApp, #updatesPage, #favoritesPage { display: none; }
+        #mainApp, #updatesPage, #favoritesPage, #popularPage { display: none; }
 
         header { background-color: var(--card-bg); border-bottom: 3px solid var(--drive-blue); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
         .brand-area h1 { margin: 0; font-size: 24px; cursor: pointer; }
@@ -35,6 +35,7 @@
         .nav-btn:hover { background-color: var(--drive-blue); }
         #adminPanelBtn { display: none; background-color: #7b1fa2; }
         #favMenuBtn { display: none; background-color: #00796b; }
+        #popularMenuBtn { background-color: #e65100; }
         
         .badge-red::after { content: ''; position: absolute; top: -3px; right: -3px; width: 10px; height: 10px; background-color: var(--drive-red); border-radius: 50%; border: 2px solid var(--bg-dark); }
         .tab-btn { position: relative; }
@@ -60,13 +61,15 @@
         .card-info { padding: 12px; position: relative; padding-right: 40px; }
         .card-title { font-size: 15px; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 600; }
 
-        .admin-card-overlay { display: none; position: absolute; top: 5px; left: 5px; background: rgba(0,0,0,0.8); padding: 4px 8px; border-radius: 4px; font-size: 11px; color: var(--drive-yellow); z-index: 5; }
+        .admin-card-overlay { display: none; position: absolute; top: 5px; left: 5px; background: rgba(0,0,0,0.8); padding: 4px 8px; border-radius: 4px; font-size: 11px; color: var(--drive-yellow); z-index: 5; margin-bottom: 2px; }
+        .admin-popular-overlay { display: none; position: absolute; top: 30px; left: 5px; background: rgba(0,0,0,0.8); padding: 4px 8px; border-radius: 4px; font-size: 11px; color: #ffeb3b; z-index: 5; }
+        .admin-unpopular-overlay { display: none; position: absolute; top: 55px; left: 5px; background: rgba(0,0,0,0.8); padding: 4px 8px; border-radius: 4px; font-size: 11px; color: var(--drive-red); z-index: 5; }
         .download-icon-btn { position: absolute; bottom: 10px; right: 10px; background-color: var(--drive-blue); color: white; border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; z-index: 2; }
         
         .fav-btn { position: absolute; top: 10px; right: 10px; background: none; border: none; font-size: 18px; cursor: pointer; z-index: 3; filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.5)); transition: transform 0.2s; }
         .fav-btn:hover { transform: scale(1.2); }
 
-        .close-continue-btn { position: absolute; top: 5px; right: 5px; background: rgba(0,0,0,0.6); color: white; border: none; border-radius: 50%; width: 22px; height: 22px; cursor: pointer; font-size: 12px; z-index: 4; display: flex; align-items: center; justify-content: center; }
+        .close-continue-btn { position: absolute; top: 5px; right: 5px; background: rgba(0,0,0,0.8); color: white; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; font-size: 14px; z-index: 10; display: flex; align-items: center; justify-content: center; font-weight: bold; }
         .close-continue-btn:hover { background: var(--drive-red); }
 
         .search-wrapper { max-width: 500px; margin: 0 auto 25px auto; }
@@ -93,7 +96,7 @@
         .close-player { position: absolute; top: -40px; right: 0; color: white; font-size: 30px; background: none; border: none; cursor: pointer; z-index: 1010; }
         .minimize-player { position: absolute; top: -40px; right: 40px; color: white; font-size: 25px; background: none; border: none; cursor: pointer; z-index: 1010; }
 
-        /* Picture-in-picture */
+        /* Picture-in-picture Mode */
         .player-modal.pip-mode { width: 350px; height: 240px; top: auto; left: auto; bottom: 130px; right: 20px; background: none; box-shadow: 0 10px 30px rgba(0,0,0,0.8); border-radius: 8px; overflow: hidden; }
         .player-modal.pip-mode .player-content { width: 100%; height: 100%; padding: 0; max-height: 100%; }
         .player-modal.pip-mode video { height: 180px !important; }
@@ -173,7 +176,7 @@
 
     <div class="lock-screen" id="lockScreen">
         <div class="lock-box" id="loginPanel">
-            <h2 style="margin-top:0; color: var(--drive-yellow);">sofer cloud access</h2>
+            <h2 style="margin-top:0; color: var(--drive-yellow);">sofer video cloud</h2>
             <p style="color: var(--text-muted); font-size: 14px;">Enter your Email Address to unlock the library.</p>
             <input type="email" id="accessEmailInput" placeholder="Enter your registered email...">
             <button onclick="checkAccess()">Unlock Library</button>
@@ -202,6 +205,7 @@
             <div class="brand-area"><h1 onclick="showAppPage('library')">sofer video cloud</h1></div>
             <div class="menu-area">
                 <button class="nav-btn" id="favMenuBtn" onclick="showAppPage('favorites')">My Favorites</button>
+                <button class="nav-btn" id="popularMenuBtn" onclick="showAppPage('popular')">⭐ Trending Popular</button>
                 <button class="nav-btn" id="updatesMenuBtn" onclick="showAppPage('updates')">Updates & Forum</button>
                 <a href="about.html" class="nav-btn">About Me</a>
                 <button id="adminPanelBtn" class="nav-btn" onclick="openAdminPanel()">Admin Panel</button>
@@ -217,10 +221,9 @@
             
             <div class="main-container">
                 <div class="search-wrapper">
-                    <input type="text" id="cloudSearchInput" class="search-input" placeholder="Search this folder..." oninput="filterContent()">
+                    <input type="text" id="cloudSearchInput" class="search-input" placeholder="Search total cloud ecosystem (folders & videos)..." oninput="filterGlobalDriveSearch()">
                 </div>
 
-                <!-- Continue Watching סעקציע -->
                 <div id="continueWatchingWrapper" style="display: none; margin-bottom: 40px;">
                     <h2 class="section-title">Continue Watching</h2>
                     <div class="grid" id="continueGrid"></div>
@@ -234,7 +237,6 @@
             </div>
         </div>
 
-        <!-- Favorites פערזענליכע בלאט -->
         <div id="favoritesPage">
             <div class="breadcrumb-container" style="background-color: #1c2638; margin-bottom: 20px;">
                 <button class="back-btn" onclick="showAppPage('library')">← Back to Main Menu</button>
@@ -243,6 +245,17 @@
             <div class="main-container">
                 <h2 class="section-title">Bookmarked Favorites</h2>
                 <div class="grid" id="favoritesGrid"></div>
+            </div>
+        </div>
+
+        <div id="popularPage">
+            <div class="breadcrumb-container" style="background-color: #1c2638; margin-bottom: 20px;">
+                <button class="back-btn" onclick="showAppPage('library')">← Back to Main Menu</button>
+                <span style="color: var(--text-muted); font-size:14px; margin-left: 10px;">Curated Trending & Popular Media</span>
+            </div>
+            <div class="main-container">
+                <h2 class="section-title">Trending & Popular Videos</h2>
+                <div class="grid" id="popularGrid">Loading pinned popular media...</div>
             </div>
         </div>
 
@@ -274,9 +287,7 @@
 
     <div class="admin-modal" id="adminModal">
         <div class="admin-content">
-            <!-- נייע "Back to Home" קנעפּל אינעווייניג אינעם אדמין פאנעל -->
             <button class="nav-btn" style="position: absolute; top: 15px; left: 20px; background-color: var(--drive-blue); font-size: 12px; padding: 6px 12px;" onclick="hideAdminPanel(); showAppPage('library');">🏠 Go to Home Base</button>
-            
             <button class="close-player" onclick="hideAdminPanel()">×</button>
             <h2 style="color: var(--drive-yellow); margin-top:40px; margin-bottom: 20px;">sofer Cloud Admin Panel</h2>
             <div class="admin-tabs">
@@ -295,10 +306,17 @@
             <button class="minimize-player" onclick="togglePipMode()">🗕</button>
             <button class="close-player" onclick="closeVideo()">×</button>
             <div class="video-wrapper">
-                <video id="my-video" class="video-js vjs-big-play-centered" controls preload="auto" width="900" height="500">
-                    <p class="vjs-no-js">To view this video please enable JavaScript</p>
-                </video>
+                <video id="my-video" class="video-js vjs-big-play-centered" controls preload="auto" width="900" height="500"></video>
                 <img src="logo.png" class="video-watermark" alt="WM" onerror="this.style.display='none'">
+            </div>
+            <div id="videoModalCommentsSection" style="margin-top:20px; border-top:1px solid #25334a; padding-top:15px;">
+                <h3 style="color: var(--drive-yellow); margin:0 0 10px 0;">Video Reactions & Messages</h3>
+                <div class="reaction-row" id="videoReactionsContainer"></div>
+                <div id="videoCommentsList" style="max-height:180px; overflow-y:auto; margin:15px 0; background:#141b27; padding:10px; border-radius:6px;">Loading thread...</div>
+                <div class="comment-input-row">
+                    <input type="text" id="videoCommentInput" placeholder="Add a public comment/reply to this video...">
+                    <button onclick="submitVideoComment()">Post Message</button>
+                </div>
             </div>
         </div>
     </div>
@@ -310,7 +328,6 @@
     <script src="https://vjs.zencdn.net/8.3.0/video.min.js"></script>
     
     <script>
-        // ************************************************************
         const API_KEY = "AIzaSyDEkcoogK9_8e4HOf7vSWFWEHKct21gjdE"; 
         const START_FOLDER_ID = "14v9raW-BX5EkdfK2-Yj8wDA5kGok2Tda"; 
 
@@ -327,547 +344,318 @@
         const EMAILJS_PUBLIC_KEY = "2VeSFXHu7Jhf2qE-O";
         const EMAILJS_SERVICE_ID = "service_0pgs1vp"; 
         const EMAILJS_TEMPLATE_ID = "template_tq4bhu7";
-
         const ADMIN_TOKEN = "soferadmin"; 
-        // ************************************************************
 
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
         emailjs.init(EMAILJS_PUBLIC_KEY);
 
         let folderHistory = [{ id: START_FOLDER_ID, name: "Home" }];
-        let playerInstance = null;
-        let isAdmin = false;
-        let savedThumbnails = {};
-        let quillEditor = null;
-        
-        let loggedInUserEmail = "";
-        let loggedInUserName = "User";
-        let generatedVerificationCode = ""; 
-        let currentPlayingFileId = null;
+        let playerInstance = null; let isAdmin = false; let savedThumbnails = {}; let quillEditor = null;
+        let loggedInUserEmail = ""; let loggedInUserName = "User"; let generatedVerificationCode = ""; 
+        let currentPlayingFileId = null; let currentEditingPostId = null;
+        let searchTimeout = null; let isPipActive = false;
 
-        let currentEditingPostId = null;
-
-        function getDeviceFingerprint() {
-            return navigator.userAgent + (navigator.hardwareConcurrency || 2) + (navigator.deviceMemory || 4);
-        }
+        function getDeviceFingerprint() { return navigator.userAgent + (navigator.hardwareConcurrency || 2) + (navigator.deviceMemory || 4); }
 
         window.onload = function() {
             const savedEmail = localStorage.getItem('soferUserEmail');
             const savedName = localStorage.getItem('soferUserName') || "Approved User";
-            if (savedEmail) { 
-                loggedInUserEmail = savedEmail; loggedInUserName = savedName;
-                autoLogin(savedEmail); 
-            }
-            listenForUpdates();
-            updateFavMenuButtonVisibility();
+            if (savedEmail) { loggedInUserEmail = savedEmail; loggedInUserName = savedName; autoLogin(savedEmail); }
+            listenForUpdates(); updateFavMenuButtonVisibility();
         };
 
         function showAppPage(page) {
             document.getElementById('librarySection').style.display = 'none';
             document.getElementById('updatesPage').style.display = 'none';
             document.getElementById('favoritesPage').style.display = 'none';
+            document.getElementById('popularPage').style.display = 'none';
             
-            if(page === 'updates') {
-                document.getElementById('updatesMenuBtn').classList.remove('badge-red');
-                document.getElementById('updatesPage').style.display = 'block';
-                loadBlogPosts();
-            } else if(page === 'favorites') {
-                document.getElementById('favoritesPage').style.display = 'block';
-                renderFavorites();
-            } else {
-                document.getElementById('librarySection').style.display = 'block';
-                renderContinueWatching();
-            }
+            if(page === 'updates') { document.getElementById('updatesMenuBtn').classList.remove('badge-red'); document.getElementById('updatesPage').style.display = 'block'; loadBlogPosts(); } 
+            else if(page === 'favorites') { document.getElementById('favoritesPage').style.display = 'block'; renderFavorites(); } 
+            else if(page === 'popular') { document.getElementById('popularPage').style.display = 'block'; renderPopularPage(); }
+            else { document.getElementById('librarySection').style.display = 'block'; renderContinueWatching(); }
             updateFavMenuButtonVisibility();
         }
 
-        function togglePanels(showRequest) {
-            document.getElementById('loginPanel').style.display = showRequest ? 'none' : 'block';
-            document.getElementById('requestPanel').style.display = showRequest ? 'block' : 'none';
-        }
+        function togglePanels(showRequest) { document.getElementById('loginPanel').style.display = showRequest ? 'none' : 'block'; document.getElementById('requestPanel').style.display = showRequest ? 'block' : 'none'; }
 
         function sendVerificationCode() {
-            const name = document.getElementById('reqName').value.trim();
-            const email = document.getElementById('reqEmail').value.trim().toLowerCase();
-            if (!name || !email) { alert('Please fill in your Name and Email first.'); return; }
-
-            generatedVerificationCode = Math.floor(100000 + Math.random() * 900000).toString();
-            document.getElementById('sendOtpBtn').innerText = "Sending...";
-
-            emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-                to_name: name, to_email: email, verification_code: generatedVerificationCode
-            }).then(() => {
-                alert(`Code sent to ${email}. Check your inbox!`);
-                document.getElementById('sendOtpBtn').style.display = "none";
-                document.getElementById('reqOtpInput').style.display = "block";
-                document.getElementById('spamNotice').style.display = "block";
-                document.getElementById('verifyOtpBtn').style.display = "block";
+            const name = document.getElementById('reqName').value.trim(); const email = document.getElementById('reqEmail').value.trim().toLowerCase(); if (!name || !email) { alert('Please fill in your Name and Email first.'); return; }
+            generatedVerificationCode = Math.floor(100000 + Math.random() * 900000).toString(); document.getElementById('sendOtpBtn').innerText = "Sending...";
+            emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, { to_name: name, to_email: email, verification_code: generatedVerificationCode }).then(() => {
+                alert(`Code sent to ${email}. Check your inbox!`); document.getElementById('sendOtpBtn').style.display = "none"; document.getElementById('reqOtpInput').style.display = "block"; document.getElementById('spamNotice').style.display = "block"; document.getElementById('verifyOtpBtn').style.display = "block";
             }, () => { document.getElementById('sendOtpBtn').innerText = "Get Code"; });
         }
 
         function verifyInsertedCode() {
             const insertedCode = document.getElementById('reqOtpInput').value.trim();
             if (insertedCode === generatedVerificationCode && generatedVerificationCode !== "") {
-                alert('Email verified! Submit your request.');
-                const submitBtn = document.getElementById('finalSubmitBtn');
-                submitBtn.disabled = false;
-                submitBtn.style.backgroundColor = "var(--drive-blue)";
-                submitBtn.style.cursor = "pointer";
-                submitBtn.innerText = "Submit Request";
-                document.getElementById('reqOtpInput').disabled = true;
-                document.getElementById('verifyOtpBtn').style.display = "none";
-                document.getElementById('spamNotice').style.display = "none";
+                alert('Email verified! Submit your request.'); const submitBtn = document.getElementById('finalSubmitBtn'); submitBtn.disabled = false; submitBtn.style.backgroundColor = "var(--drive-blue)"; submitBtn.style.cursor = "pointer"; submitBtn.innerText = "Submit Request"; document.getElementById('reqOtpInput').disabled = true; document.getElementById('verifyOtpBtn').style.display = "none"; document.getElementById('spamNotice').style.display = "none";
             } else { alert('Invalid code!'); }
         }
 
         async function submitAccessRequest() {
-            const name = document.getElementById('reqName').value.trim();
-            const email = document.getElementById('reqEmail').value.trim().toLowerCase();
-            const note = document.getElementById('reqNote').value.trim();
-
-            try {
-                await db.collection('access_requests').doc(email).set({
-                    name: name, email: email, note: note,
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                alert('Access request submitted verified successfully!');
-                togglePanels(false);
-            } catch (error) { alert('Submit error. Try again.'); }
+            const name = document.getElementById('reqName').value.trim(); const email = document.getElementById('reqEmail').value.trim().toLowerCase(); const note = document.getElementById('reqNote').value.trim();
+            try { await db.collection('access_requests').doc(email).set({ name: name, email: email, note: note, timestamp: firebase.firestore.FieldValue.serverTimestamp() }); alert('Access request submitted verified successfully!'); togglePanels(false); } catch (error) { alert('Submit error. Try again.'); }
         }
 
         async function checkAccess() {
-            const input = document.getElementById('accessEmailInput').value.trim().toLowerCase();
-            if (!input) { alert('Please enter your Email Address.'); return; }
-
+            const input = document.getElementById('accessEmailInput').value.trim().toLowerCase(); if (!input) { alert('Please enter your Email Address.'); return; }
             if (input === ADMIN_TOKEN || input === "mw6559154@gmail.com") {
-                isAdmin = true; loggedInUserEmail = "mw6559154@gmail.com"; loggedInUserName = "Platform Administrator";
-                localStorage.setItem('soferUserEmail', "mw6559154@gmail.com"); localStorage.setItem('soferUserName', "Platform Administrator");
-                unlockApp(); return;
+                isAdmin = true; loggedInUserEmail = "mw6559154@gmail.com"; loggedInUserName = "Platform Administrator"; localStorage.setItem('soferUserEmail', "mw6559154@gmail.com"); localStorage.setItem('soferUserName', "Platform Administrator"); unlockApp(); return;
             }
-
             try {
                 const userDoc = await db.collection('allowed_users').doc(input).get();
                 if (userDoc.exists && userDoc.data().approved) {
                     const currentDevice = getDeviceFingerprint(); const userData = userDoc.data();
                     if (userData.deviceId && userData.deviceId !== currentDevice) { alert('Denied. Linked to another device.'); return; }
                     if (!userData.deviceId) { await db.collection('allowed_users').doc(input).update({ deviceId: currentDevice }); }
-                    isAdmin = false; loggedInUserEmail = input; loggedInUserName = userData.name || "Approved User";
-                    localStorage.setItem('soferUserEmail', input); localStorage.setItem('soferUserName', loggedInUserName);
-                    unlockApp();
+                    isAdmin = false; loggedInUserEmail = input; loggedInUserName = userData.name || "Approved User"; localStorage.setItem('soferUserEmail', input); localStorage.setItem('soferUserName', loggedInUserName); unlockApp();
                 } else { alert('Access Denied or Pending.'); }
             } catch (error) { alert('Login error.'); }
         }
 
-        function autoLogin(email) {
-            if (email === "mw6559154@gmail.com") { isAdmin = true; unlockApp(); } else { unlockApp(); }
-        }
+        function autoLogin(email) { if (email === "mw6559154@gmail.com") { isAdmin = true; unlockApp(); } else { unlockApp(); } }
 
         async function unlockApp() {
-            document.getElementById('lockScreen').style.display = 'none';
-            document.getElementById('mainApp').style.display = 'block';
+            document.getElementById('lockScreen').style.display = 'none'; document.getElementById('mainApp').style.display = 'block';
             if(isAdmin) {
-                document.getElementById('adminPanelBtn').style.display = 'block';
-                document.getElementById('adminEditorBox').style.display = 'block';
-                quillEditor = new Quill('#editor-container', {
-                    modules: { toolbar: [['bold', 'italic', 'underline'], [{ 'color': [] }, { 'background': [] }], ['image', 'link']] },
-                    theme: 'snow'
-                });
+                document.getElementById('adminPanelBtn').style.display = 'block'; document.getElementById('adminEditorBox').style.display = 'block';
+                quillEditor = new Quill('#editor-container', { modules: { toolbar: [['bold', 'italic', 'underline'], [{ 'color': [] }, { 'background': [] }], ['image', 'link']] }, theme: 'snow' });
             }
             document.getElementById('userDisplayBadge').innerText = `${loggedInUserName} (${loggedInUserEmail})`;
+            playerInstance = videojs('my-video', { playbackRates: [0.5, 1, 1.25, 1.5, 1.75, 2], responsive: true, fluid: true });
             
-            playerInstance = videojs('my-video', {
-                playbackRates: [0.5, 1, 1.25, 1.5, 1.75, 2],
-                responsive: true,
-                fluid: true,
-                controlBar: {
-                    children: [
-                        'playToggle',
-                        'volumePanel',
-                        'currentTimeDisplay',
-                        'timeDivider',
-                        'durationDisplay',
-                        'progressControl',
-                        'liveDisplay',
-                        'playbackRateMenuButton',
-                        'subsCapsButton',
-                        'audioTrackButton',
-                        'fullscreenToggle'
-                    ]
-                }
-            });
-
             playerInstance.on('timeupdate', function() {
                 if (currentPlayingFileId && playerInstance.duration()) {
                     const progress = (playerInstance.currentTime() / playerInstance.duration()) * 100;
-                    if (progress > 2 && progress < 98) {
-                        saveVideoProgress(currentPlayingFileId, playerInstance.currentTime(), playerInstance.duration());
-                    } else if (progress >= 98) {
-                        clearVideoProgress(currentPlayingFileId);
-                    }
+                    if (progress > 2 && progress < 98) { saveVideoProgress(currentPlayingFileId, playerInstance.currentTime(), playerInstance.duration()); } 
+                    else if (progress >= 98) { clearVideoProgress(currentPlayingFileId); }
                 }
             });
 
-            try {
-                const thumbSnapshot = await db.collection('custom_thumbnails').get();
-                thumbSnapshot.forEach(doc => { savedThumbnails[doc.id] = doc.data().url; });
-            } catch(e) {}
-            loadFolder(START_FOLDER_ID, "Home");
-            setTimeout(() => { setupCustomButtons(); }, 1000);
+            try { const thumbSnapshot = await db.collection('custom_thumbnails').get(); thumbSnapshot.forEach(doc => { savedThumbnails[doc.id] = doc.data().url; }); } catch(e) {}
+            loadFolder(START_FOLDER_ID, "Home"); setTimeout(() => { setupCustomButtons(); }, 1000);
+        }
+
+        /* --- פולקאמע גלאבאלע סעירטש סיסטעם פונעם גאנצן דרייוו --- */
+        function filterGlobalDriveSearch() {
+            clearTimeout(searchTimeout);
+            const query = document.getElementById('cloudSearchInput').value.trim().toLowerCase();
+            if(!query) {
+                const currentFolder = folderHistory[folderHistory.length - 1] || { id: START_FOLDER_ID, name: "Home" };
+                folderHistory.pop(); loadFolder(currentFolder.id, currentFolder.name); return;
+            }
+
+            searchTimeout = setTimeout(async () => {
+                const foldersGrid = document.getElementById('foldersGrid'); const videosGrid = document.getElementById('videosGrid');
+                foldersGrid.innerHTML = 'Searching Drive archive system...'; videosGrid.innerHTML = 'Searching Drive archive system...';
+                
+                try {
+                    const escapedQuery = query.replace(/'/g, "\\'");
+                    const url = `https://www.googleapis.com/drive/v3/files?q=name+contains+'${escapedQuery}'+and+trashed=false&fields=files(id,name,mimeType,thumbnailLink)&key=${API_KEY}`;
+                    const res = await fetch(url); const data = await res.json();
+                    foldersGrid.innerHTML = ''; videosGrid.innerHTML = '';
+                    let favs = JSON.parse(localStorage.getItem('sofer_favs') || '[]');
+
+                    if (data.files && data.files.length > 0) {
+                        data.files.forEach(file => {
+                            const card = document.createElement('div'); card.setAttribute('data-id', file.id); card.setAttribute('data-name', file.name); card.setAttribute('data-thumb', savedThumbnails[file.id] || file.thumbnailLink || '');
+                            const isFav = favs.some(f => f.id === file.id) ? '❤️' : '🤍';
+                            const adminOverlayHtml = isAdmin ? `<div class="admin-card-overlay" style="display:block;" onclick="changeThumbnailPrompt('${file.id}', event)">⚙️ Edit Thumbnail</div><div class="admin-popular-overlay" style="display:block;" onclick="markAsPopularManual('${file.id}', '${file.name.replace(/'/g, "\\'")}', event)">⭐ Set Popular</div>` : '';
+
+                            if (file.mimeType === 'application/vnd.google-apps.folder') {
+                                card.className = 'card folder'; card.onclick = () => { document.getElementById('cloudSearchInput').value = ''; loadFolder(file.id, file.name); };
+                                card.innerHTML = `${adminOverlayHtml}<div class="thumbnail-placeholder" id="thumb-${file.id}">${savedThumbnails[file.id] ? `<img src="${savedThumbnails[file.id]}" style="width:100%;height:100%;object-fit:cover;">` : '📁'}</div><div class="card-info"><p class="card-title">${file.name}</p></div>`; foldersGrid.appendChild(card);
+                            } else if (file.mimeType.startsWith('video/')) {
+                                card.className = 'card video'; card.onclick = (e) => { if(!e.target.classList.contains('download-icon-btn') && !e.target.classList.contains('admin-card-overlay') && !e.target.classList.contains('admin-popular-overlay') && !e.target.classList.contains('fav-btn')) playVideo(file.id); };
+                                card.innerHTML = `${adminOverlayHtml}<button class="fav-btn" onclick="toggleFavorite('${file.id}', event)">${isFav}</button><div class="thumbnail-placeholder" id="thumb-${file.id}"><img src="${savedThumbnails[file.id] || file.thumbnailLink || '🎬'}" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='https://via.placeholder.com/220x130?text=Video'"></div><div class="card-info"><p class="card-title">${file.name}</p></div><button class="download-icon-btn" onclick="downloadVideo('${file.id}')">↓</button>`; videosGrid.appendChild(card);
+                            }
+                        });
+                    }
+                    if(foldersGrid.innerHTML === '') foldersGrid.innerHTML = '<p>No matching folders found.</p>';
+                    if(videosGrid.innerHTML === '') videosGrid.innerHTML = '<p>No matching videos found.</p>';
+                } catch(e) {}
+            }, 600);
+        }
+
+        /* --- מאנועלע פאפולער קנעפּלעך פארן אדמין --- */
+        async function markAsPopularManual(fileId, title, event) {
+            event.stopPropagation();
+            const cardEl = document.querySelector(`[data-id="${fileId}"]`); const thumb = cardEl ? cardEl.getAttribute('data-thumb') : '';
+            await db.collection('popular_videos').doc(fileId).set({ title: title, thumb: thumb || '' });
+            alert('Video has been successfully pinned to the Latest Popular page!');
+        }
+
+        async function removePopularManual(fileId, event) {
+            event.stopPropagation();
+            if(confirm("Remove from Latest Popular list?")) {
+                await db.collection('popular_videos').doc(fileId).delete(); alert('Removed successfully!'); renderPopularPage();
+            }
+        }
+
+        function renderPopularPage() {
+            const container = document.getElementById('popularGrid'); container.innerHTML = 'Loading latest trends...';
+            db.collection('popular_videos').get().then(snap => {
+                container.innerHTML = ''; if(snap.empty) { container.innerHTML = '<p>No pinned popular items yet.</p>'; return; }
+                snap.forEach(doc => {
+                    const data = doc.data(); const card = document.createElement('div'); card.className = 'card video';
+                    card.onclick = () => playVideo(doc.id);
+                    const removeBtn = isAdmin ? `<div class="admin-unpopular-overlay" style="display:block;" onclick="removePopularManual('${doc.id}', event)">❌ Unset Popular</div>` : '';
+                    card.innerHTML = `${removeBtn}<div class="thumbnail-placeholder"><img src="${data.thumb || '🎬'}" style="width:100%;height:100%;object-fit:cover;"></div><div class="card-info"><p class="card-title">${data.title}</p></div>`;
+                    container.appendChild(card);
+                });
+            });
+        }
+
+        /* --- ווידעאו קאמענטארן און רעאקציעס לאגיק --- */
+        function loadVideoMetaAndComments(fileId) {
+            const reactionContainer = document.getElementById('videoReactionsContainer');
+            db.collection('video_reactions').doc(fileId).onSnapshot(doc => {
+                reactionContainer.innerHTML = ''; const data = doc.exists ? doc.data() : {};
+                ['thumb', 'heart', 'fire', 'wow'].forEach(emoji => {
+                    const reactMap = data['emoji_' + emoji] || {}; const count = Object.keys(reactMap).length;
+                    const activeClass = reactMap[loggedInUserEmail] ? 'style="background: var(--drive-blue);"' : '';
+                    reactionContainer.innerHTML += `<button class="react-btn" ${activeClass} onclick="toggleVideoEmoji('${fileId}', '${emoji}')">${emoji==='thumb'?'👍':emoji==='heart'?'❤️':emoji==='fire'?'🔥':'😮'} <span>${count}</span></button>`;
+                });
+            });
+
+            const commentsList = document.getElementById('videoCommentsList');
+            db.collection('video_reactions').doc(fileId).collection('comments').orderBy('timestamp', 'asc').onSnapshot(snap => {
+                commentsList.innerHTML = ''; if(snap.empty) { commentsList.innerHTML = '<p style="color:var(--text-muted); font-size:12px; margin:0;">No replies or messages yet. Be the first!</p>'; return; }
+                snap.forEach(cDoc => {
+                    const c = cDoc.data(); commentsList.innerHTML += `<div style="margin-bottom:8px; border-bottom:1px solid #1c2638; padding-bottom:5px;"><strong style="color:var(--drive-yellow); font-size:13px;">${c.userName}:</strong> <span style="font-size:13px; color:#cbd5e1;">${c.text}</span></div>`;
+                });
+            });
+        }
+
+        async function toggleVideoEmoji(fileId, emoji) {
+            const ref = db.collection('video_reactions').doc(fileId); const doc = await ref.get();
+            let data = doc.exists ? doc.data() : {}; let currentMap = data['emoji_' + emoji] || {};
+            if(currentMap[loggedInUserEmail]) delete currentMap[loggedInUserEmail]; else currentMap[loggedInUserEmail] = loggedInUserName;
+            await ref.set({ ['emoji_' + emoji]: currentMap }, { merge: true });
+        }
+
+        async function submitVideoComment() {
+            const input = document.getElementById('videoCommentInput'); const text = input.value.trim(); if(!text) return;
+            await db.collection('video_reactions').doc(currentPlayingFileId).collection('comments').add({ userName: loggedInUserName, text: text, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
+            input.value = '';
         }
 
         function saveVideoProgress(fileId, time, duration) {
             let progressList = JSON.parse(localStorage.getItem('sofer_progress') || '{}');
-            const cardEl = document.querySelector(`[data-id="${fileId}"]`);
-            const title = cardEl ? cardEl.getAttribute('data-name') : 'Video';
-            const thumb = cardEl ? cardEl.getAttribute('data-thumb') : '';
-
+            const cardEl = document.querySelector(`[data-id="${fileId}"]`); const title = cardEl ? cardEl.getAttribute('data-name') : 'Video'; const thumb = cardEl ? cardEl.getAttribute('data-thumb') : '';
             progressList[fileId] = { time: time, duration: duration, title: title, thumb: thumb, timestamp: Date.now() };
             localStorage.setItem('sofer_progress', JSON.stringify(progressList));
         }
 
-        function clearVideoProgress(fileId) {
-            let progressList = JSON.parse(localStorage.getItem('sofer_progress') || '{}');
-            delete progressList[fileId];
-            localStorage.setItem('sofer_progress', JSON.stringify(progressList));
-        }
-
-        function removeContinueItem(fileId, event) {
-            event.stopPropagation();
-            clearVideoProgress(fileId);
-            renderContinueWatching();
-        }
+        function clearVideoProgress(fileId) { let progressList = JSON.parse(localStorage.getItem('sofer_progress') || '{}'); delete progressList[fileId]; localStorage.setItem('sofer_progress', JSON.stringify(progressList)); }
+        function removeContinueItem(fileId, event) { event.stopPropagation(); clearVideoProgress(fileId); renderContinueWatching(); }
 
         function renderContinueWatching() {
-            const container = document.getElementById('continueGrid');
-            const wrapper = document.getElementById('continueWatchingWrapper');
-            const currentFolder = folderHistory[folderHistory.length - 1];
-            
-            if (!currentFolder || currentFolder.id !== START_FOLDER_ID) {
-                wrapper.style.display = 'none';
-                return;
-            }
-
-            container.innerHTML = '';
-            let progressList = JSON.parse(localStorage.getItem('sofer_progress') || '{}');
+            const container = document.getElementById('continueGrid'); const wrapper = document.getElementById('continueWatchingWrapper'); const currentFolder = folderHistory[folderHistory.length - 1];
+            if (!currentFolder || currentFolder.id !== START_FOLDER_ID) { wrapper.style.display = 'none'; return; }
+            container.innerHTML = ''; let progressList = JSON.parse(localStorage.getItem('sofer_progress') || '{}');
             let items = Object.keys(progressList).sort((a,b) => progressList[b].timestamp - progressList[a].timestamp);
-
-            if (items.length === 0) { wrapper.style.display = 'none'; return; }
-            wrapper.style.display = 'block';
-
+            if (items.length === 0) { wrapper.style.display = 'none'; return; } wrapper.style.display = 'block';
             items.forEach(id => {
-                const item = progressList[id];
-                const pct = (item.time / item.duration) * 100;
-                const card = document.createElement('div');
-                card.className = 'card video';
+                const item = progressList[id]; const pct = (item.time / item.duration) * 100; const card = document.createElement('div'); card.className = 'card video';
                 card.onclick = () => { playVideo(id); setTimeout(() => { playerInstance.currentTime(item.time); }, 800); };
-                card.innerHTML = `
-                    <button class="close-continue-btn" onclick="removeContinueItem('${id}', event)">×</button>
-                    <div class="thumbnail-placeholder">
-                        <img src="${item.thumb || '🎬'}" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='https://via.placeholder.com/220x130?text=Video'">
-                        <div class="continue-progress-bg"><div class="continue-progress-fill" style="width: ${pct}%"></div></div>
-                    </div>
-                    <div class="card-info"><p class="card-title">${item.title}</p></div>
-                `;
-                container.appendChild(card);
+                card.innerHTML = `<button class="close-continue-btn" onclick="removeContinueItem('${id}', event)">×</button><div class="thumbnail-placeholder"><img src="${item.thumb || '🎬'}" style="width:100%;height:100%;object-fit:cover;"><div class="continue-progress-bg"><div class="continue-progress-fill" style="width: ${pct}%"></div></div></div><div class="card-info"><p class="card-title">${item.title}</p></div>`; container.appendChild(card);
             });
         }
 
         async function publishAdminUpdate() {
-            const htmlContent = quillEditor.root.innerHTML;
-            if(quillEditor.getText().trim().length === 0) { alert('Please write something first.'); return; }
-
+            const htmlContent = quillEditor.root.innerHTML; if(quillEditor.getText().trim().length === 0) { alert('Please write something first.'); return; }
             try {
-                if(currentEditingPostId) {
-                    await db.collection('forum_posts').doc(currentEditingPostId).update({
-                        content: htmlContent,
-                        lastEditAt: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-                    currentEditingPostId = null;
-                    document.getElementById('editorBoxTitle').innerText = "Publish a Rich Update";
-                    document.getElementById('submitPostBtn').innerText = "Publish Post";
-                    document.getElementById('submitPostBtn').style.backgroundColor = "var(--drive-green)";
-                    document.getElementById('cancelEditBtn').style.display = "none";
-                } else {
-                    await db.collection('forum_posts').add({
-                        content: htmlContent,
-                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-                }
-                quillEditor.setText('');
-                loadBlogPosts();
+                if(currentEditingPostId) { await db.collection('forum_posts').doc(currentEditingPostId).update({ content: htmlContent, lastEditAt: firebase.firestore.FieldValue.serverTimestamp() }); currentEditingPostId = null; document.getElementById('editorBoxTitle').innerText = "Publish a Rich Update"; document.getElementById('submitPostBtn').innerText = "Publish Post"; document.getElementById('submitPostBtn').style.backgroundColor = "var(--drive-green)"; document.getElementById('cancelEditBtn').style.display = "none"; } 
+                else { await db.collection('forum_posts').add({ content: htmlContent, timestamp: firebase.firestore.FieldValue.serverTimestamp() }); }
+                quillEditor.setText(''); loadBlogPosts();
             } catch(e) { alert('Post error.'); }
         }
 
-        function cancelAdminEditing() {
-            currentEditingPostId = null;
-            quillEditor.setText('');
-            document.getElementById('editorBoxTitle').innerText = "Publish a Rich Update";
-            document.getElementById('submitPostBtn').innerText = "Publish Post";
-            document.getElementById('submitPostBtn').style.backgroundColor = "var(--drive-green)";
-            document.getElementById('cancelEditBtn').style.display = "none";
-        }
+        function cancelAdminEditing() { currentEditingPostId = null; quillEditor.setText(''); document.getElementById('editorBoxTitle').innerText = "Publish a Rich Update"; document.getElementById('submitPostBtn').innerText = "Publish Post"; document.getElementById('submitPostBtn').style.backgroundColor = "var(--drive-green)"; document.getElementById('cancelEditBtn').style.display = "none"; }
 
         function loadBlogPosts() {
-            const listContainer = document.getElementById('blogPostsList');
-            listContainer.innerHTML = 'Loading threads...';
-
+            const listContainer = document.getElementById('blogPostsList'); listContainer.innerHTML = 'Loading threads...';
             db.collection('forum_posts').orderBy('timestamp', 'desc').onSnapshot(snapshot => {
                 listContainer.innerHTML = '';
                 snapshot.forEach(doc => {
-                    const postData = doc.data();
-                    const postId = doc.id;
-                    const timeString = postData.timestamp ? postData.timestamp.toDate().toLocaleString() : 'Just now';
-                    
-                    let adminActionsHtml = isAdmin ? `
-                        <div style="display:inline-flex; gap:10px; margin-left:15px;">
-                            <span class="action-link" onclick="setupEditMainPost('${postId}', \`${postData.content.replace(/`/g, "\\`").replace(/\${/g, "\\${")}\`)">Edit Update</span>
-                            <span class="action-link delete-link" onclick="deleteMainPost('${postId}')">Delete Update</span>
-                        </div>
-                    ` : '';
-
-                    const postElement = document.createElement('div');
-                    postElement.className = 'blog-post';
-                    postElement.innerHTML = `
-                        <div class="blog-time">
-                            <span>📅 Published: ${timeString} ${adminActionsHtml}</span>
-                        </div>
-                        <div class="blog-body">${postData.content}</div>
-                        <div class="thread-section">
-                            <h4>Conversation Thread</h4>
-                            <div id="comments-list-${postId}">Loading posts...</div>
-                            <div class="comment-input-row">
-                                <input type="text" id="input-${postId}" placeholder="Write a message in this thread...">
-                                <button onclick="submitComment('${postId}', 'root')">Post Message</button>
-                            </div>
-                        </div>
-                    `;
-                    listContainer.appendChild(postElement);
-                    loadCommentsForPost(postId);
+                    const postData = doc.data(); const postId = doc.id; const timeString = postData.timestamp ? postData.timestamp.toDate().toLocaleString() : 'Just now';
+                    let adminActionsHtml = isAdmin ? `<div style="display:inline-flex; gap:10px; margin-left:15px;"><span class="action-link" onclick="setupEditMainPost('${postId}', \`${postData.content.replace(/`/g, "\\`").replace(/\${/g, "\\${")}\`)">Edit Update</span><span class="action-link delete-link" onclick="deleteMainPost('${postId}')">Delete Update</span></div>` : '';
+                    const postElement = document.createElement('div'); postElement.className = 'blog-post';
+                    postElement.innerHTML = `<div class="blog-time"><span>📅 Published: ${timeString} ${adminActionsHtml}</span></div><div class="blog-body">${postData.content}</div><div class="thread-section"><h4>Conversation Thread</h4><div id="comments-list-${postId}">Loading posts...</div><div class="comment-input-row"><input type="text" id="input-${postId}" placeholder="Write a message in this thread..."><button onclick="submitComment('${postId}', 'root')">Post Message</button></div></div>`;
+                    listContainer.appendChild(postElement); loadCommentsForPost(postId);
                 });
             });
         }
 
-        function setupEditMainPost(postId, currentHtml) {
-            currentEditingPostId = postId;
-            quillEditor.root.innerHTML = currentHtml;
-            document.getElementById('editorBoxTitle').innerText = "✏️ Edit Existing Update";
-            document.getElementById('submitPostBtn').innerText = "Save Changes";
-            document.getElementById('submitPostBtn').style.backgroundColor = "var(--drive-yellow)";
-            document.getElementById('cancelEditBtn').style.display = "inline-block";
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        async function deleteMainPost(postId) {
-            if(confirm("Are you sure you want to delete this main update?")) {
-                await db.collection('forum_posts').doc(postId).delete();
-                loadBlogPosts();
-            }
-        }
+        function setupEditMainPost(postId, currentHtml) { currentEditingPostId = postId; quillEditor.root.innerHTML = currentHtml; document.getElementById('editorBoxTitle').innerText = "✏️ Edit Existing Update"; document.getElementById('submitPostBtn').innerText = "Save Changes"; document.getElementById('submitPostBtn').style.backgroundColor = "var(--drive-yellow)"; document.getElementById('cancelEditBtn').style.display = "inline-block"; window.scrollTo({ top: 0, behavior: 'smooth' }); }
+        async function deleteMainPost(postId) { if(confirm("Are you sure you want to delete this main update?")) { await db.collection('forum_posts').doc(postId).delete(); loadBlogPosts(); } }
 
         async function submitComment(postId, parentId) {
-            const inputField = parentId === 'root' ? document.getElementById(`input-${postId}`) : document.getElementById(`inline-input-${parentId}`);
-            const text = inputField.value.trim();
-            if(!text) return;
-
-            try {
-                await db.collection('forum_posts').doc(postId).collection('comments').add({
-                    userName: loggedInUserName,
-                    userEmail: loggedInUserEmail,
-                    commentText: text,
-                    parentId: parentId, // 'root' or a specific comment ID
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                inputField.value = '';
-                if(parentId !== 'root') {
-                    document.getElementById(`inline-replybox-${parentId}`).style.display = "none";
-                }
-            } catch (e) { alert('Comment error.'); }
+            const inputField = parentId === 'root' ? document.getElementById(`input-${postId}`) : document.getElementById(`inline-input-${parentId}`); const text = inputField.value.trim(); if(!text) return;
+            try { await db.collection('forum_posts').doc(postId).collection('comments').add({ userName: loggedInUserName, userEmail: loggedInUserEmail, commentText: text, parentId: parentId, timestamp: firebase.firestore.FieldValue.serverTimestamp() }); inputField.value = ''; if(parentId !== 'root') { document.getElementById(`inline-replybox-${parentId}`).style.display = "none"; } } catch (e) { alert('Comment error.'); }
         }
 
         function loadCommentsForPost(postId) {
             const container = document.getElementById(`comments-list-${postId}`);
             db.collection('forum_posts').doc(postId).collection('comments').orderBy('timestamp', 'asc').onSnapshot(snap => {
-                container.innerHTML = '';
-                if(snap.empty) { container.innerHTML = '<p style="color:var(--text-muted); font-size:13px; margin:0;">No comments in this thread yet.</p>'; return; }
-                
-                let commentMap = {};
-                let rootComments = [];
-                
-                snap.forEach(cDoc => {
-                    let data = cDoc.data();
-                    data.id = cDoc.id;
-                    data.replies = [];
-                    commentMap[data.id] = data;
-                    if (data.parentId === 'root' || !data.parentId) { rootComments.push(data); }
-                });
-
-                snap.forEach(cDoc => {
-                    let data = commentMap[cDoc.id];
-                    if (data.parentId && data.parentId !== 'root' && commentMap[data.parentId]) {
-                        commentMap[data.parentId].replies.push(data);
-                    }
-                });
-
+                container.innerHTML = ''; if(snap.empty) { container.innerHTML = '<p style="color:var(--text-muted); font-size:13px; margin:0;">No comments in this thread yet.</p>'; return; }
+                let commentMap = {}; let rootComments = [];
+                snap.forEach(cDoc => { let data = cDoc.data(); data.id = cDoc.id; data.replies = []; commentMap[data.id] = data; if (data.parentId === 'root' || !data.parentId) { rootComments.push(data); } });
+                snap.forEach(cDoc => { let data = commentMap[cDoc.id]; if (data.parentId && data.parentId !== 'root' && commentMap[data.parentId]) { commentMap[data.parentId].replies.push(data); } });
                 rootComments.forEach(rootComment => { buildRecursiveCommentNode(container, rootComment, postId); });
             });
         }
 
         function buildRecursiveCommentNode(parentElement, c, postId) {
-            const cTime = c.timestamp ? c.timestamp.toDate().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'Now';
-            const canEdit = (c.userEmail === loggedInUserEmail && (Date.now() - (c.timestamp ? c.timestamp.toDate() : Date.now()) < 24*60*60*1000));
-            const canDelete = (c.userEmail === loggedInUserEmail || isAdmin);
-
-            const editHtml = canEdit ? `<span class="action-link" onclick="editCommentPrompt('${postId}', '${c.id}', '${c.commentText.replace(/'/g, "\\'")}')">Edit</span>` : '';
-            const deleteHtml = canDelete ? `<span class="action-link delete-link" onclick="deleteCommentAction('${postId}', '${c.id}')">Delete</span>` : '';
-
-            const wrapper = document.createElement('div');
-            wrapper.className = 'comment-wrapper';
-            wrapper.innerHTML = `
-                <div class="comment-box">
-                    <div class="comment-meta">
-                        <span class="comment-user">${c.userName} (${c.userEmail}) <span class="comment-actions">${editHtml} ${deleteHtml}</span></span>
-                        <span class="comment-time">${cTime} <span class="reply-trigger" onclick="openInlineReplyBox('${postId}', '${c.id}')">Reply</span></span>
-                    </div>
-                    <div class="comment-text">${c.commentText}</div>
-                    <div id="inline-replybox-${c.id}" style="margin-top:10px; display:none;"></div>
-                </div>
-            `;
-            const repliesContainer = document.createElement('div');
-            repliesContainer.className = 'replies-container';
-            wrapper.appendChild(repliesContainer); parentElement.appendChild(wrapper);
+            const cTime = c.timestamp ? c.timestamp.toDate().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'Now'; const canEdit = (c.userEmail === loggedInUserEmail && (Date.now() - (c.timestamp ? c.timestamp.toDate() : Date.now()) < 24*60*60*1000)); const canDelete = (c.userEmail === loggedInUserEmail || isAdmin);
+            const editHtml = canEdit ? `<span class="action-link" onclick="editCommentPrompt('${postId}', '${c.id}', '${c.commentText.replace(/'/g, "\\'")}')">Edit</span>` : ''; const deleteHtml = canDelete ? `<span class="action-link delete-link" onclick="deleteCommentAction('${postId}', '${c.id}')">Delete</span>` : '';
+            const wrapper = document.createElement('div'); wrapper.className = 'comment-wrapper';
+            wrapper.innerHTML = `<div class="comment-box"><div class="comment-meta"><span class="comment-user">${c.userName} (${c.userEmail}) <span class="comment-actions">${editHtml} ${deleteHtml}</span></span><span class="comment-time">${cTime} <span class="reply-trigger" onclick="openInlineReplyBox('${postId}', '${c.id}')">Reply</span></span></div><div class="comment-text">${c.commentText}</div><div id="inline-replybox-${c.id}" style="margin-top:10px; display:none;"></div></div>`;
+            const repliesContainer = document.createElement('div'); repliesContainer.className = 'replies-container'; wrapper.appendChild(repliesContainer); parentElement.appendChild(wrapper);
             if (c.replies && c.replies.length > 0) { c.replies.forEach(subReply => { buildRecursiveCommentNode(repliesContainer, subReply, postId); }); }
         }
 
-        function openInlineReplyBox(postId, commentId) {
-            const box = document.getElementById(`inline-replybox-${commentId}`);
-            box.style.display = "block";
-            box.innerHTML = `
-                <div class="comment-input-row">
-                    <input type="text" id="inline-input-${commentId}" placeholder="Reply to this message...">
-                    <button onclick="submitComment('${postId}', '${commentId}')">Post Reply</button>
-                </div>
-            `;
-        }
-
-        async function editCommentPrompt(postId, commentId, oldText) {
-            const newText = prompt("Edit your message:", oldText);
-            if(newText && newText.trim() !== "") {
-                try {
-                    await db.collection('forum_posts').doc(postId).collection('comments').doc(commentId).update({
-                        commentText: newText.trim(),
-                        editedAt: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-                } catch(e) {}
-            }
-        }
-
-        async function deleteCommentAction(postId, commentId) {
-            if(confirm("Are you sure you want to delete this message permanently?")) {
-                try {
-                    await db.collection('forum_posts').doc(postId).collection('comments').doc(commentId).delete();
-                } catch(e) {}
-            }
-        }
+        function openInlineReplyBox(postId, commentId) { const box = document.getElementById(`inline-replybox-${commentId}`); box.style.display = "block"; box.innerHTML = `<div class="comment-input-row"><input type="text" id="inline-input-${commentId}" placeholder="Reply to this message..."><button onclick="submitComment('${postId}', '${commentId}')">Post Reply</button></div>`; }
+        async function editCommentPrompt(postId, commentId, oldText) { const newText = prompt("Edit your message:", oldText); if(newText && newText.trim() !== "") { try { await db.collection('forum_posts').doc(postId).collection('comments').doc(commentId).update({ commentText: newText.trim(), editedAt: firebase.firestore.FieldValue.serverTimestamp() }); } catch(e) {} } }
+        async function deleteCommentAction(postId, commentId) { if(confirm("Are you sure you want to delete this message permanently?")) { try { await db.collection('forum_posts').doc(postId).collection('comments').doc(commentId).delete(); } catch(e) {} } }
 
         async function sendMessageToAdmin() {
-            const text = document.getElementById('footerMessageText').value.trim();
-            if(!text) { alert('Please type a message.'); return; }
-
-            try {
-                await db.collection('admin_messages').add({
-                    name: loggedInUserName,
-                    email: loggedInUserEmail,
-                    message: text,
-                    status: "unread",
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                alert('Message sent to Administrator panel!');
-                document.getElementById('footerMessageText').value = "";
-            } catch(e) { alert('Send error.'); }
+            const text = document.getElementById('footerMessageText').value.trim(); if(!text) { alert('Please type a message.'); return; }
+            try { await db.collection('admin_messages').add({ name: loggedInUserName, email: loggedInUserEmail, message: text, status: "unread", timestamp: firebase.firestore.FieldValue.serverTimestamp() }); alert('Message sent to Administrator panel!'); document.getElementById('footerMessageText').value = ""; } catch(e) { alert('Send error.'); }
         }
 
-        async function markMessageAsRead(msgId, currentStatus) {
-            if(currentStatus === "unread") {
-                await db.collection('admin_messages').doc(msgId).update({ status: "read" });
-                fetchAdminData();
-            }
-        }
-
-        async function deleteDirectMessage(msgId) {
-            if(confirm("Are you sure you want to delete this message from your direct inbox?")) {
-                try {
-                    await db.collection('admin_messages').doc(msgId).delete();
-                    fetchAdminData();
-                } catch(e) {}
-            }
-        }
+        async function markMessageAsRead(msgId, currentStatus) { if(currentStatus === "unread") { await db.collection('admin_messages').doc(msgId).update({ status: "read" }); fetchAdminData(); } }
+        async function deleteDirectMessage(msgId) { if(confirm("Are you sure you want to delete this message from your direct inbox?")) { try { await db.collection('admin_messages').doc(msgId).delete(); fetchAdminData(); } catch(e) {} } }
 
         function listenForUpdates() {
             db.collection('access_requests').onSnapshot(snap => { if(!snap.empty && isAdmin) document.getElementById('adminPanelBtn').classList.add('badge-red'); });
-            db.collection('admin_messages').where("status", "==", "unread").onSnapshot(snap => { 
-                if(!snap.empty && isAdmin) { document.getElementById('adminPanelBtn').classList.add('badge-red'); document.getElementById('tabMsgBtn').classList.add('tab-badge-red'); } 
-                else { document.getElementById('tabMsgBtn').classList.remove('tab-badge-red'); }
-            });
-            db.collection('forum_posts').orderBy('timestamp', 'desc').limit(1).onSnapshot(snap => {
-                if(!snap.empty) {
-                    const latestPost = snap.docs[0].data(); const lastViewed = localStorage.getItem('lastViewedPostTime') || 0;
-                    const postTime = latestPost.timestamp ? latestPost.timestamp.toDate().getTime() : Date.now();
-                    if(postTime > lastViewed) { document.getElementById('updatesMenuBtn').classList.add('badge-red'); }
-                }
-            });
+            db.collection('admin_messages').where("status", "==", "unread").onSnapshot(snap => { if(!snap.empty && isAdmin) { document.getElementById('adminPanelBtn').classList.add('badge-red'); document.getElementById('tabMsgBtn').classList.add('tab-badge-red'); } else { document.getElementById('tabMsgBtn').classList.remove('tab-badge-red'); } });
         }
 
         function toggleFavorite(fileId, event) {
-            event.stopPropagation();
-            let favs = JSON.parse(localStorage.getItem('sofer_favs') || '[]');
-            const cardEl = document.querySelector(`[data-id="${fileId}"]`);
-            const title = cardEl ? cardEl.getAttribute('data-name') : 'Video';
-            const thumb = cardEl ? cardEl.getAttribute('data-thumb') : '';
-            
+            event.stopPropagation(); let favs = JSON.parse(localStorage.getItem('sofer_favs') || '[]'); const cardEl = document.querySelector(`[data-id="${fileId}"]`); const title = cardEl ? cardEl.getAttribute('data-name') : 'Video'; const thumb = cardEl ? cardEl.getAttribute('data-thumb') : '';
             const index = favs.findIndex(f => f.id === fileId);
-            
-            if (index === -1) {
-                favs.push({ id: fileId, title: title, thumb: thumb });
-                event.target.innerText = '❤️';
-            } else {
-                favs.splice(index, 1);
-                event.target.innerText = '🤍';
-            }
-            localStorage.setItem('sofer_favs', JSON.stringify(favs));
-            updateFavMenuButtonVisibility();
+            if (index === -1) { favs.push({ id: fileId, title: title, thumb: thumb }); event.target.innerText = '❤️'; } 
+            else { favs.splice(index, 1); event.target.innerText = '🤍'; }
+            localStorage.setItem('sofer_favs', JSON.stringify(favs)); updateFavMenuButtonVisibility();
         }
 
         function updateFavMenuButtonVisibility() {
-            let favs = JSON.parse(localStorage.getItem('sofer_favs') || '[]');
-            const currentFolder = folderHistory[folderHistory.length - 1];
-            if(favs.length > 0 && currentFolder && currentFolder.id === START_FOLDER_ID) {
-                document.getElementById('favMenuBtn').style.display = 'inline-block';
-            } else {
-                document.getElementById('favMenuBtn').style.display = 'none';
-            }
+            let favs = JSON.parse(localStorage.getItem('sofer_favs') || '[]'); const currentFolder = folderHistory[folderHistory.length - 1];
+            if(favs.length > 0 && currentFolder && currentFolder.id === START_FOLDER_ID) { document.getElementById('favMenuBtn').style.display = 'inline-block'; } 
+            else { document.getElementById('favMenuBtn').style.display = 'none'; }
         }
 
         function renderFavorites() {
-            const container = document.getElementById('favoritesGrid');
-            container.innerHTML = '';
-
-            let favs = JSON.parse(localStorage.getItem('sofer_favs') || '[]');
+            const container = document.getElementById('favoritesGrid'); container.innerHTML = ''; let favs = JSON.parse(localStorage.getItem('sofer_favs') || '[]');
             if (favs.length === 0) { container.innerHTML = '<p>No favorites added yet.</p>'; return; }
-
             favs.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'card video';
-                card.onclick = () => playVideo(item.id);
-                card.innerHTML = `
-                    <button class="fav-btn" onclick="toggleFavorite('${item.id}', event); renderFavorites();">❤️</button>
-                    <div class="thumbnail-placeholder">
-                        <img src="${item.thumb || '🎬'}" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='https://via.placeholder.com/220x130?text=Video'">
-                    </div>
-                    <div class="card-info"><p class="card-title">${item.title}</p></div>
-                    <button class="download-icon-btn" onclick="downloadVideo('${item.id}')">↓</button>
-                `;
-                container.appendChild(card);
+                const card = document.createElement('div'); card.className = 'card video'; card.onclick = () => playVideo(item.id);
+                card.innerHTML = `<button class="fav-btn" onclick="toggleFavorite('${item.id}', event); renderFavorites();">❤️</button><div class="thumbnail-placeholder"><img src="${item.thumb || '🎬'}" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='https://via.placeholder.com/220x130?text=Video'"></div><div class="card-info"><p class="card-title">${item.title}</p></div><button class="download-icon-btn" onclick="downloadVideo('${item.id}')">↓</button>`; container.appendChild(card);
             });
         }
 
@@ -875,8 +663,7 @@
         function hideAdminPanel() { document.getElementById('adminModal').style.display = 'none'; }
         
         function switchAdminTab(tab) {
-            document.getElementById('tabReqBtn').className = 'tab-btn'; document.getElementById('tabUsersBtn').className = 'tab-btn'; document.getElementById('tabMsgBtn').className = 'tab-btn';
-            document.getElementById('secRequests').className = 'panel-section'; document.getElementById('secUsers').className = 'panel-section'; document.getElementById('secMessages').className = 'panel-section';
+            document.getElementById('tabReqBtn').className = 'tab-btn'; document.getElementById('tabUsersBtn').className = 'tab-btn'; document.getElementById('tabMsgBtn').className = 'tab-btn'; document.getElementById('secRequests').className = 'panel-section'; document.getElementById('secUsers').className = 'panel-section'; document.getElementById('secMessages').className = 'panel-section';
             if(tab === 'requests') { document.getElementById('tabReqBtn').classList.add('active'); document.getElementById('secRequests').classList.add('active'); } 
             else if(tab === 'users') { document.getElementById('tabUsersBtn').classList.add('active'); document.getElementById('secUsers').classList.add('active'); } 
             else { document.getElementById('tabMsgBtn').classList.add('active'); document.getElementById('secMessages').className = 'panel-section active'; document.getElementById('tabMsgBtn').classList.remove('tab-badge-red'); }
@@ -886,16 +673,13 @@
             const reqSection = document.getElementById('secRequests'); const usersSection = document.getElementById('secUsers'); const msgSection = document.getElementById('secMessages');
             reqSection.innerHTML = 'Loading...'; usersSection.innerHTML = 'Loading...'; msgSection.innerHTML = 'Loading...';
             try {
-                const reqSnapshot = await db.collection('access_requests').get();
-                reqSection.innerHTML = reqSnapshot.empty ? '<p>No pending requests.</p>' : '';
+                const reqSnapshot = await db.collection('access_requests').get(); reqSection.innerHTML = reqSnapshot.empty ? '<p>No pending requests.</p>' : '';
                 reqSnapshot.forEach(doc => { const d = doc.data(); const div = document.createElement('div'); div.className = 'list-item'; div.innerHTML = `<div><strong>${d.name}</strong> (${d.email})</div><button style="cursor:pointer; background:var(--drive-green); color:white; border:none; padding:5px; border-radius:4px;" onclick="approveUser('${d.email}', '${d.name}')">Approve</button>`; reqSection.appendChild(div); });
 
-                const usersSnapshot = await db.collection('allowed_users').get();
-                usersSection.innerHTML = usersSnapshot.empty ? '<p>No active users.</p>' : ''; document.getElementById('userCount').innerText = usersSnapshot.size;
+                const usersSnapshot = await db.collection('allowed_users').get(); usersSection.innerHTML = usersSnapshot.empty ? '<p>No active users.</p>' : ''; document.getElementById('userCount').innerText = usersSnapshot.size;
                 usersSnapshot.forEach(doc => { const email = doc.id; const d = doc.data(); const div = document.createElement('div'); div.className = 'list-item approved'; div.innerHTML = `<div><strong>${d.name || 'User'}</strong> (${email})</div><button style="cursor:pointer; background:var(--drive-red); color:white; border:none; padding:5px; border-radius:4px;" onclick="revokeUser('${email}')">Revoke Access</button>`; usersSection.appendChild(div); });
 
-                const msgSnapshot = await db.collection('admin_messages').orderBy('timestamp', 'desc').get();
-                msgSection.innerHTML = msgSnapshot.empty ? '<p>Inbox empty.</p>' : '';
+                const msgSnapshot = await db.collection('admin_messages').orderBy('timestamp', 'desc').get(); msgSection.innerHTML = msgSnapshot.empty ? '<p>Inbox empty.</p>' : '';
                 msgSnapshot.forEach(doc => {
                     const d = doc.data(); const isUnread = (d.status === "unread"); const itemClass = isUnread ? 'list-item msg-item unread' : 'list-item msg-item'; const badge = isUnread ? '<span class="unread-badge">NEW</span>' : '';
                     const div = document.createElement('div'); div.className = itemClass; div.onclick = () => markMessageAsRead(doc.id, d.status); div.innerHTML = `<div style="width:100%; display:flex; justify-content:space-between; color:var(--drive-yellow);"><strong>From: ${d.name} (${d.email}) ${badge}</strong><button style="cursor:pointer; background:rgba(234,67,53,0.2); color:var(--drive-red); border:none; padding:3px 8px; font-size:11px;" onclick="event.stopPropagation(); deleteDirectMessage('${doc.id}')">Delete</button></div><div style="color:white; margin-top:5px; font-size:14px; line-height:1.4;">${d.message}</div>`; msgSection.appendChild(div);
@@ -918,40 +702,35 @@
             const res = await fetch(url); const data = await res.json();
             const foldersGrid = document.getElementById('foldersGrid'); const videosGrid = document.getElementById('videosGrid');
             foldersGrid.innerHTML = ''; videosGrid.innerHTML = '';
-            
             let favs = JSON.parse(localStorage.getItem('sofer_favs') || '[]');
 
             if (data.files && data.files.length > 0) {
                 data.files.forEach(file => {
-                    const card = document.createElement('div'); 
-                    card.setAttribute('data-id', file.id);
-                    card.setAttribute('data-name', file.name);
-                    card.setAttribute('data-thumb', savedThumbnails[file.id] || file.thumbnailLink || '');
-                    const adminOverlayHtml = isAdmin ? `<div class="admin-card-overlay" style="display:block;" onclick="changeThumbnailPrompt('${file.id}', event)">⚙️ Edit Thumbnail</div>` : ''; 
-                    const currentThumb = savedThumbnails[file.id] || file.thumbnailLink;
-                    const isFav = favs.some(f => f.id === file.id) ? '❤️' : '🤍';
+                    const card = document.createElement('div'); card.setAttribute('data-id', file.id); card.setAttribute('data-name', file.name); card.setAttribute('data-thumb', savedThumbnails[file.id] || file.thumbnailLink || '');
+                    const adminOverlayHtml = isAdmin ? `<div class="admin-card-overlay" style="display:block;" onclick="changeThumbnailPrompt('${file.id}', event)">⚙     Edit Thumbnail</div><div class="admin-popular-overlay" style="display:block;" onclick="markAsPopularManual('${file.id}', '${file.name.replace(/'/g, "\\'")}', event)">⭐ Set Popular</div>` : ''; 
+                    const currentThumb = savedThumbnails[file.id] || file.thumbnailLink; const isFav = favs.some(f => f.id === file.id) ? '❤️' : '🤍';
                     
                     if (file.mimeType === 'application/vnd.google-apps.folder') {
                         card.className = 'card folder'; card.onclick = () => { showAppPage('library'); loadFolder(file.id, file.name); };
                         card.innerHTML = `${adminOverlayHtml}<div class="thumbnail-placeholder" id="thumb-${file.id}">${savedThumbnails[file.id] ? `<img src="${savedThumbnails[file.id]}" style="width:100%;height:100%;object-fit:cover;">` : '📁'}</div><div class="card-info"><p class="card-title">${file.name}</p></div>`; foldersGrid.appendChild(card);
                     } else if (file.mimeType.startsWith('video/')) {
-                        card.className = 'card video'; card.onclick = (e) => { if(!e.target.classList.contains('download-icon-btn') && !e.target.classList.contains('admin-card-overlay') && !e.target.classList.contains('fav-btn')) playVideo(file.id); };
+                        card.className = 'card video'; card.onclick = (e) => { if(!e.target.classList.contains('download-icon-btn') && !e.target.classList.contains('admin-card-overlay') && !e.target.classList.contains('admin-popular-overlay') && !e.target.classList.contains('fav-btn')) playVideo(file.id); };
                         card.innerHTML = `${adminOverlayHtml}<button class="fav-btn" onclick="toggleFavorite('${file.id}', event)">${isFav}</button><div class="thumbnail-placeholder" id="thumb-${file.id}"><img src="${currentThumb || '🎬'}" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='https://via.placeholder.com/220x130?text=Video'"></div><div class="card-info"><p class="card-title">${file.name}</p></div><button class="download-icon-btn" onclick="downloadVideo('${file.id}')">↓</button>`; videosGrid.appendChild(card);
                     }
                 });
             } else { foldersGrid.innerHTML = '<p>No folders.</p>'; videosGrid.innerHTML = '<p>No videos.</p>'; }
-            
-            renderContinueWatching();
-            updateFavMenuButtonVisibility();
+            renderContinueWatching(); updateFavMenuButtonVisibility();
         }
         
-        function playVideo(id) { currentPlayingFileId = id; const modal = document.getElementById('playerModal'); modal.style.display = 'flex'; modal.classList.remove('pip-mode'); isPipActive = false; playerInstance.src({type: 'video/mp4', src: `https://www.googleapis.com/drive/v3/files/${id}?alt=media&key=${API_KEY}`}); playerInstance.play(); }
+        function playVideo(id) { currentPlayingFileId = id; const modal = document.getElementById('playerModal'); modal.style.display = 'flex'; modal.classList.remove('pip-mode'); isPipActive = false; playerInstance.src({type: 'video/mp4', src: `https://www.googleapis.com/drive/v3/files/${id}?alt=media&key=${API_KEY}`}); playerInstance.play(); loadVideoMetaAndComments(id); }
         function closeVideo() { document.getElementById('playerModal').style.display = 'none'; playerInstance.pause(); currentPlayingFileId = null; isPipActive = false; renderContinueWatching(); }
         function closeVideoFromOutside(event) { if(!isPipActive) closeVideo(); }
         function downloadVideo(fileId) { window.open(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${API_KEY}`, '_blank'); }
         function updateBreadcrumbs() { const container = document.getElementById('breadcrumbs'); let html = ''; folderHistory.forEach((folder, idx) => { if (idx === folderHistory.length - 1) { html += `<span>${folder.name}</span>`; } else { html += `<a href="#" onclick="showAppPage('library'); loadFolder('${folder.id}', '${folder.name}')">${folder.name}</a> / `; } }); container.innerHTML = html; }
         function goBack() { if (folderHistory.length > 1) { folderHistory.pop(); const prev = folderHistory[folderHistory.length - 1]; folderHistory.pop(); showAppPage('library'); loadFolder(prev.id, prev.name); } }
-        let isPipActive = false; function togglePipMode() { const modal = document.getElementById('playerModal'); if(!isPipActive) { modal.classList.add('pip-mode'); isPipActive = true; } else { modal.classList.remove('pip-mode'); isPipActive = false; } }
+        
+        function togglePipMode() { const modal = document.getElementById('playerModal'); if(!isPipActive) { modal.classList.add('pip-mode'); isPipActive = true; } else { modal.classList.remove('pip-mode'); isPipActive = false; } }
+        
         function setupCustomButtons() {
             if(!playerInstance) return;
             const controlBar = playerInstance.controlBar; const volumeControl = controlBar.volumePanel.el();
