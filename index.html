@@ -19,7 +19,21 @@
             --text-muted: #9aa0a6;
         }
 
-        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: var(--bg-dark); color: var(--text-light); margin: 0; padding: 0; position: relative; min-height: 100vh; padding-bottom: 120px; box-sizing: border-box; }
+        /* Themes */
+        body.theme-pitch-black {
+            --bg-dark: #000000;
+            --card-bg: #0d0d0d;
+        }
+        body.theme-accent-green {
+            --drive-yellow: #0f9d58;
+            --drive-blue: #2e7d32;
+        }
+        body.theme-accent-purple {
+            --drive-yellow: #9c27b0;
+            --drive-blue: #6a1b9a;
+        }
+
+        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: var(--bg-dark); color: var(--text-light); margin: 0; padding: 0; position: relative; min-height: 100vh; padding-bottom: 120px; box-sizing: border-box; transition: background 0.3s, color 0.3s; }
         #mainApp, #updatesPage, #favoritesPage { display: none; }
 
         header { background-color: var(--card-bg); border-bottom: 3px solid var(--drive-blue); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
@@ -71,6 +85,10 @@
         .continue-progress-bg { position: absolute; bottom: 0; left: 0; width: 100%; height: 5px; background: rgba(255,255,255,0.2); }
         .continue-progress-fill { height: 100%; background: var(--drive-red); width: 0%; }
 
+        /* קאלירן טוישער פּאַנעל */
+        .theme-picker-panel { display: none; position: absolute; top: 70px; right: 80px; background-color: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); z-index: 1500; flex-direction: column; gap: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+        .theme-option { display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 14px; font-weight: bold; }
+
         /* לאגין סקרין */
         .lock-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-dark); display: flex; justify-content: center; align-items: center; z-index: 2000; }
         .lock-box { background-color: var(--card-bg); padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); text-align: center; width: 90%; max-width: 420px; border-top: 4px solid var(--drive-blue); }
@@ -81,10 +99,19 @@
         .verify-row { display: flex; gap: 10px; align-items: center; }
         .verify-row button { width: auto; font-size: 12px; padding: 12px 15px; margin: 0; white-space: nowrap; background-color: #25334a; }
 
-        /* מאדאלס */
+        /* מאדאלס און פילטער פאר פיקטשער-אין-פיקטשער */
         .player-modal, .admin-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center; }
-        .player-content, .admin-content { width: 80%; max-width: 900px; position: relative; background-color: var(--bg-dark); padding: 25px; border-radius: 8px; color: white; }
+        .player-content, .admin-content { width: 80%; max-width: 900px; position: relative; background-color: var(--bg-dark); padding: 25px; border-radius: 8px; color: white; max-height: 90vh; overflow-y: auto; }
         .close-player { position: absolute; top: -40px; right: 0; color: white; font-size: 30px; background: none; border: none; cursor: pointer; z-index: 1010; }
+        .minimize-player { position: absolute; top: -40px; right: 40px; color: white; font-size: 25px; background: none; border: none; cursor: pointer; z-index: 1010; }
+
+        /* Picture-in-picture קלאס */
+        .player-modal.pip-mode { width: 350px; height: 240px; top: auto; left: auto; bottom: 130px; right: 20px; background: none; box-shadow: 0 10px 30px rgba(0,0,0,0.8); border-radius: 8px; overflow: hidden; }
+        .player-modal.pip-mode .player-content { width: 100%; height: 100%; padding: 0; max-height: 100%; }
+        .player-modal.pip-mode video { height: 180px !important; }
+        .player-modal.pip-mode .close-player { top: 5px; right: 5px; font-size: 20px; background: rgba(0,0,0,0.6); border-radius: 50%; width: 25px; height: 25px; display: flex; align-items: center; justify-content: center; }
+        .player-modal.pip-mode .minimize-player { top: 5px; right: 35px; font-size: 16px; background: rgba(0,0,0,0.6); border-radius: 50%; width: 25px; height: 25px; display: flex; align-items: center; justify-content: center; }
+        .player-modal.pip-mode #videoModalCommentsSection { display: none !important; }
 
         .video-wrapper { position: relative; width: 100%; }
         .video-watermark { position: absolute; bottom: 55px; right: 20px; width: 50px; height: 50px; object-fit: contain; pointer-events: none; z-index: 10; opacity: 0.85; }
@@ -142,7 +169,6 @@
         .action-link.delete-link { color: var(--drive-red); }
         .action-link.delete-link:hover { color: #ff5252; }
 
-        /* רעאקציעס */
         .reaction-row { display: flex; gap: 8px; align-items: center; margin-top: 8px; font-size: 13px; flex-wrap: wrap; }
         .react-btn { background: #25334a; border: none; color: white; padding: 4px 8px; border-radius: 4px; cursor: pointer; position: relative; font-size: 12px; display: flex; align-items: center; gap: 4px; }
         .react-btn:hover { background: var(--drive-blue); }
@@ -187,6 +213,7 @@
         <header>
             <div class="brand-area"><h1 onclick="showAppPage('library')">sofer video cloud</h1></div>
             <div class="menu-area">
+                <button class="nav-btn" style="background: none; font-size: 20px; border: none;" onclick="toggleThemePanel(event)">🎨</button>
                 <button class="nav-btn" id="favMenuBtn" onclick="showAppPage('favorites')">My Favorites</button>
                 <button class="nav-btn" id="updatesMenuBtn" onclick="showAppPage('updates')">Updates & Forum</button>
                 <a href="about.html" class="nav-btn">About Me</a>
@@ -194,6 +221,14 @@
                 <img src="logo.png" class="profile-pic" alt="Profile" onerror="this.src='https://via.placeholder.com/45?text=sofer'">
             </div>
         </header>
+
+        <!-- Theme Picker Panel -->
+        <div class="theme-picker-panel" id="themePickerPanel">
+            <div class="theme-option" onclick="changeTheme('modern-blue')">🔵 Modern Blue (Default)</div>
+            <div class="theme-option" onclick="changeTheme('pitch-black')">⚫ Pitch Black</div>
+            <div class="theme-option" onclick="changeTheme('accent-green')">🟢 Vibrant Green</div>
+            <div class="theme-option" onclick="changeTheme('accent-purple')">🟣 Royal Purple</div>
+        </div>
 
         <div id="librarySection">
             <div class="breadcrumb-container">
@@ -210,6 +245,12 @@
                 <div id="continueWatchingWrapper" style="display: none; margin-bottom: 40px;">
                     <h2 class="section-title">Continue Watching</h2>
                     <div class="grid" id="continueGrid"></div>
+                </div>
+
+                <!-- Trending / Popular Videos Section -->
+                <div id="trendingVideosWrapper" style="margin-bottom: 40px;">
+                    <h2 class="section-title">Trending & Popular Videos</h2>
+                    <div class="grid" id="trendingGrid">Loading popular trends...</div>
                 </div>
 
                 <h2 class="section-title" id="foldersTitle">Folders</h2>
@@ -273,14 +314,27 @@
         </div>
     </div>
 
+    <!-- ווידעאו מאדאל מיט קאמענטארן סעקציע און מינימיזירן אפציע -->
     <div class="player-modal" id="playerModal" onclick="closeVideoFromOutside(event)">
         <div class="player-content" onclick="event.stopPropagation()">
+            <button class="minimize-player" onclick="togglePipMode()">🗕</button>
             <button class="close-player" onclick="closeVideo()">×</button>
             <div class="video-wrapper">
                 <video id="my-video" class="video-js vjs-big-play-centered" controls preload="auto" width="900" height="500">
                     <p class="vjs-no-js">To view this video please enable JavaScript</p>
                 </video>
                 <img src="logo.png" class="video-watermark" alt="WM" onerror="this.style.display='none'">
+            </div>
+            
+            <!-- קאמענטארן און רעאקציעס פאר יעדע ספעציפישע ווידעא -->
+            <div id="videoModalCommentsSection" style="margin-top: 25px; border-top: 1px solid #25334a; padding-top: 20px;">
+                <h3 style="color: var(--drive-yellow); margin-top: 0;">Video Reactions & Comments</h3>
+                <div class="reaction-row" id="videoReactionsRow" style="margin-bottom: 20px;"></div>
+                <div id="videoCommentsList" style="max-height: 200px; overflow-y: auto; margin-bottom: 15px;">Loading comments...</div>
+                <div class="comment-input-row">
+                    <input type="text" id="videoCommentInput" placeholder="Add a public comment for this video...">
+                    <button onclick="submitVideoComment()">Comment</button>
+                </div>
             </div>
         </div>
     </div>
@@ -293,11 +347,9 @@
     
     <script>
         // ************************************************************
-        // 1) דא קומט דיין Google Drive API Key פונקטליך:
         const API_KEY = "AIzaSyDEkcoogK9_8e4HOf7vSWFWEHKct21gjdE"; 
         const START_FOLDER_ID = "14v9raW-BX5EkdfK2-Yj8wDA5kGok2Tda"; 
 
-        // 2) פירבעיס קאנסול דעטאלן:
         const firebaseConfig = {
             apiKey: "AIzaSyDqkaFHG6eGB2BASDpjr94KPqBTaDTZDQw",
             authDomain: "sofer-video-cloud.firebaseapp.com",
@@ -330,6 +382,7 @@
         let generatedVerificationCode = ""; 
         let currentPlayingFileId = null;
         let currentSearchTimeout = null;
+        let isPipActive = false;
 
         let currentEditingPostId = null;
 
@@ -346,7 +399,37 @@
             }
             listenForUpdates();
             updateFavMenuButtonVisibility();
+            
+            // לאדען די היסטארישע טעמע וואס דער יוזער האט אויסגעקליקט
+            const savedTheme = localStorage.getItem('sofer_theme');
+            if(savedTheme) changeTheme(savedTheme);
+
+            document.addEventListener('click', () => { document.getElementById('themePickerPanel').style.display = 'none'; });
         };
+
+        // --- Theme Selector Logic ---
+        function toggleThemePanel(e) {
+            e.stopPropagation();
+            const panel = document.getElementById('themePickerPanel');
+            panel.style.display = (panel.style.display === 'flex') ? 'none' : 'flex';
+        }
+        function changeTheme(theme) {
+            document.body.className = '';
+            if(theme !== 'modern-blue') document.body.classList.add('theme-' + theme);
+            localStorage.setItem('sofer_theme', theme);
+        }
+
+        // --- Picture in Picture Mode (🗕) ---
+        function togglePipMode() {
+            const modal = document.getElementById('playerModal');
+            if(!isPipActive) {
+                modal.classList.add('pip-mode');
+                isPipActive = true;
+            } else {
+                modal.classList.remove('pip-mode');
+                isPipActive = false;
+            }
+        }
 
         function showAppPage(page) {
             document.getElementById('librarySection').style.display = 'none';
@@ -363,6 +446,7 @@
             } else {
                 document.getElementById('librarySection').style.display = 'block';
                 renderContinueWatching();
+                loadTrendingVideos();
             }
             updateFavMenuButtonVisibility();
         }
@@ -481,16 +565,17 @@
                 thumbSnapshot.forEach(doc => { savedThumbnails[doc.id] = doc.data().url; });
             } catch(e) {}
             loadFolder(START_FOLDER_ID, "Home");
+            loadTrendingVideos();
             setTimeout(() => { setupCustomButtons(); }, 1000);
         }
 
-        // --- Global Search פונקציע פונעם גאנצן גוגל דרייוו ---
+        // --- פולע גלאבאלע סעירטש פונעם גאנצן גוגל דרייוו ---
         function filterGlobalCloudContent() {
             clearTimeout(currentSearchTimeout);
             const query = document.getElementById('cloudSearchInput').value.toLowerCase().trim();
             
             if(query === "") {
-                const curFolder = folderHistory[folderHistory.length - 1];
+                const curFolder = folderHistory[folderHistory.length - 1] || { id: START_FOLDER_ID, name: "Home" };
                 folderHistory.pop(); 
                 loadFolder(curFolder.id, curFolder.name);
                 return;
@@ -499,12 +584,12 @@
             currentSearchTimeout = setTimeout(async () => {
                 const foldersGrid = document.getElementById('foldersGrid');
                 const videosGrid = document.getElementById('videosGrid');
-                foldersGrid.innerHTML = 'Searching folders globally...';
-                videosGrid.innerHTML = 'Searching videos globally...';
+                foldersGrid.innerHTML = 'Searching entire cloud architecture...';
+                videosGrid.innerHTML = 'Searching entire cloud architecture...';
 
                 try {
-                    // שיקן א ריין API רוף צו זוכן אין גאנצן דרייוו לויטן נאמען
                     const escapedQuery = query.replace(/'/g, "\\'");
+                    // זוכט יעדע זאך אינעם גאנצן דרייוו וואס קומט פונעםSTART_FOLDER_ID
                     const url = `https://www.googleapis.com/drive/v3/files?q=name+contains+'${escapedQuery}'+and+trashed=false&fields=files(id,name,mimeType,thumbnailLink)&key=${API_KEY}`;
                     const res = await fetch(url);
                     const data = await res.json();
@@ -537,8 +622,8 @@
                             }
                         });
                     }
-                    if(foldersGrid.innerHTML === '') foldersGrid.innerHTML = '<p>No matching folders found globally.</p>';
-                    if(videosGrid.innerHTML === '') videosGrid.innerHTML = '<p>No matching videos found globally.</p>';
+                    if(foldersGrid.innerHTML === '') foldersGrid.innerHTML = '<p>No matching folders found.</p>';
+                    if(videosGrid.innerHTML === '') videosGrid.innerHTML = '<p>No matching videos found.</p>';
                 } catch (e) {}
             }, 500);
         }
@@ -571,7 +656,6 @@
             const wrapper = document.getElementById('continueWatchingWrapper');
             const currentFolder = folderHistory[folderHistory.length - 1];
             
-            // נאר ארויפקומען ווען מ'איז אויפן הויפט היימבלאט פאלדער!
             if (!currentFolder || currentFolder.id !== START_FOLDER_ID) {
                 wrapper.style.display = 'none';
                 return;
@@ -600,6 +684,102 @@
                 `;
                 container.appendChild(card);
             });
+        }
+
+        // --- Trending / Popular Top 5 Logic ---
+        async function incrementVideoViewCount(fileId, title, thumb) {
+            const ref = db.collection('trending_videos').doc(fileId);
+            const doc = await ref.get();
+            if(!doc.exists) {
+                await ref.set({ title: title, thumb: thumb || '', views: 1 });
+            } else {
+                await ref.update({ views: firebase.firestore.FieldValue.increment(1) });
+            }
+        }
+        function loadTrendingVideos() {
+            const container = document.getElementById('trendingGrid');
+            const currentFolder = folderHistory[folderHistory.length - 1];
+            
+            if (!currentFolder || currentFolder.id !== START_FOLDER_ID) {
+                document.getElementById('trendingVideosWrapper').style.display = 'none';
+                return;
+            }
+            document.getElementById('trendingVideosWrapper').style.display = 'block';
+
+            db.collection('trending_videos').orderBy('views', 'desc').limit(5).onSnapshot(snap => {
+                container.innerHTML = '';
+                if(snap.empty) { container.innerHTML = '<p>No trending media recorded yet.</p>'; return; }
+                snap.forEach(doc => {
+                    const data = doc.data();
+                    const card = document.createElement('div');
+                    card.className = 'card video';
+                    card.onclick = () => playVideo(doc.id);
+                    card.innerHTML = `
+                        <div class="thumbnail-placeholder">
+                            <img src="${data.thumb || '🎬'}" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='https://via.placeholder.com/220x130?text=Video'">
+                            <div style="position:absolute; top:5px; left:5px; background:rgba(0,0,0,0.7); padding:2px 6px; border-radius:4px; font-size:11px; color:var(--drive-yellow);">🔥 ${data.views} views</div>
+                        </div>
+                        <div class="card-info"><p class="card-title">${data.title}</p></div>
+                    `;
+                    container.appendChild(card);
+                });
+            });
+        }
+
+        // --- קאמענטארן און רעאקציעס פאר ווידעאוס ---
+        function loadVideoCommentsAndReactions(fileId) {
+            // רעאקציעס רודערן
+            const recRow = document.getElementById('videoReactionsRow');
+            db.collection('video_metadata').doc(fileId).onSnapshot(doc => {
+                recRow.innerHTML = '';
+                const data = doc.exists ? doc.data() : {};
+                const list = ['thumb', 'heart', 'fire', 'wow'];
+                const map = { thumb: '👍', heart: '❤️', fire: '🔥', wow: '😮' };
+                
+                list.forEach(type => {
+                    const count = data['react_' + type] ? Object.keys(data['react_' + type]).length : 0;
+                    const users = data['react_' + type] ? Object.values(data['react_' + type]).join(', ') : 'No reactions';
+                    recRow.innerHTML += `
+                        <button class="react-btn" onclick="toggleVideoReaction('${fileId}', '${type}')">
+                            ${map[type]} <span>${count}</span>
+                            <div class="react-tooltip">Reacted: ${users}</div>
+                        </button>
+                    `;
+                });
+            });
+
+            // קאמענטארן רענדערן
+            const comList = document.getElementById('videoCommentsList');
+            db.collection('video_metadata').doc(fileId).collection('comments').orderBy('timestamp', 'asc').onSnapshot(snap => {
+                comList.innerHTML = '';
+                if(snap.empty) { comList.innerHTML = '<p style="color:var(--text-muted); font-size:13px;">No comments on this video yet.</p>'; return; }
+                snap.forEach(cDoc => {
+                    const c = cDoc.data();
+                    comList.innerHTML += `
+                        <div class="comment-box" style="margin-top:5px; padding:8px;">
+                            <div class="comment-meta"><span class="comment-user">${c.userName}</span></div>
+                            <div class="comment-text" style="margin-bottom:0; font-size:13px;">${c.text}</div>
+                        </div>
+                    `;
+                });
+            });
+        }
+        async function toggleVideoReaction(fileId, type) {
+            const ref = db.collection('video_metadata').doc(fileId);
+            const doc = await ref.get();
+            let data = doc.exists ? doc.data() : {};
+            let current = data['react_' + type] || {};
+            if(current[loggedInUserEmail]) { delete current[loggedInUserEmail]; } 
+            else { current[loggedInUserEmail] = loggedInUserName; }
+            await ref.set({ ['react_' + type]: current }, { merge: true });
+        }
+        async function submitVideoComment() {
+            const input = document.getElementById('videoCommentInput');
+            const text = input.value.trim(); if(!text) return;
+            await db.collection('video_metadata').doc(currentPlayingFileId).collection('comments').add({
+                userName: loggedInUserName, userEmail: loggedInUserEmail, text: text, timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            input.value = '';
         }
 
         // --- פייוואריטס אפציעס ---
@@ -976,24 +1156,43 @@
             } else { foldersGrid.innerHTML = '<p>No folders.</p>'; videosGrid.innerHTML = '<p>No videos.</p>'; }
             
             renderContinueWatching();
+            loadTrendingVideos();
             updateFavMenuButtonVisibility();
         }
         
         function playVideo(id) { 
             currentPlayingFileId = id;
-            document.getElementById('playerModal').style.display = 'flex'; 
+            const modal = document.getElementById('playerModal');
+            modal.style.display = 'flex'; 
+            
+            // אויב מ'עפנט א ווידעא נארמאל, נעמען אראפ PIP אויב ס'איז געווען אקטיוו
+            modal.classList.remove('pip-mode');
+            isPipActive = false;
+
             playerInstance.src({type: 'video/mp4', src: `https://www.googleapis.com/drive/v3/files/${id}?alt=media&key=${API_KEY}`}); 
             playerInstance.play(); 
+
+            // שלעפן די טיטל און טאַמבנעיל פאר די פאפולערסטע רשימה
+            const cardEl = document.querySelector(`[data-id="${id}"]`);
+            if(cardEl) {
+                const title = cardEl.getAttribute('data-name');
+                const thumb = cardEl.getAttribute('data-thumb');
+                incrementVideoViewCount(id, title, thumb);
+            }
+
+            loadVideoCommentsAndReactions(id);
         }
         
         function closeVideo() { 
             document.getElementById('playerModal').style.display = 'none'; 
+            document.getElementById('playerModal').classList.remove('pip-mode');
             playerInstance.pause(); 
             currentPlayingFileId = null;
+            isPipActive = false;
             renderContinueWatching();
         }
         
-        function closeVideoFromOutside(event) { closeVideo(); }
+        function closeVideoFromOutside(event) { if(!isPipActive) closeVideo(); }
         function downloadVideo(fileId) { window.open(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${API_KEY}`, '_blank'); }
         function updateBreadcrumbs() { const container = document.getElementById('breadcrumbs'); let html = ''; folderHistory.forEach((folder, idx) => { if (idx === folderHistory.length - 1) { html += `<span>${folder.name}</span>`; } else { html += `<a href="#" onclick="showAppPage('library'); loadFolder('${folder.id}', '${folder.name}')">${folder.name}</a> / `; } }); container.innerHTML = html; }
         function goBack() { if (folderHistory.length > 1) { folderHistory.pop(); const prev = folderHistory[folderHistory.length - 1]; folderHistory.pop(); showAppPage('library'); loadFolder(prev.id, prev.name); } }
