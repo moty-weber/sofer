@@ -6,13 +6,14 @@
     <title>About Us - sofer video cloud</title>
     <style>
         :root {
-            --bg-dark: #121824;
-            --card-bg: #1c2638;
+            --bg-dark: #0f1319;
+            --card-bg: #161f30;
             --drive-blue: #1a73e8;
             --drive-green: #0f9d58;
             --drive-yellow: #f4b400;
             --text-light: #ffffff;
-            --text-muted: #9aa0a6;
+            --text-muted: #a0aec0;
+            --paper-letter: #fefcf0;
         }
 
         body {
@@ -21,12 +22,11 @@
             color: var(--text-light);
             margin: 0;
             padding: 0;
-            line-height: 1.6;
+            line-height: 1.7;
         }
 
-        /* העדער */
         header {
-            background-color: var(--card-bg);
+            background-color: #161f30;
             border-bottom: 3px solid var(--drive-blue);
             padding: 15px 20px;
             display: flex;
@@ -34,7 +34,7 @@
             align-items: center;
         }
 
-        .brand-area h1 { margin: 0; font-size: 24px; }
+        .brand-area h1 { margin: 0; font-size: 24px; letter-spacing: 0.5px; }
         
         .nav-btn {
             background-color: #25334a;
@@ -49,143 +49,179 @@
         }
         .nav-btn:hover { background-color: var(--drive-blue); }
 
-        /* הויפט קאנטענט קאנטעינער */
         .container {
-            max-width: 1000px;
+            max-width: 1100px;
             margin: 40px auto;
-            padding: 0 20px;
+            padding: 0 25px;
         }
 
-        /* העלד סעקשאן */
         .hero-section {
             text-align: center;
-            padding: 40px 20px;
-            background: linear-gradient(135deg, rgba(28, 38, 56, 0.8), rgba(18, 24, 36, 0.9));
+            padding: 50px 20px;
+            background: linear-gradient(135deg, #1c2638 0%, #111722 100%);
             border-radius: 12px;
             border: 1px solid rgba(255,255,255,0.05);
-            margin-bottom: 40px;
+            margin-bottom: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
         .hero-section h2 {
-            font-size: 36px;
+            font-size: 40px;
             color: var(--drive-yellow);
             margin-top: 0;
+            margin-bottom: 15px;
         }
 
         .hero-section p {
-            font-size: 18px;
+            font-size: 19px;
             color: var(--text-muted);
-            max-width: 800px;
+            max-width: 850px;
             margin: 0 auto;
-        }
-
-        /* פראפעסיאנאלע אינטערנעט בילדער סטיל */
-        .section-image {
-            width: 100%;
-            max-height: 350px;
-            object-fit: cover;
-            border-radius: 10px;
-            margin: 25px 0;
-            border: 1px solid rgba(255,255,255,0.1);
         }
 
         /* סעקשאן טיטלען */
         .section-title {
             border-left: 5px solid var(--drive-blue);
             padding-left: 15px;
-            font-size: 24px;
-            margin-top: 40px;
-            margin-bottom: 20px;
+            font-size: 26px;
+            margin-top: 50px;
+            margin-bottom: 25px;
             color: white;
         }
 
-        /* סטאטיסטיקס קארדס */
+        /* גראפיקס פאר די קליינע דברים העומדים בילדער */
+        .image-layout {
+            display: flex;
+            gap: 20px;
+            margin: 25px 0;
+            align-items: center;
+        }
+        
+        .image-layout.reverse {
+            flex-direction: row-reverse;
+        }
+
+        .section-image-aside {
+            width: 250px;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid #25334a;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            flex-shrink: 0;
+        }
+
+        .text-block {
+            flex-grow: 1;
+        }
+
+        /* סטאטיסטיקס נייע קארדס (כולל מאוויס און ווידעאוס) */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 20px;
-            margin: 30px 0;
+            margin: 40px 0;
         }
 
         .stat-card {
             background-color: var(--card-bg);
-            padding: 25px;
+            padding: 30px 20px;
             border-radius: 8px;
             text-align: center;
             border-top: 4px solid var(--drive-green);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
         }
 
         .stat-number {
-            font-size: 42px;
+            font-size: 45px;
             font-weight: bold;
-            color: var(--drive-green);
             margin-bottom: 5px;
         }
 
-        /* בריוון סעקשאן (Letters / Testimonials) */
-        .letters-container {
-            display: flex;
-            flex-direction: column;
-            gap: 25px;
-            margin: 30px 0;
+        /* גראפיקס פאר די בריוון - קוקט אויס ווי אלטע פאפירענע נאטיץ צעטלאך */
+        .letters-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        @media (max-width: 768px) {
+            .letters-grid { grid-template-columns: 1fr; }
+            .image-layout { flex-direction: column; }
+            .section-image-aside { width: 100%; height: 200px; }
         }
 
         .letter-card {
-            background-color: var(--card-bg);
-            padding: 30px;
-            border-radius: 8px;
-            border-left: 5px solid var(--drive-yellow);
+            background-color: var(--paper-letter);
+            color: #2d3748; /* טונקעלע טעקסט פארן העלן פאפיר */
+            padding: 35px;
+            border-radius: 4px;
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.4), inset 0 0 40px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
             position: relative;
+            transform: rotate(-0.5deg); /* קליינע דריי פאר א נאטורליכע בריוו עפעקט */
+            transition: transform 0.2s;
+        }
+
+        .letter-card:nth-child(even) {
+            transform: rotate(0.5deg);
+            border-top: 3px solid var(--drive-green);
+        }
+        
+        .letter-card:nth-child(odd) {
+            border-top: 3px solid var(--drive-blue);
+        }
+
+        .letter-card:hover {
+            transform: rotate(0deg) scale(1.02);
+            z-index: 10;
+        }
+
+        /* פאסט ברעמפ סטיל אייקאן אויפן בריוו */
+        .letter-stamp {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 45px;
+            height: 45px;
+            opacity: 0.15;
+            pointer-events: none;
         }
 
         .letter-text {
+            font-family: 'Georgia', serif;
             font-style: italic;
-            color: #e2e8f0;
-            font-size: 16px;
-            margin-bottom: 15px;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            text-align: left;
+            white-space: pre-line; /* היט אפ די שורות פונעם בריוו */
         }
 
         .letter-author {
             font-weight: bold;
-            color: var(--drive-yellow);
-            font-size: 14px;
+            color: #1a202c;
+            font-size: 13px;
             text-align: right;
+            border-top: 1px dashed rgba(0,0,0,0.1);
+            padding-top: 10px;
         }
 
-        /* קשיות ותשובות (Q&A) */
-        .qa-container {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin: 30px 0;
-        }
-
-        .qa-item {
-            background-color: var(--card-bg);
-            padding: 20px;
-            border-radius: 8px;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .qa-question {
-            font-weight: bold;
-            color: var(--drive-blue);
-            font-size: 18px;
-            margin-bottom: 10px;
-        }
-
-        .qa-answer {
-            color: #cbd5e1;
-            font-size: 15px;
-        }
+        /* Q&A */
+        .qa-container { display: flex; flex-direction: column; gap: 20px; margin: 40px 0; }
+        .qa-item { background-color: var(--card-bg); padding: 25px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        .qa-question { font-weight: bold; color: var(--drive-blue); font-size: 19px; margin-bottom: 12px; }
+        .qa-answer { color: #cbd5e1; font-size: 15px; }
 
         footer {
             text-align: center;
-            padding: 30px;
+            padding: 40px;
             color: var(--text-muted);
             font-size: 14px;
             border-top: 1px solid rgba(255,255,255,0.05);
-            margin-top: 60px;
+            margin-top: 80px;
+            background-color: #111722;
         }
     </style>
 </head>
@@ -202,99 +238,150 @@
 
     <div class="container">
         
+        <!-- העלד באנער -->
         <div class="hero-section">
-            <h2>Our Story & Vision</h2>
-            <p>Bridging the gap between cutting-edge digital media streaming and uncompromising Kosher values for the Heimishe community.</p>
+            <h2>The Premium Kosher Sanctuary</h2>
+            <p>Providing the Jewish global community with elite visual media, meticulously curated to shield spiritual values while answering the vital need for high-end digital entertainment.</p>
         </div>
 
-        <h3 class="section-title">The Urgent Need for Pure Entertainment</h3>
-        <p>
-            In today's fast-paced digital era, high-quality video, audio, and educational content have become an integral part of daily life. However, for the Heimishe community, navigating the public internet to find safe, wholesome content poses a tremendous spiritual challenge. Families, students, and individuals are often forced to choose between completely depriving themselves of modern digital communication tools or exposing themselves to unwanted, unvetted, and inappropriate online material.
-        </p>
-        <p>
-            Furthermore, acquiring strictly filtered and managed educational physical media or searching across unorganized sharing networks has historically been extremely expensive, fragmented, and frustrating. Recognizing this void, we felt a profound responsibility to step forward and create a centralized, safe haven. 
-        </p>
-        
-        <img src="https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=1000&q=80" class="section-image" alt="Safe Family Environment">
+        <!-- פיל מער אריכות אין די מיסיע -->
+        <h3 class="section-title">The Blueprint of Our Mission</h3>
+        <div class="image-layout">
+            <div class="text-block">
+                <p>
+                    For generations, a Jewish home has always been defined by its walls—walls built with holiness, intentional boundaries, and careful filtration of what enters the hearts and minds of our children. In the modern era, the internet has effectively dismantled physical walls, presenting an unprecedented challenge to the traditional lifestyle. High-end video streaming, podcasts, musical events, and theatrical dramas have grown into massive cultural necessities, yet the public platforms hosting them are saturated with absolute distractions, unfiltered content, and severe spiritual compromises.
+                </p>
+                <p>
+                    The modern Heimishe family often finds itself at a painful crossroads: either to fully isolate from digital entertainment, leading to frustration and hidden consumption, or to accept broken boundaries. The financial burden of acquiring strictly managed standalone media drives, combined with the chaotic lack of centralization across kosher video distributions, only exacerbated this issue. We understood that modern tech cannot just be blocked; it must be mastered and answered with a superior, holier alternative.
+                </p>
+            </div>
+            <!-- דברים העומדים: כשר'ע פאסטע טעכנאלאגיע / פילטער אייקאן -->
+            <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=300&q=80" class="section-image-aside" alt="Secure Tech Environment">
+        </div>
 
         <p>
-            <strong>sofer video cloud</strong> was established as a direct response to this call. Our platform serves as a massive, beautifully structured digital library that brings together the finest Jewish movies, podcasts, music albums, theatrical plays, and educational series into one secure dashboard. We take the stress out of media consumption, giving you full access to rich cultural entertainment without a single drop of compromise.
+            <strong>sofer video cloud</strong> was built precisely to establish this definitive digital sanctuary. We do not just aggregate videos; we construct a tailored, professional gateway where every movie, theatrical masterpiece, musical track, and educational series is seamlessly presented inside a beautiful dashboard. By blending top-tier streaming engineering with uncompromising frame-by-frame human curation, we completely eliminate the stress of media consumption. Your values remain perfectly intact while your household enjoys a premium entertainment experience.
         </p>
 
-        <h3 class="section-title">Our Strict and Uncompromising Kosher Standards</h3>
-        <p>
-            Every single file hosted within the sofer platform undergoes a meticulous, frame-by-frame human vetting process before it ever reaches your screen. We adhere to the highest moral and traditional standards to guarantee that our digital environment remains pure, modest, and completely spiritually aligned with a Torah-observant lifestyle.
-        </p>
-        <p>
-            Our core screening policies guarantee:
-        </p>
-        <ul>
-            <li>Strict adherence to absolute modesty values (צניעות), with a total guarantee of zero videos containing any female appearances or immodest content.</li>
-            <li>Complete elimination of inappropriate internet slang, crude humor, or secular ideological influences.</li>
-            <li>Focus on highly educational, inspirational, and family-oriented historical or cultural productions.</li>
-        </ul>
+        <!-- די ריינע סטאנדארטן -->
+        <h3 class="section-title">Uncompromising Curation: Our Sanctified Protocol</h3>
+        <div class="image-layout">
+            <!-- דברים העומדים: אלטע ספרים און היסטאריע -->
+            <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&w=300&q=80" class="section-image-aside" alt="Traditional Jewish Values">
+            <div class="text-block">
+                <p>
+                    The term "Kosher" on our platform is not a loosely applied label; it represents an absolute, systematic framework of manual review. Every single video stream uploaded to the cloud undergoes an intensive, exhaustive vetting process by real human editors before being integrated into any sub-folder. We respect the sanctity of your home, and our content policies are built on unbreakable red lines designed to protect children and adults alike.
+                </p>
+                <p>
+                    Our core principles are firmly locked to our heritage: a strict guarantee of zero female appearances in any visual media, complete eradication of crude or secular internet slang, and a total filter against modern secular philosophies. Instead, we heavily invest in locating and highlighting rich historical dramas, deep educational analysis, inspiring storytelling, and traditional entertainment that elevates the mind while resting the body.
+                </p>
+            </div>
+        </div>
 
-        <h3 class="section-title">Our Growing Global Impact</h3>
+        <!-- די נייע געטוישטע סטאטיסטיקס מיט דיינע פונקטליכע צאלן -->
+        <h3 class="section-title">The Scale of Our Digital Library</h3>
         <p>
-            What started as a localized initiative has quickly blossomed into a vital daily asset for thousands of households across the globe. Our architecture is designed to handle immense traffic smoothly, ensuring that families can access their content whenever they need it.
+            A massive library requires robust infrastructure and content depth. We have engineered a lean, rapid frontend delivery network that handles thousands of concurrent data streams effortlessly. Below is the live scope of our platform's global reach and content catalog:
         </p>
         
         <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-number">8,000+</div>
-                <div style="font-weight: bold; margin-bottom: 5px;">Monthly Active Users</div>
-                <p style="margin: 0; font-size: 13px; color: var(--text-muted);">Verified unique members utilizing our secure cloud platform safely every month.</p>
+            <div class="stat-card" style="border-top-color: var(--drive-yellow);">
+                <div class="stat-number" style="color: var(--drive-yellow);">150+</div>
+                <div style="font-weight: bold; margin-bottom: 5px;">Premium Jewish Movies</div>
+                <p style="margin: 0; font-size: 13px; color: var(--text-muted);">Full-length classic and modern cinematic dramas and theatrical releases.</p>
             </div>
             <div class="stat-card" style="border-top-color: var(--drive-blue);">
-                <div class="stat-number">100%</div>
-                <div style="font-weight: bold; margin-bottom: 5px;">Kosher Vetted</div>
-                <p style="margin: 0; font-size: 13px; color: var(--text-muted);">Every folder, video title, sub-folder, and file is manually reviewed and approved.</p>
+                <div class="stat-number" style="color: var(--drive-blue);">500+</div>
+                <div style="font-weight: bold; margin-bottom: 5px;">Curated Videos & Plays</div>
+                <p style="margin: 0; font-size: 13px; color: var(--text-muted);">Musical concerts, educational series, and historic cultural media files.</p>
+            </div>
+            <div class="stat-card" style="border-top-color: var(--drive-green);">
+                <div class="stat-number" style="color: var(--drive-green);">8,000+</div>
+                <div style="font-weight: bold; margin-bottom: 5px;">Monthly Active Users</div>
+                <p style="margin: 0; font-size: 13px; color: var(--text-muted);">Verified unique members relying on our cloud to safeguard their homes daily.</p>
             </div>
         </div>
 
-        <h3 class="section-title">Voices from the Community</h3>
+        <!-- בריוו געגנט מיט מער בריוון און בריוועדיגע פאפירענע גראפיקס -->
+        <h3 class="section-title">Letters from the Heart of Our Cloud</h3>
         <p>
-            Nothing illustrates the true value of our platform more than the real letters and feedback we receive from grateful parents, patients, and community leaders. Below are a few selected messages that remind us why this work is so vital:
+            Behind the source code and the media storage live the actual souls we affect. These real letters, sent from across the community, serve as the burning fuel that keeps our mission alive:
         </p>
 
-        <div class="letters-container">
+        <div class="letters-grid">
+            <!-- בריוו 1 -->
             <div class="letter-card">
-                <p class="letter-text">
-                    "I am writing this with tears of gratitude from a hospital room in Manhattan. My young son has been undergoing grueling medical treatments for the past three weeks, and the days are incredibly long and draining. Being in a secular hospital setting, the temptation to just hand him an open tablet to distract him from his pain was immense. Finding the sofer cloud was literally a lifesaver sent from Heaven. He sat for hours watching beautiful, kosher Jewish plays and high-quality educational videos. It completely took his mind off the illness, kept his spirit joyful, and most importantly, kept his mind entirely holy and pure during our darkest hours. Thank you for this incredible chesed."
-                </p>
-                <div class="letter-author">— A Grateful Mother, Brooklyn, NY</div>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/cf/Stamps_of_Germany_2004_Briefmarke_Post_0.55_Euro.jpg" class="letter-stamp" alt="stamp">
+                <div class="letter-text">
+                    Dear sofer Admin,
+                    I am writing this with tears streaming down my face directly from a hospital isolation ward. My 12-year-old son has been fighting severe medical complications for over a month now. The days here are endless, dark, and spiritually draining. 
+
+                    The pressure to hand him a standard tablet connected to the public internet just to distract him from his pain was massive. When we received our cloud token, everything changed. He has spent hours watching the beautiful Jewish plays and listening to the high-quality music. It completely decoupled his mind from the illness, kept him laughing, and preserved his pure Neshמה inside this secular hospital environment. You brought light into our darkest hours.
+                </div>
+                <div class="letter-author">— A Grateful Mother, Hospital Room 4B, Manhattan</div>
             </div>
 
-            <img src="https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=1000&q=80" class="section-image" alt="Comfort and Home Style">
+            <!-- בריוו 2 -->
+            <div class="letter-card">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/cf/Stamps_of_Germany_2004_Briefmarke_Post_0.55_Euro.jpg" class="letter-stamp" alt="stamp">
+                <div class="letter-text">
+                    Shalom,
+                    I feel a strong moral obligation to share this message. As a young working man in a demanding tech field, coming home late after exhausting shifts always brought a massive spiritual danger. I deeply needed a way to unwind and relax, but the draw of popular secular streaming sites was incredibly powerful simply because no professional kosher alternative existed. 
 
-            <div class="letter-card" style="border-left-color: var(--drive-green);">
-                <p class="letter-text">
-                    "To the founders of the cloud: I feel obligated to share a personal confession with you. For a long time, during late evenings after my long shifts, I struggled heavily with seeking entertainment online. The pull of secular media streaming sites was very strong, simply because there was no professional Jewish alternative available that was easy to use. Since I was granted access to your platform, my entire routine has changed. The interface is stunning, the built-in video player is faster and smoother than anything I've seen, and the library of Jewish movies and deep podcasts is endless. You have effectively eliminated my struggle by providing a magnificent, kosher platform that fulfills my need for relaxation while guarding my spiritual integrity. You saved my spiritual growth."
-                </p>
-                <div class="letter-author">— Name withheld upon request, Lakewood, NJ</div>
+                    Your video cloud completely saved me. The interface is exceptionally fast, the built-in player controls are beautifully responsive, and the library of Jewish movies is limitless. You have entirely replaced my struggle by giving me a high-end platform that satisfies my need for relaxation while strictly guarding my values.
+                </div>
+                <div class="letter-author">— Name withheld for privacy, Lakewood, NJ</div>
+            </div>
+
+            <!-- בריוו 3 -->
+            <div class="letter-card">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/cf/Stamps_of_Germany_2004_Briefmarke_Post_0.55_Euro.jpg" class="letter-stamp" alt="stamp">
+                <div class="letter-text">
+                    To the organizers of the cloud,
+                    As a father of six teenage boys, managing the media intake in our household was an ongoing, exhausting warfare. We bought filtered devices, but the boys were constantly frustrated by the clunky, unorganized platforms and missing content. 
+
+                    Since we onboarded into the sofer video cloud, peace has returned to our home. My boys feel they have a premium, modern streaming network just like their peers, but as a father, I can rest easy knowing there isn't a single file that can harm their pure souls. The device-lock feature is also brilliant, ensuring they respect the sanctity of their access credentials. God bless you.
+                </div>
+                <div class="letter-author">— A Relieved Father, Monsey, NY</div>
+            </div>
+
+            <!-- בריוו 4 -->
+            <div class="letter-card">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/cf/Stamps_of_Germany_2004_Briefmarke_Post_0.55_Euro.jpg" class="letter-stamp" alt="stamp">
+                <div class="letter-text">
+                    Dear Team,
+                    I run a residential home for elderly community members who find it hard to leave their rooms. Boredom and loneliness are severe challenges here. 
+
+                    We set up the sofer cloud on a central screen in our lounge and on private devices for the room-bound residents. The joy you have injected into these elderly people is indescribable. They sit for hours listening to old-time Yiddish music collections, historic plays, and engaging kosher podcasts. You didn't just build a cloud website; you built a digital fountain of life and connection for souls who felt completely forgotten.
+                </div>
+                <div class="letter-author">— Director of Golden Years Pavilion, Williamsburg, NY</div>
             </div>
         </div>
 
-        <h3 class="section-title">Frequently Asked Questions (Q&A)</h3>
+        <!-- דברים העומדים: נגינה כשרה / כלי נגינה קלאסי -->
+        <img src="https://images.unsplash.com/photo-1511192336575-5a79af67a629?auto=format&fit=crop&w=1000&q=80" class="section-image-aside" style="width:100%; max-height:220px;" alt="Kosher Music and Melodies">
+
+        <!-- פולע קשיות ותשובות -->
+        <h3 class="section-title">Deep Technical & Halachic Q&A</h3>
         <div class="qa-container">
             <div class="qa-item">
-                <div class="qa-question">Q: How much does it cost to use the sofer video cloud?</div>
-                <div class="qa-answer">A: Our cloud platform is built entirely as a community service project and is completely free of charge for approved members. We believe that safe, kosher media should be easily accessible to every Jewish family without financial strain.</div>
+                <div class="qa-question">Q: What guarantees that the video source links remain entirely invisible to the public?</div>
+                <div class="qa-answer">A: Our cloud architecture is built directly on secure API integration layers. Users only interact with our customized frontend grid and player elements. The direct paths to the underlying data stores are never exposed within the browser's inspection nodes, completely shielding our source vaults from unauthorized exploitation.</div>
             </div>
             
             <div class="qa-item">
-                <div class="qa-question">Q: Can I share my registered access email with a close friend or relative?</div>
-                <div class="qa-answer">A: No. To maintain high-level security and protect system bandwidth, our architecture utilizes a strict 'Device Lock' system. Your account automatically links to the first specific browser/device you use to log in. Sharing your credentials will lead to an automatic access denial on the secondary device. Kindly advise your friends to request their own separate access token via the main login screen.</div>
+                <div class="qa-question">Q: Why do you enforce the strict single-device lock policy per user account?</div>
+                <div class="qa-answer">A: Bandwidth costs for high-definition streaming are immense. More importantly, maintaining a controlled, trustworthy community network requires accountability. By locking an approved email token to the user's specific hardware signature upon their initial login, we ensure credentials aren't shared carelessly across the public web, preventing system crashes and unauthorized intrusion.</div>
             </div>
 
             <div class="qa-item">
-                <div class="qa-question">Q: Who manages the content inside the folders and how often is it updated?</div>
-                <div class="qa-answer">A: The library is constantly managed and synchronized directly from our secure cloud storage. New Jewish music releases, kosher historical videos, inspirational podcasts, and seasonal plays are added on a weekly basis. All updates appear instantly inside your folder dashboard without requiring any software downloads.</div>
+                <div class="qa-question">Q: Can users request specific historical kosher media or plays to be uploaded?</div>
+                <div class="qa-answer">A: Absolutely. Our administrator monitors the incoming request database continuously. Approved users can submit requests for specific community records, historic musical collections, or vetted theatrical releases. If the content fully aligns with our frame-by-frame purity protocols, it will be uploaded and mapped into the public view swiftly.</div>
             </div>
 
             <div class="qa-item">
-                <div class="qa-question">Q: What should I do if a video thumbnail is missing or if I want to report a technical issue?</div>
-                <div class="qa-answer">A: The platform administrator has full dynamic access to manage, replace, and upload custom thumbnails permanently via the central Admin Panel. If you encounter any streaming lag, structural bugs, or have technical inquiries, you can reach out directly via the admin request portal or email, and our team will resolve it swiftly.</div>
+                <div class="qa-question">Q: How do custom permanent thumbnails operate on the frontend?</div>
+                <div class="qa-answer">A: The platform administrator can click 'Edit Thumbnail' on any media card on the screen. By supplying a direct image web link (such as via ImgBB), the new design maps directly into our global metadata table. This ensures the clean, unified styling is instantly reflected on every user's dashboard permanently.</div>
             </div>
         </div>
 
