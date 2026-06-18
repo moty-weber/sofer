@@ -105,14 +105,10 @@
         .blog-body { font-size: 16px; color: #f1f5f9; line-height: 1.6; }
         .blog-body img { max-width: 100%; border-radius: 6px; margin: 15px 0; }
         
-        /* פארום קאמענטארן און אינפיניט נעיסטעד טרעדס */
+        /* פארום קאמענטארן */
         .thread-section { margin-top: 25px; border-top: 1px solid #25334a; padding-top: 20px; }
-        
-        /* דער הויפט קאסטטומער באקס פונעם קאמענטאר */
         .comment-wrapper { display: flex; flex-direction: column; width: 100%; }
         .comment-box { background: #141b27; padding: 12px 16px; border-radius: 6px; margin-top: 10px; border-right: 3px solid var(--drive-blue); position: relative; box-sizing: border-box; }
-        
-        /* אינפיניט ריפלאיס סאב-קאנטעינער מיט א מעקסימום אריינרוקונג זיך צו היטן פון די ברעגן */
         .replies-container { padding-left: 25px; border-left: 1px dashed rgba(255,255,255,0.05); width: 100%; box-sizing: border-box; }
         
         .comment-meta { display: flex; justify-content: space-between; font-size: 12px; font-weight: bold; margin-bottom: 5px; }
@@ -127,7 +123,7 @@
         .action-link.delete-link:hover { color: #ff5252; }
 
         /* רעאקציעס */
-        .reaction-row { display: flex; gap: 8px; align-items: center; margin-top: 8px; font-size: 13px; }
+        .reaction-row { display: flex; gap: 8px; align-items: center; margin-top: 8px; font-size: 13px; flex-wrap: wrap; }
         .react-btn { background: #25334a; border: none; color: white; padding: 4px 8px; border-radius: 4px; cursor: pointer; position: relative; font-size: 12px; display: flex; align-items: center; gap: 4px; }
         .react-btn:hover { background: var(--drive-blue); }
         .react-tooltip { display: none; position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.9); color: white; padding: 5px 10px; border-radius: 4px; font-size: 11px; white-space: nowrap; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); }
@@ -194,13 +190,19 @@
         </div>
 
         <div id="updatesPage">
+            <!-- צוגעלייגט א "Back to Library" באַר אויבן פונקטליך -->
+            <div class="breadcrumb-container" style="background-color: #1c2638; margin-bottom: 20px;">
+                <button class="back-btn" onclick="showAppPage('library')">← Back to Main Menu</button>
+                <span style="color: var(--text-muted); font-size:14px; margin-left: 10px;">Updates & Community Forum</span>
+            </div>
+
             <div class="updates-container">
-                <h2 class="section-title" style="border-color: var(--drive-yellow);">System Updates & Community Threads</h2>
-                
                 <div class="admin-editor-box" id="adminEditorBox">
-                    <h3 style="margin-top:0; color:var(--drive-yellow);">Publish a Rich Update</h3>
+                    <h3 style="margin-top:0; color:var(--drive-yellow);" id="editorBoxTitle">Publish a Rich Update</h3>
                     <div id="editor-container" style="height: 200px; margin-bottom: 15px;"></div>
-                    <button class="nav-btn" style="background-color: var(--drive-green);" onclick="publishAdminUpdate()">Publish Post</button>
+                    <!-- קנעפּל וואס טוישט זיך אויטאמאטיש ביי עדיטן -->
+                    <button class="nav-btn" style="background-color: var(--drive-green);" id="submitPostBtn" onclick="publishAdminUpdate()">Publish Post</button>
+                    <button class="nav-btn" style="background-color: var(--text-muted); display:none; margin-left:10px;" id="cancelEditBtn" onclick="cancelAdminEditing()">Cancel Edit</button>
                 </div>
 
                 <div id="blogPostsList">Loading forum threads...</div>
@@ -253,7 +255,7 @@
     
     <script>
         // ************************************************************
-        // 1) דא קומט דיין Google Drive API Key:
+        // 1) דא קומט דיין Google Drive API Key פונקטליך:
         const API_KEY = "AIzaSyDEkcoogK9_8e4HOf7vSWFWEHKct21gjdE"; 
         const START_FOLDER_ID = "14v9raW-BX5EkdfK2-Yj8wDA5kGok2Tda"; 
 
@@ -269,7 +271,7 @@
         };
 
         const EMAILJS_PUBLIC_KEY = "2VeSFXHu7Jhf2qE-O";
-        const EMAILJS_SERVICE_ID = "service_0pgs1vp";
+        const EMAILJS_SERVICE_ID = "service_0pgs1vp"; 
         const EMAILJS_TEMPLATE_ID = "template_tq4bhu7";
 
         const ADMIN_TOKEN = "soferadmin"; 
@@ -288,6 +290,9 @@
         let loggedInUserEmail = "";
         let loggedInUserName = "User";
         let generatedVerificationCode = ""; 
+
+        // פאר דעם פראפעסיאנאלן עדיט סיסטעם
+        let currentEditingPostId = null;
 
         function getDeviceFingerprint() {
             return navigator.userAgent + (navigator.hardwareConcurrency || 2) + (navigator.deviceMemory || 4);
@@ -398,29 +403,55 @@
             loadFolder(START_FOLDER_ID, "Home");
         }
 
+        // פובליקאציע אדער סעיוון אן עקזעסטירנדע פאסט
         async function publishAdminUpdate() {
             const htmlContent = quillEditor.root.innerHTML;
             if(quillEditor.getText().trim().length === 0) { alert('Please write something first.'); return; }
 
-            await db.collection('forum_posts').add({
-                content: htmlContent,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            });
+            if(currentEditingPostId) {
+                // סעיוון די שינויים געהעריג אינעם פירבעיס!
+                await db.collection('forum_posts').doc(currentEditingPostId).update({
+                    content: htmlContent
+                });
+                cancelAdminEditing();
+            } else {
+                // פאסטן א גאנציגע נייע פאסט
+                await db.collection('forum_posts').add({
+                    content: htmlContent,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+            }
             quillEditor.setText('');
             loadBlogPosts();
+        }
+
+        // לאדן א פאסט צוריק אריין אינעם רייכן עדיטאר אויבן געהעריג!
+        function setupRichEditMainPost(postId, currentHtml) {
+            currentEditingPostId = postId;
+            quillEditor.root.innerHTML = currentHtml;
+            
+            // טוישן די קנעפּלעך אויבן פונקטליך
+            document.getElementById('editorBoxTitle').innerText = "✏️ Edit Existing Update";
+            document.getElementById('submitPostBtn').innerText = "Save Changes";
+            document.getElementById('submitPostBtn').style.backgroundColor = "var(--drive-yellow)";
+            document.getElementById('cancelEditBtn').style.display = "inline-block";
+            
+            // סקראָלן גלייך גלאַט אויבן צומ עדיטאר
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function cancelAdminEditing() {
+            currentEditingPostId = null;
+            quillEditor.setText('');
+            document.getElementById('editorBoxTitle').innerText = "Publish a Rich Update";
+            document.getElementById('submitPostBtn').innerText = "Publish Post";
+            document.getElementById('submitPostBtn').style.backgroundColor = "var(--drive-green)";
+            document.getElementById('cancelEditBtn').style.display = "none";
         }
 
         async function deleteMainPost(postId) {
             if(confirm("Are you sure you want to delete this main update permanently?")) {
                 await db.collection('forum_posts').doc(postId).delete();
-                loadBlogPosts();
-            }
-        }
-
-        async function editMainPost(postId, currentHtml) {
-            const newHtml = prompt("Edit the update HTML/Text code directly:", currentHtml);
-            if(newHtml && newHtml.trim() !== "") {
-                await db.collection('forum_posts').doc(postId).update({ content: newHtml.trim() });
                 loadBlogPosts();
             }
         }
@@ -435,14 +466,20 @@
                     const postData = doc.data(); const postId = doc.id;
                     const timeString = postData.timestamp ? postData.timestamp.toDate().toLocaleString() : 'Just now';
                     
-                    const mainThumbs = postData.react_thumb ? Object.keys(postData.react_thumb).length : 0;
-                    const mainHearts = postData.react_heart ? Object.keys(postData.react_heart).length : 0;
-                    const mainThumbUsers = postData.react_thumb ? Object.values(postData.react_thumb).join(', ') : 'No one yet';
-                    const mainHeartUsers = postData.react_heart ? Object.values(postData.react_heart).join(', ') : 'No one yet';
+                    // אויסרעכענען עמאדזשיס מיט די נייע ברייטע ליסטע
+                    const emojiList = ['thumb', 'heart', 'laugh', 'wow', 'sad', 'fire', 'party', 'pray'];
+                    let emojiCounts = {};
+                    let emojiUsers = {};
+                    
+                    emojiList.forEach(type => {
+                        emojiCounts[type] = postData['react_' + type] ? Object.keys(postData['react_' + type]).length : 0;
+                        emojiUsers[type] = postData['react_' + type] ? Object.values(postData['react_' + type]).join(', ') : 'No one yet';
+                    });
 
+                    // צוגעפאסט דעם Rich Edit קנעפל
                     const adminActionsHtml = isAdmin ? `
                         <div style="display:inline-flex; gap:10px; margin-left:15px;">
-                            <span class="action-link" onclick="editMainPost('${postId}', '${postData.content.replace(/'/g, "\\'")}')">Edit Update</span>
+                            <span class="action-link" onclick="setupRichEditMainPost('${postId}', \`${postData.content.replace(/`/g, "\\`").replace(/\${/g, "\\${")}\`)">Edit Update</span>
                             <span class="action-link delete-link" onclick="deleteMainPost('${postId}')">Delete Update</span>
                         </div>
                     ` : '';
@@ -455,15 +492,16 @@
                         </div>
                         <div class="blog-body">${postData.content}</div>
                         
+                        <!-- די נייע ברייטע עמאדזשי באר דירעקט פארן הויפט פאסט -->
                         <div class="reaction-row" style="margin-top:15px; border-bottom: 1px dashed #25334a; padding-bottom:15px;">
-                            <button class="react-btn" onclick="toggleMainPostReaction('${postId}', 'thumb')">
-                                👍 <span>${mainThumbs}</span>
-                                <div class="react-tooltip">Liked by: ${mainThumbUsers}</div>
-                            </button>
-                            <button class="react-btn" onclick="toggleMainPostReaction('${postId}', 'heart')">
-                                ❤️ <span>${mainHearts}</span>
-                                <div class="react-tooltip">Loved by: ${mainHeartUsers}</div>
-                            </button>
+                            <button class="react-btn" onclick="toggleMainPostReaction('${postId}', 'thumb')">👍 <span>${emojiCounts['thumb']}</span><div class="react-tooltip">Liked by: ${emojiUsers['thumb']}</div></button>
+                            <button class="react-btn" onclick="toggleMainPostReaction('${postId}', 'heart')">❤️ <span>${emojiCounts['heart']}</span><div class="react-tooltip">Loved by: ${emojiUsers['heart']}</div></button>
+                            <button class="react-btn" onclick="toggleMainPostReaction('${postId}', 'laugh')">😂 <span>${emojiCounts['laugh']}</span><div class="react-tooltip">Reacted by: ${emojiUsers['laugh']}</div></button>
+                            <button class="react-btn" onclick="toggleMainPostReaction('${postId}', 'wow')">😮 <span>${emojiCounts['wow']}</span><div class="react-tooltip">Reacted by: ${emojiUsers['wow']}</div></button>
+                            <button class="react-btn" onclick="toggleMainPostReaction('${postId}', 'sad')">😢 <span>${emojiCounts['sad']}</span><div class="react-tooltip">Reacted by: ${emojiUsers['sad']}</div></button>
+                            <button class="react-btn" onclick="toggleMainPostReaction('${postId}', 'fire')">🔥 <span>${emojiCounts['fire']}</span><div class="react-tooltip">Reacted by: ${emojiUsers['fire']}</div></button>
+                            <button class="react-btn" onclick="toggleMainPostReaction('${postId}', 'party')">🎉 <span>${emojiCounts['party']}</span><div class="react-tooltip">Reacted by: ${emojiUsers['party']}</div></button>
+                            <button class="react-btn" onclick="toggleMainPostReaction('${postId}', 'pray')">🙏 <span>${emojiCounts['pray']}</span><div class="react-tooltip">Reacted by: ${emojiUsers['pray']}</div></button>
                         </div>
 
                         <div class="thread-section">
@@ -503,53 +541,53 @@
             if(parentId !== 'root') document.getElementById(`inline-replybox-${parentId}`).style.display = "none";
         }
 
-        // --- די אינפיניט נעיסטעד רעקורסיווע לאדן סיסטעם (Infinite Nested Loop System) ---
         function loadCommentsForPost(postId) {
             const container = document.getElementById(`comments-list-${postId}`);
             db.collection('forum_posts').doc(postId).collection('comments').orderBy('timestamp', 'asc').onSnapshot(snap => {
                 container.innerHTML = '';
                 if(snap.empty) { container.innerHTML = '<p style="color:var(--text-muted); font-size:13px; margin:0;">No comments in this thread yet.</p>'; return; }
                 
-                let commentMap = {};
-                let rootComments = [];
-
+                let commentMap = {}; let rootComments = [];
                 snap.forEach(cDoc => {
                     let data = cDoc.data(); data.id = cDoc.id; data.replies = [];
                     commentMap[data.id] = data;
                     if (data.parentId === 'root' || !data.parentId) { rootComments.push(data); }
                 });
-
-                // בויען די רעקורסיווע בוים סטראקטור אויטאָמאַטיש
                 snap.forEach(cDoc => {
                     let data = commentMap[cDoc.id];
                     if (data.parentId && data.parentId !== 'root' && commentMap[data.parentId]) {
                         commentMap[data.parentId].replies.push(data);
                     }
                 });
-
-                // אנהייבן רענדערן פונעם הויפט שורש אלס אראפ און אראפ אן קיין ענדע
-                rootComments.forEach(rootComment => {
-                    buildRecursiveHTMLNode(container, rootComment, postId);
-                });
+                rootComments.forEach(rootComment => { buildRecursiveHTMLNode(container, rootComment, postId); });
             });
         }
 
-        // די פונקציע וואס בויט אליין די טרעדס רעקורסיוו אראפ און אראפ אומענדליך!
         function buildRecursiveHTMLNode(parentElement, c, postId) {
             const cTime = c.timestamp ? c.timestamp.toDate().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'Now';
-            const thumbs = c.react_thumb ? Object.keys(c.react_thumb).length : 0;
-            const hearts = c.react_heart ? Object.keys(c.react_heart).length : 0;
-            const thumbUsers = c.react_thumb ? Object.values(c.react_thumb).join(', ') : 'No one yet';
-            const heartUsers = c.react_heart ? Object.values(c.react_heart).join(', ') : 'No one yet';
+            
+            // די גאנצע עמאדזשי ליסטע פאר די קאמענטארן געהעריג
+            const emojiList = ['thumb', 'heart', 'laugh', 'wow', 'sad', 'fire', 'party', 'pray'];
+            let emojiButtonsHtml = '';
+            
+            const emojisMap = { thumb: '👍', heart: '❤️', laugh: '😂', wow: '😮', sad: '😢', fire: '🔥', party: '🎉', pray: '🙏' };
+            
+            emojiList.forEach(type => {
+                const count = c['react_' + type] ? Object.keys(c['react_' + type]).length : 0;
+                const users = c['react_' + type] ? Object.values(c['react_' + type]).join(', ') : 'No one yet';
+                emojiButtonsHtml += `
+                    <button class="react-btn" onclick="toggleReaction('${postId}', '${c.id}', '${type}')">
+                        ${emojisMap[type]} <span>${count}</span>
+                        <div class="react-tooltip">Reacted by: ${users}</div>
+                    </button>
+                `;
+            });
 
             const isOwner = (c.userEmail === loggedInUserEmail);
             const editHtml = isOwner ? `<span class="action-link" onclick="editCommentPrompt('${postId}', '${c.id}', '${c.commentText.replace(/'/g, "\\'")}')">Edit</span>` : '';
             const deleteHtml = (isOwner || isAdmin) ? `<span class="action-link delete-link" onclick="deleteCommentAction('${postId}', '${c.id}')">Delete</span>` : '';
 
-            // באשאפן א קאמפלעט באנדל קארד פאר דעם נאד
-            const wrapper = document.createElement('div');
-            wrapper.className = 'comment-wrapper';
-            
+            const wrapper = document.createElement('div'); wrapper.className = 'comment-wrapper';
             wrapper.innerHTML = `
                 <div class="comment-box">
                     <div class="comment-meta">
@@ -558,32 +596,15 @@
                     </div>
                     <div class="comment-text">${c.commentText}</div>
                     <div class="reaction-row">
-                        <button class="react-btn" onclick="toggleReaction('${postId}', '${c.id}', 'thumb')">
-                            👍 <span>${thumbs}</span>
-                            <div class="react-tooltip">Liked by: ${thumbUsers}</div>
-                        </button>
-                        <button class="react-btn" onclick="toggleReaction('${postId}', '${c.id}', 'heart')">
-                            ❤️ <span>${hearts}</span>
-                            <div class="react-tooltip">Loved by: ${heartUsers}</div>
-                        </button>
+                        ${emojiButtonsHtml}
                         <span class="reply-trigger" onclick="openInlineReplyBox('${postId}', '${c.id}')">Reply</span>
                     </div>
                     <div id="inline-replybox-${c.id}" style="margin-top:10px; display:none;"></div>
                 </div>
             `;
-
-            // באשאפן דעם סאב-קאנטעינער פאר זיינע אייגענע אומענדליכע קינדער-ריפלאיס (Nested Container)
-            const subRepliesContainer = document.createElement('div');
-            subRepliesContainer.className = 'replies-container';
-            wrapper.appendChild(subRepliesContainer);
-            parentElement.appendChild(wrapper);
-
-            // רעקורסיווע רוף: אויב דער ריפלאי פארמאגט אליין נאך א ריפלאי, בוי אים אריין אינעווייניג!
-            if (c.replies && c.replies.length > 0) {
-                c.replies.forEach(subReply => {
-                    buildRecursiveHTMLNode(subRepliesContainer, subReply, postId);
-                });
-            }
+            const subRepliesContainer = document.createElement('div'); subRepliesContainer.className = 'replies-container';
+            wrapper.appendChild(subRepliesContainer); parentElement.appendChild(wrapper);
+            if (c.replies && c.replies.length > 0) { c.replies.forEach(subReply => { buildRecursiveHTMLNode(subRepliesContainer, subReply, postId); }); }
         }
 
         function openInlineReplyBox(postId, commentId) {
