@@ -76,6 +76,10 @@
         .video-wrapper { position: relative; width: 100%; }
         .video-watermark { position: absolute; bottom: 55px; right: 20px; width: 50px; height: 50px; object-fit: contain; pointer-events: none; z-index: 10; opacity: 0.85; }
 
+        /* פונקציעס פאר מעניוז אויף די ווידעאו פלעיער קאנטראלס */
+        .video-js .vjs-playback-rate { display: block !important; }
+        .video-js .vjs-subs-caps-button { display: block !important; }
+
         .admin-tabs { display: flex; gap: 10px; margin-bottom: 15px; border-bottom: 1px solid #25334a; padding-bottom: 10px; }
         .tab-btn { background: #25334a; border: none; color: white; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: bold; }
         .tab-btn.active { background-color: var(--drive-blue); }
@@ -393,7 +397,29 @@
                 });
             }
             document.getElementById('userDisplayBadge').innerText = `${loggedInUserName} (${loggedInUserEmail})`;
-            playerInstance = videojs('my-video');
+            
+            // איניציאליזאציע פונעם פלעיער מיט שנעלקייט און סובטייטל אפציעס געבויט אינעווייניג
+            playerInstance = videojs('my-video', {
+                playbackRates: [0.5, 1, 1.25, 1.5, 1.75, 2],
+                responsive: true,
+                fluid: true,
+                controlBar: {
+                    children: [
+                        'playToggle',
+                        'volumePanel',
+                        'currentTimeDisplay',
+                        'timeDivider',
+                        'durationDisplay',
+                        'progressControl',
+                        'liveDisplay',
+                        'playbackRateMenuButton',
+                        'subsCapsButton',
+                        'audioTrackButton',
+                        'fullscreenToggle'
+                    ]
+                }
+            });
+
             try {
                 const thumbSnapshot = await db.collection('custom_thumbnails').get();
                 thumbSnapshot.forEach(doc => { savedThumbnails[doc.id] = doc.data().url; });
