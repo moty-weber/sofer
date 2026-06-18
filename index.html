@@ -31,11 +31,12 @@
         .brand-area h1 { margin: 0; font-size: 24px; cursor: pointer; }
         .menu-area { display: flex; align-items: center; gap: 15px; }
         
-        .nav-btn { background-color: #25334a; border: 1px solid rgba(255,255,255,0.1); color: white; padding: 8px 16px; border-radius: 6px; cursor: pointer; text-decoration: none; font-weight: bold; font-size: 14px; position: relative; }
+        /* יוניפארם קנעפּלעך אויסזען - אלע קנעפּלעך זענען יעצט אייניג */
+        .nav-btn { background-color: #25334a; border: 1px solid rgba(255,255,255,0.1); color: white; padding: 8px 16px; border-radius: 6px; cursor: pointer; text-decoration: none; font-weight: bold; font-size: 14px; position: relative; display: inline-block; box-sizing: border-box; }
         .nav-btn:hover { background-color: var(--drive-blue); }
         #adminPanelBtn { display: none; background-color: #7b1fa2; }
-        #favMenuBtn { display: none; background-color: #00796b; }
-        #popularMenuBtn { background-color: #e65100; }
+        #favMenuBtn { display: none; }
+        #popularMenuBtn { display: inline-block; }
         
         .badge-red::after { content: ''; position: absolute; top: -3px; right: -3px; width: 10px; height: 10px; background-color: var(--drive-red); border-radius: 50%; border: 2px solid var(--bg-dark); }
         .tab-btn { position: relative; }
@@ -161,8 +162,9 @@
         .action-link.delete-link:hover { color: #ff5252; }
 
         .reaction-row { display: flex; gap: 8px; align-items: center; margin-top: 8px; font-size: 13px; flex-wrap: wrap; }
-        .react-btn { background: #25334a; border: none; color: white; padding: 4px 8px; border-radius: 4px; cursor: pointer; position: relative; font-size: 12px; display: flex; align-items: center; gap: 4px; }
+        .react-btn { background: #25334a; border: none; color: white; padding: 4px 8px; border-radius: 4px; cursor: pointer; position: relative; font-size: 12px; display: flex; align-items: center; gap: 4px; transition: background 0.2s; }
         .react-btn:hover { background: var(--drive-blue); }
+        .react-btn.active { background: #0d47a1; border: 1px solid var(--drive-blue); }
         .react-tooltip { display: none; position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.9); color: white; padding: 5px 10px; border-radius: 4px; font-size: 11px; white-space: nowrap; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); }
         .react-btn:hover .react-tooltip { display: block; }
 
@@ -224,6 +226,7 @@
                     <input type="text" id="cloudSearchInput" class="search-input" placeholder="Search total cloud ecosystem (folders & videos)..." oninput="filterGlobalDriveSearch()">
                 </div>
 
+                <!-- Continue Watching סעקציע -->
                 <div id="continueWatchingWrapper" style="display: none; margin-bottom: 40px;">
                     <h2 class="section-title">Continue Watching</h2>
                     <div class="grid" id="continueGrid"></div>
@@ -237,6 +240,7 @@
             </div>
         </div>
 
+        <!-- Favorites פערזענליכע בלאט -->
         <div id="favoritesPage">
             <div class="breadcrumb-container" style="background-color: #1c2638; margin-bottom: 20px;">
                 <button class="back-btn" onclick="showAppPage('library')">← Back to Main Menu</button>
@@ -248,6 +252,7 @@
             </div>
         </div>
 
+        <!-- Popular / Trending Pinned Page -->
         <div id="popularPage">
             <div class="breadcrumb-container" style="background-color: #1c2638; margin-bottom: 20px;">
                 <button class="back-btn" onclick="showAppPage('library')">← Back to Main Menu</button>
@@ -301,14 +306,17 @@
         </div>
     </div>
 
+    <!-- Video Player Modal -->
     <div class="player-modal" id="playerModal" onclick="closeVideoFromOutside(event)">
         <div class="player-content" onclick="event.stopPropagation()">
             <button class="minimize-player" onclick="togglePipMode()">🗕</button>
             <button class="close-player" onclick="closeVideo()">×</button>
             <div class="video-wrapper">
-                <video id="my-video" class="video-js vjs-big-play-centered" controls preload="auto" width="900" height="500"></video>
+                <!-- crossorigin צוגעלייגט פארצוהיטן פלייבעק בלאקאדעס -->
+                <video id="my-video" class="video-js vjs-big-play-centered" controls preload="auto" width="900" height="500" crossorigin="anonymous"></video>
                 <img src="logo.png" class="video-watermark" alt="WM" onerror="this.style.display='none'">
             </div>
+            <!-- קאמענטארן און עמאודזשיס פאר יעדע ווידעאו ספעציעל -->
             <div id="videoModalCommentsSection" style="margin-top:20px; border-top:1px solid #25334a; padding-top:15px;">
                 <h3 style="color: var(--drive-yellow); margin:0 0 10px 0;">Video Reactions & Messages</h3>
                 <div class="reaction-row" id="videoReactionsContainer"></div>
@@ -439,7 +447,6 @@
             loadFolder(START_FOLDER_ID, "Home"); setTimeout(() => { setupCustomButtons(); }, 1000);
         }
 
-        /* --- פולקאמע גלאבאלע סעירטש סיסטעם פונעם גאנצן דרייוו --- */
         function filterGlobalDriveSearch() {
             clearTimeout(searchTimeout);
             const query = document.getElementById('cloudSearchInput').value.trim().toLowerCase();
@@ -480,7 +487,6 @@
             }, 600);
         }
 
-        /* --- מאנועלע פאפולער קנעפּלעך פארן אדמין --- */
         async function markAsPopularManual(fileId, title, event) {
             event.stopPropagation();
             const cardEl = document.querySelector(`[data-id="${fileId}"]`); const thumb = cardEl ? cardEl.getAttribute('data-thumb') : '';
@@ -509,15 +515,14 @@
             });
         }
 
-        /* --- ווידעאו קאמענטארן און רעאקציעס לאגיק --- */
         function loadVideoMetaAndComments(fileId) {
             const reactionContainer = document.getElementById('videoReactionsContainer');
             db.collection('video_reactions').doc(fileId).onSnapshot(doc => {
                 reactionContainer.innerHTML = ''; const data = doc.exists ? doc.data() : {};
                 ['thumb', 'heart', 'fire', 'wow'].forEach(emoji => {
                     const reactMap = data['emoji_' + emoji] || {}; const count = Object.keys(reactMap).length;
-                    const activeClass = reactMap[loggedInUserEmail] ? 'style="background: var(--drive-blue);"' : '';
-                    reactionContainer.innerHTML += `<button class="react-btn" ${activeClass} onclick="toggleVideoEmoji('${fileId}', '${emoji}')">${emoji==='thumb'?'👍':emoji==='heart'?'❤️':emoji==='fire'?'🔥':'😮'} <span>${count}</span></button>`;
+                    const activeClass = reactMap[loggedInUserEmail] ? 'active' : '';
+                    reactionContainer.innerHTML += `<button class="react-btn ${activeClass}" onclick="toggleVideoEmoji('${fileId}', '${emoji}')">${emoji==='thumb'?'👍':emoji==='heart'?'❤️':emoji==='fire'?'🔥':'😮'} <span>${count}</span></button>`;
                 });
             });
 
@@ -585,8 +590,22 @@
                     const postData = doc.data(); const postId = doc.id; const timeString = postData.timestamp ? postData.timestamp.toDate().toLocaleString() : 'Just now';
                     let adminActionsHtml = isAdmin ? `<div style="display:inline-flex; gap:10px; margin-left:15px;"><span class="action-link" onclick="setupEditMainPost('${postId}', \`${postData.content.replace(/`/g, "\\`").replace(/\${/g, "\\${")}\`)">Edit Update</span><span class="action-link delete-link" onclick="deleteMainPost('${postId}')">Delete Update</span></div>` : '';
                     const postElement = document.createElement('div'); postElement.className = 'blog-post';
-                    postElement.innerHTML = `<div class="blog-time"><span>📅 Published: ${timeString} ${adminActionsHtml}</span></div><div class="blog-body">${postData.content}</div><div class="thread-section"><h4>Conversation Thread</h4><div id="comments-list-${postId}">Loading posts...</div><div class="comment-input-row"><input type="text" id="input-${postId}" placeholder="Write a message in this thread..."><button onclick="submitComment('${postId}', 'root')">Post Message</button></div></div>`;
-                    listContainer.appendChild(postElement); loadCommentsForPost(postId);
+                    postElement.innerHTML = `
+                        <div class="blog-time"><span>📅 Published: ${timeString} ${adminActionsHtml}</span></div>
+                        <div class="blog-body">${postData.content}</div>
+                        <!-- גרויסע אויסווייל פון עמאוידזשעס פאר די הויפט פאסט -->
+                        <div class="reaction-row" id="post-reactions-${postId}"></div>
+                        <div class="thread-section">
+                            <h4>Conversation Thread</h4>
+                            <div id="comments-list-${postId}">Loading posts...</div>
+                            <div class="comment-input-row">
+                                <input type="text" id="input-${postId}" placeholder="Write a message in this thread...">
+                                <button onclick="submitComment('${postId}', 'root')">Post Message</button>
+                            </div>
+                        </div>`;
+                    listContainer.appendChild(postElement);
+                    listenToReactions('forum_posts', postId, `post-reactions-${postId}`);
+                    loadCommentsForPost(postId);
                 });
             });
         }
@@ -614,9 +633,43 @@
             const cTime = c.timestamp ? c.timestamp.toDate().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'Now'; const canEdit = (c.userEmail === loggedInUserEmail && (Date.now() - (c.timestamp ? c.timestamp.toDate() : Date.now()) < 24*60*60*1000)); const canDelete = (c.userEmail === loggedInUserEmail || isAdmin);
             const editHtml = canEdit ? `<span class="action-link" onclick="editCommentPrompt('${postId}', '${c.id}', '${c.commentText.replace(/'/g, "\\'")}')">Edit</span>` : ''; const deleteHtml = canDelete ? `<span class="action-link delete-link" onclick="deleteCommentAction('${postId}', '${c.id}')">Delete</span>` : '';
             const wrapper = document.createElement('div'); wrapper.className = 'comment-wrapper';
-            wrapper.innerHTML = `<div class="comment-box"><div class="comment-meta"><span class="comment-user">${c.userName} (${c.userEmail}) <span class="comment-actions">${editHtml} ${deleteHtml}</span></span><span class="comment-time">${cTime} <span class="reply-trigger" onclick="openInlineReplyBox('${postId}', '${c.id}')">Reply</span></span></div><div class="comment-text">${c.commentText}</div><div id="inline-replybox-${c.id}" style="margin-top:10px; display:none;"></div></div>`;
+            wrapper.innerHTML = `
+                <div class="comment-box">
+                    <div class="comment-meta">
+                        <span class="comment-user">${c.userName} (${c.userEmail}) <span class="comment-actions">${editHtml} ${deleteHtml}</span></span>
+                        <span class="comment-time">${cTime} <span class="reply-trigger" onclick="openInlineReplyBox('${postId}', '${c.id}')">Reply</span></span>
+                    </div>
+                    <div class="comment-text">${c.commentText}</div>
+                    <!-- גרויסע אויסווייל פון עמאוידזשעס פאר יעדע סאב-ריפליי -->
+                    <div class="reaction-row" id="reply-reactions-${c.id}"></div>
+                    <div id="inline-replybox-${c.id}" style="margin-top:10px; display:none;"></div>
+                </div>`;
             const repliesContainer = document.createElement('div'); repliesContainer.className = 'replies-container'; wrapper.appendChild(repliesContainer); parentElement.appendChild(wrapper);
+            
+            // עפענען די רעאקציע ליסטענער פאר די ספעציפישע קאמענטאר
+            setTimeout(() => { listenToReactions(`forum_posts/${postId}/comments`, c.id, `reply-reactions-${c.id}`); }, 50);
+
             if (c.replies && c.replies.length > 0) { c.replies.forEach(subReply => { buildRecursiveCommentNode(repliesContainer, subReply, postId); }); }
+        }
+
+        /* --- גלאבאלע עמוזשי רעאקציעס פארן פארום (אדמין פאסטס + ריפלייס) --- */
+        function listenToReactions(collectionPath, docId, targetElementId) {
+            db.collection(collectionPath).doc(docId).onSnapshot(doc => {
+                const el = document.getElementById(targetElementId); if(!el) return;
+                el.innerHTML = ''; const data = doc.exists ? doc.data() : {};
+                ['👍', '❤️', '🔥', '😮', '😂', '😢'].forEach(emoji => {
+                    const reactMap = data['emoji_' + emoji] || {}; const count = Object.keys(reactMap).length;
+                    const activeClass = reactMap[loggedInUserEmail] ? 'active' : '';
+                    el.innerHTML += `<button class="react-btn ${activeClass}" onclick="toggleEmojiReaction('${collectionPath}', '${docId}', '${emoji}')">${emoji} <span>${count}</span></button>`;
+                });
+            });
+        }
+
+        async function toggleEmojiReaction(collectionPath, docId, emoji) {
+            const ref = db.collection(collectionPath).doc(docId); const doc = await ref.get();
+            let data = doc.exists ? doc.data() : {}; let current = data['emoji_' + emoji] || {};
+            if(current[loggedInUserEmail]) delete current[loggedInUserEmail]; else current[loggedInUserEmail] = loggedInUserName;
+            await ref.set({ ['emoji_' + emoji]: current }, { merge: true });
         }
 
         function openInlineReplyBox(postId, commentId) { const box = document.getElementById(`inline-replybox-${commentId}`); box.style.display = "block"; box.innerHTML = `<div class="comment-input-row"><input type="text" id="inline-input-${commentId}" placeholder="Reply to this message..."><button onclick="submitComment('${postId}', '${commentId}')">Post Reply</button></div>`; }
@@ -707,7 +760,7 @@
             if (data.files && data.files.length > 0) {
                 data.files.forEach(file => {
                     const card = document.createElement('div'); card.setAttribute('data-id', file.id); card.setAttribute('data-name', file.name); card.setAttribute('data-thumb', savedThumbnails[file.id] || file.thumbnailLink || '');
-                    const adminOverlayHtml = isAdmin ? `<div class="admin-card-overlay" style="display:block;" onclick="changeThumbnailPrompt('${file.id}', event)">⚙     Edit Thumbnail</div><div class="admin-popular-overlay" style="display:block;" onclick="markAsPopularManual('${file.id}', '${file.name.replace(/'/g, "\\'")}', event)">⭐ Set Popular</div>` : ''; 
+                    const adminOverlayHtml = isAdmin ? `<div class="admin-card-overlay" style="display:block;" onclick="changeThumbnailPrompt('${file.id}', event)">⚙️ Edit Thumbnail</div><div class="admin-popular-overlay" style="display:block;" onclick="markAsPopularManual('${file.id}', '${file.name.replace(/'/g, "\\'")}', event)">⭐ Set Popular</div>` : ''; 
                     const currentThumb = savedThumbnails[file.id] || file.thumbnailLink; const isFav = favs.some(f => f.id === file.id) ? '❤️' : '🤍';
                     
                     if (file.mimeType === 'application/vnd.google-apps.folder') {
@@ -722,7 +775,17 @@
             renderContinueWatching(); updateFavMenuButtonVisibility();
         }
         
-        function playVideo(id) { currentPlayingFileId = id; const modal = document.getElementById('playerModal'); modal.style.display = 'flex'; modal.classList.remove('pip-mode'); isPipActive = false; playerInstance.src({type: 'video/mp4', src: `https://www.googleapis.com/drive/v3/files/${id}?alt=media&key=${API_KEY}`}); playerInstance.play(); loadVideoMetaAndComments(id); }
+        function playVideo(id) { 
+            currentPlayingFileId = id; const modal = document.getElementById('playerModal'); 
+            modal.style.display = 'flex'; modal.classList.remove('pip-mode'); isPipActive = false; 
+            
+            // פארראכטן די גוגל דרייוו פלייבעק עראר לינק צו א גאראנטירטע עקספּאָרט פארמאט
+            const videoUrl = `https://www.googleapis.com/drive/v3/files/${id}?alt=media&key=${API_KEY}&export=download`;
+            playerInstance.src({type: 'video/mp4', src: videoUrl}); 
+            playerInstance.play(); 
+            loadVideoMetaAndComments(id); 
+        }
+        
         function closeVideo() { document.getElementById('playerModal').style.display = 'none'; playerInstance.pause(); currentPlayingFileId = null; isPipActive = false; renderContinueWatching(); }
         function closeVideoFromOutside(event) { if(!isPipActive) closeVideo(); }
         function downloadVideo(fileId) { window.open(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${API_KEY}`, '_blank'); }
