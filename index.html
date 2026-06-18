@@ -80,6 +80,7 @@
 
         .admin-card-overlay { display: none; position: absolute; top: 5px; left: 5px; background: rgba(0,0,0,0.8); padding: 4px 8px; border-radius: 4px; font-size: 11px; color: var(--drive-yellow); z-index: 5; margin-bottom: 2px; }
         .admin-popular-overlay { display: none; position: absolute; top: 30px; left: 5px; background: rgba(0,0,0,0.8); padding: 4px 8px; border-radius: 4px; font-size: 11px; color: #ffeb3b; z-index: 5; }
+        .admin-unpopular-overlay { display: none; position: absolute; top: 55px; left: 5px; background: rgba(0,0,0,0.8); padding: 4px 8px; border-radius: 4px; font-size: 11px; color: var(--drive-red); z-index: 5; }
         .download-icon-btn { position: absolute; bottom: 10px; right: 10px; background-color: var(--drive-blue); color: white; border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; z-index: 2; }
         
         .fav-btn { position: absolute; top: 10px; right: 10px; background: none; border: none; font-size: 18px; cursor: pointer; z-index: 3; filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.5)); transition: transform 0.2s; }
@@ -174,7 +175,7 @@
 
     <div class="lock-screen" id="lockScreen">
         <div class="lock-box" id="loginPanel">
-            <h2 style="margin-top:0; color: var(--drive-yellow);">sofer cloud access</h2>
+            <h2 style="margin-top:0; color: var(--drive-yellow);">sofer video cloud</h2>
             <p style="color: var(--text-muted); font-size: 14px;">Enter your Email Address to unlock the library.</p>
             <input type="email" id="accessEmailInput" placeholder="Enter your registered email...">
             <button onclick="checkAccess()">Unlock Library</button>
@@ -201,24 +202,29 @@
     <div class="slide-menu" id="optionsSlideMenu">
         <button class="slide-menu-close" onclick="toggleOptionsDrawer(false)">×</button>
         
+        <div class="slide-section-title">Navigation Controls</div>
+        <button class="nav-btn" style="margin-bottom:10px; background-color: var(--drive-blue);" onclick="toggleOptionsDrawer(false); backToMainHomeBase()">🏠 Home Base</button>
+        <button class="nav-btn" style="margin-bottom:10px;" onclick="toggleOptionsDrawer(false); showAppPage('favorites')">⭐ Bookmarked Favorites</button>
+        <button class="nav-btn" style="margin-bottom:10px;" id="updatesMenuBtn" onclick="toggleOptionsDrawer(false); showAppPage('updates')">📰 Updates & Forum</button>
+        <a href="about.html" class="nav-btn" style="text-align:center; margin-bottom:10px; text-decoration:none;">👤 About Me</a>
+        <button id="adminPanelBtn" class="nav-btn" style="margin-bottom:10px;" onclick="toggleOptionsDrawer(false); openAdminPanel()">⚙️ Admin Panel</button>
+
         <div class="slide-section-title">Theme Customizer</div>
-        <select class="theme-select-box" onchange="changeTheme(this.value)">
+        <select class="theme-select-box" style="margin-bottom: 15px;" onchange="changeTheme(this.value)">
             <option value="modern-blue">Modern Blue (Default)</option>
             <option value="pitch-black">Pitch Black</option>
             <option value="accent-green">Vibrant Green</option>
             <option value="accent-purple">Royal Purple</option>
         </select>
 
-        <div class="slide-section-title">Navigation Links</div>
-        <button class="nav-btn" style="margin-bottom:10px;" onclick="toggleOptionsDrawer(false); showAppPage('favorites')">⭐ Bookmarked Favorites</button>
-        <button class="nav-btn" style="margin-bottom:10px;" id="updatesMenuBtn" onclick="toggleOptionsDrawer(false); showAppPage('updates')">📰 Updates & Forum</button>
-        <a href="about.html" class="nav-btn" style="text-align:center; margin-bottom:10px; text-decoration:none;">👤 About Me</a>
-        <button id="adminPanelBtn" class="nav-btn" style="margin-bottom:10px;" onclick="toggleOptionsDrawer(false); openAdminPanel()">⚙️ Admin Panel</button>
+        <!-- Curated Trending / Popular Section - Moved here inside the bar ONLY -->
+        <div class="slide-section-title">Trending & Popular Pinned</div>
+        <div id="trendingGrid" style="display: flex; flex-direction: column; gap: 10px; max-height: 250px; overflow-y: auto; padding-right: 5px;">Loading curated trends...</div>
     </div>
 
     <div id="mainApp">
         <header>
-            <div class="brand-area"><h1 onclick="showAppPage('library')">sofer video cloud</h1></div>
+            <div class="brand-area"><h1 onclick="backToMainHomeBase()">sofer video cloud</h1></div>
             <div class="menu-area">
                 <!-- ☰ Options Menu Trigger -->
                 <button class="menu-trigger-btn" id="menuHamburgerBtn" onclick="toggleOptionsDrawer(true)">☰</button>
@@ -243,12 +249,6 @@
                     <div class="grid" id="continueGrid"></div>
                 </div>
 
-                <!-- Trending / Popular Section -->
-                <div id="trendingVideosWrapper" style="margin-bottom: 40px;">
-                    <h2 class="section-title">Trending & Popular Videos</h2>
-                    <div class="grid" id="trendingGrid">Loading curated trends...</div>
-                </div>
-
                 <h2 class="section-title" id="foldersTitle">Folders</h2>
                 <div class="grid" id="foldersGrid"></div>
                 <div style="margin-top: 40px;" id="videosSpacer"></div>
@@ -260,7 +260,7 @@
         <!-- Favorites בלאט -->
         <div id="favoritesPage">
             <div class="breadcrumb-container" style="background-color: #1c2638; margin-bottom: 20px;">
-                <button class="back-btn" onclick="showAppPage('library')">← Back to Main Menu</button>
+                <button class="back-btn" onclick="backToMainHomeBase()">← Back to Main Menu</button>
                 <span style="color: var(--text-muted); font-size:14px; margin-left: 10px;">My Personal Bookmarks</span>
             </div>
             <div class="main-container">
@@ -271,7 +271,7 @@
 
         <div id="updatesPage">
             <div class="breadcrumb-container" style="background-color: #1c2638; margin-bottom: 20px;">
-                <button class="back-btn" onclick="showAppPage('library')">← Back to Main Menu</button>
+                <button class="back-btn" onclick="backToMainHomeBase()">← Back to Main Menu</button>
             </div>
             <div class="updates-container">
                 <div class="admin-editor-box" id="adminEditorBox">
@@ -294,7 +294,7 @@
     <!-- Admin Panel Modal -->
     <div class="admin-modal" id="adminModal">
         <div class="admin-content">
-            <button class="close-player" onclick="document.getElementById('adminModal').style.display='none'">×</button>
+            <button class="close-player" onclick="hideAdminPanel()">×</button>
             <h2 style="color: var(--drive-yellow); margin-top:0; margin-bottom: 20px;">sofer Cloud Admin Panel</h2>
             <div class="admin-tabs">
                 <button class="tab-btn active" id="tabReqBtn" onclick="switchAdminTab('requests')">Pending Requests</button>
@@ -386,6 +386,11 @@
             else { modal.classList.remove('pip-mode'); isPipActive = false; }
         }
 
+        function backToMainHomeBase() {
+            showAppPage('library');
+            loadFolder(START_FOLDER_ID, "Home");
+        }
+
         function showAppPage(page) {
             document.getElementById('librarySection').style.display = 'none';
             document.getElementById('updatesPage').style.display = 'none';
@@ -393,7 +398,8 @@
             
             if(page === 'updates') { document.getElementById('updatesPage').style.display = 'block'; loadBlogPosts(); } 
             else if(page === 'favorites') { document.getElementById('favoritesPage').style.display = 'block'; renderFavorites(); } 
-            else { document.getElementById('librarySection').style.display = 'block'; renderContinueWatching(); loadTrendingVideos(); }
+            else { document.getElementById('librarySection').style.display = 'block'; renderContinueWatching(); }
+            loadTrendingVideos();
         }
 
         function togglePanels(showRequest) {
@@ -475,7 +481,7 @@
             setTimeout(() => { setupCustomButtons(); }, 1000);
         }
 
-        /* --- גלאבאלע סעירטש סיסטעם --- */
+        /* --- גלאבאלע סעירטש סיסטעם פונעם גאנצן דרייוו פערפעקט --- */
         function filterGlobalCloudContent() {
             clearTimeout(currentSearchTimeout);
             const query = document.getElementById('cloudSearchInput').value.toLowerCase().trim();
@@ -505,7 +511,11 @@
                             card.setAttribute('data-id', file.id); card.setAttribute('data-name', file.name);
                             card.setAttribute('data-thumb', savedThumbnails[file.id] || file.thumbnailLink || '');
                             const isFav = favs.some(f => f.id === file.id) ? '❤️' : '🤍';
-                            const adminOverlayHtml = isAdmin ? `<div class="admin-card-overlay" style="display:block;" onclick="changeThumbnailPrompt('${file.id}', event)">⚙️ Thumbnail</div><div class="admin-popular-overlay" style="display:block;" onclick="markAsPopularManual('${file.id}', '${file.name.replace(/'/g, "\\'")}', event)">⭐ Set Popular</div>` : '';
+                            const adminOverlayHtml = isAdmin ? `
+                                <div class="admin-card-overlay" style="display:block;" onclick="changeThumbnailPrompt('${file.id}', event)">⚙️ Thumbnail</div>
+                                <div class="admin-popular-overlay" style="display:block;" onclick="markAsPopularManual('${file.id}', '${file.name.replace(/'/g, "\\'")}', event)">⭐ Set Popular</div>
+                                <div class="admin-unpopular-overlay" style="display:block;" onclick="removeFromPopularManual('${file.id}', event)">❌ Unset Popular</div>
+                            ` : '';
 
                             if (file.mimeType === 'application/vnd.google-apps.folder') {
                                 card.className = 'card folder';
@@ -514,7 +524,7 @@
                                 foldersGrid.appendChild(card);
                             } else if (file.mimeType.startsWith('video/')) {
                                 card.className = 'card video';
-                                card.onclick = (e) => { if(!e.target.classList.contains('download-icon-btn') && !e.target.classList.contains('admin-card-overlay') && !e.target.classList.contains('admin-popular-overlay') && !e.target.classList.contains('fav-btn')) playVideo(file.id); };
+                                card.onclick = (e) => { if(!e.target.classList.contains('download-icon-btn') && !e.target.classList.contains('admin-card-overlay') && !e.target.classList.contains('admin-popular-overlay') && !e.target.classList.contains('admin-unpopular-overlay') && !e.target.classList.contains('fav-btn')) playVideo(file.id); };
                                 card.innerHTML = `${adminOverlayHtml}<button class="fav-btn" onclick="toggleFavorite('${file.id}', event)">${isFav}</button><div class="thumbnail-placeholder"><img src="${savedThumbnails[file.id] || file.thumbnailLink || '🎬'}" style="width:100%;height:100%;object-fit:cover;"></div><div class="card-info"><p class="card-title">${file.name}</p></div><button class="download-icon-btn" onclick="downloadVideo('${file.id}')">↓</button>`;
                                 videosGrid.appendChild(card);
                             }
@@ -526,12 +536,21 @@
             }, 600);
         }
 
+        /* --- מאנועלע פאפולער קנעפּלעך פארן אדמין --- */
         async function markAsPopularManual(fileId, title, event) {
             event.stopPropagation();
             const cardEl = document.querySelector(`[data-id="${fileId}"]`);
             const thumb = cardEl ? cardEl.getAttribute('data-thumb') : '';
             await db.collection('trending_videos').doc(fileId).set({ title: title, thumb: thumb || '', views: 100 });
-            alert('Pinned to Trending & Popular list!'); loadTrendingVideos();
+            alert('Pinned to Trending & Popular list successfully!'); loadTrendingVideos();
+        }
+
+        async function removeFromPopularManual(fileId, event) {
+            event.stopPropagation();
+            if(confirm("Remove this video from Trending & Popular list permanently?")) {
+                await db.collection('trending_videos').doc(fileId).delete();
+                alert('Removed from Popular list!'); loadTrendingVideos();
+            }
         }
 
         function saveVideoProgress(fileId, time, duration) {
@@ -583,23 +602,23 @@
 
         function loadTrendingVideos() {
             const container = document.getElementById('trendingGrid');
-            const currentFolder = folderHistory[folderHistory.length - 1];
-            if (!currentFolder || currentFolder.id !== START_FOLDER_ID) { document.getElementById('trendingVideosWrapper').style.display = 'none'; return; }
-            document.getElementById('trendingVideosWrapper').style.display = 'block';
-
             db.collection('trending_videos').orderBy('views', 'desc').limit(5).onSnapshot(snap => {
                 container.innerHTML = '';
-                if(snap.empty) { container.innerHTML = '<p>No popular trends pinned by Administrator.</p>'; return; }
+                if(snap.empty) { container.innerHTML = '<p style="font-size:13px; color:var(--text-muted);">No popular media.</p>'; return; }
                 snap.forEach(doc => {
-                    const data = doc.data(); const card = document.createElement('div'); card.className = 'card video';
-                    card.onclick = () => playVideo(doc.id);
-                    card.innerHTML = `<div class="thumbnail-placeholder"><img src="${data.thumb || '🎬'}" style="width:100%;height:100%;object-fit:cover;"></div><div class="card-info"><p class="card-title">${data.title}</p></div>`;
-                    container.appendChild(card);
+                    const data = doc.data(); 
+                    const row = document.createElement('div');
+                    row.style.cssText = "display:flex; align-items:center; gap:10px; background:#25334a; padding:8px; border-radius:6px; cursor:pointer;";
+                    row.onclick = () => { toggleOptionsDrawer(false); playVideo(doc.id); };
+                    row.innerHTML = `
+                        <img src="${data.thumb || 'logo.png'}" style="width:50px; height:35px; object-fit:cover; border-radius:4px;">
+                        <div style="font-size:13px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:180px;">${data.title}</div>
+                    `;
+                    container.appendChild(row);
                 });
             });
         }
 
-        /* --- קאמענטארן לאגיק אונטער ווידעאוס --- */
         function loadVideoCommentsAndReactions(fileId) {
             const recRow = document.getElementById('videoReactionsRow');
             db.collection('video_metadata').doc(fileId).onSnapshot(doc => {
@@ -612,7 +631,7 @@
             const comList = document.getElementById('videoCommentsList');
             db.collection('video_metadata').doc(fileId).collection('comments').orderBy('timestamp', 'asc').onSnapshot(snap => {
                 comList.innerHTML = ''; if(snap.empty) { comList.innerHTML = '<p style="font-size:12px; color:var(--text-muted);">No comments yet.</p>'; return; }
-                snap.forEach(cDoc => { const c = cDoc.data(); comList.innerHTML += `<div class="comment-box"><div class="comment-meta"><span class="comment-user">${c.userName}</span></div><div class="comment-text">${c.text}</div></div>`; });
+                snap.forEach(cDoc => { const c = cDoc.data(); comList.innerHTML += `<div class="comment-box" style="padding:8px; margin-top:5px;"><div class="comment-meta"><span class="comment-user">${c.userName}</span></div><div class="comment-text" style="font-size:13px; margin:0;">${c.text}</div></div>`; });
             });
         }
 
@@ -651,7 +670,6 @@
             });
         }
 
-        /* --- קאמיוניטי פארום לאגיק --- */
         async function publishAdminUpdate() {
             const htmlContent = quillEditor.root.innerHTML; if(quillEditor.getText().trim().length === 0) return;
             await db.collection('forum_posts').add({ content: htmlContent, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
@@ -708,7 +726,11 @@
                 data.files.forEach(file => {
                     const card = document.createElement('div'); card.setAttribute('data-id', file.id); card.setAttribute('data-name', file.name); card.setAttribute('data-thumb', savedThumbnails[file.id] || file.thumbnailLink || '');
                     const isFav = favs.some(f => f.id === file.id) ? '❤️' : '🤍';
-                    const adminOverlayHtml = isAdmin ? `<div class="admin-card-overlay" style="display:block;" onclick="changeThumbnailPrompt('${file.id}', event)">⚙️ Thumbnail</div><div class="admin-popular-overlay" style="display:block;" onclick="markAsPopularManual('${file.id}', '${file.name.replace(/'/g, "\\'")}', event)">⭐ Set Popular</div>` : '';
+                    const adminOverlayHtml = isAdmin ? `
+                        <div class="admin-card-overlay" style="display:block;" onclick="changeThumbnailPrompt('${file.id}', event)">⚙️ Thumbnail</div>
+                        <div class="admin-popular-overlay" style="display:block;" onclick="markAsPopularManual('${file.id}', '${file.name.replace(/'/g, "\\'")}', event)">⭐ Set Popular</div>
+                        <div class="admin-unpopular-overlay" style="display:block;" onclick="removeFromPopularManual('${file.id}', event)">❌ Unset Popular</div>
+                    ` : '';
 
                     if (file.mimeType === 'application/vnd.google-apps.folder') {
                         card.className = 'card folder'; card.onclick = () => loadFolder(file.id, file.name);
@@ -716,13 +738,13 @@
                         foldersGrid.appendChild(card);
                     } else if (file.mimeType.startsWith('video/')) {
                         card.className = 'card video';
-                        card.onclick = (e) => { if(!e.target.classList.contains('download-icon-btn') && !e.target.classList.contains('admin-card-overlay') && !e.target.classList.contains('admin-popular-overlay') && !e.target.classList.contains('fav-btn')) playVideo(file.id); };
+                        card.onclick = (e) => { if(!e.target.classList.contains('download-icon-btn') && !e.target.classList.contains('admin-card-overlay') && !e.target.classList.contains('admin-popular-overlay') && !e.target.classList.contains('admin-unpopular-overlay') && !e.target.classList.contains('fav-btn')) playVideo(file.id); };
                         card.innerHTML = `${adminOverlayHtml}<button class="fav-btn" onclick="toggleFavorite('${file.id}', event)">${isFav}</button><div class="thumbnail-placeholder"><img src="${savedThumbnails[file.id] || file.thumbnailLink || '🎬'}" style="width:100%;height:100%;object-fit:cover;"></div><div class="card-info"><p class="card-title">${file.name}</p></div><button class="download-icon-btn" onclick="downloadVideo('${file.id}')">↓</button>`;
                         videosGrid.appendChild(card);
                     }
                 });
             }
-            renderContinueWatching(); loadTrendingVideos();
+            renderContinueWatching();
         }
 
         function playVideo(id) { currentPlayingFileId = id; const modal = document.getElementById('playerModal'); modal.style.display = 'flex'; modal.classList.remove('pip-mode'); isPipActive = false; playerInstance.src({type: 'video/mp4', src: `https://www.googleapis.com/drive/v3/files/${id}?alt=media&key=${API_KEY}`}); playerInstance.play(); loadVideoCommentsAndReactions(id); }
@@ -734,6 +756,7 @@
         
         async function changeThumbnailPrompt(fileId, event) { event.stopPropagation(); const newImgUrl = prompt("Enter image URL:"); if (newImgUrl) { await db.collection('custom_thumbnails').doc(fileId).set({ url: newImgUrl }); savedThumbnails[fileId] = newImgUrl; loadFolder(folderHistory[folderHistory.length-1].id, folderHistory[folderHistory.length-1].name); } }
         function openAdminPanel() { document.getElementById('adminModal').style.display = 'flex'; switchAdminTab('requests'); fetchAdminData(); }
+        function hideAdminPanel() { document.getElementById('adminModal').style.display = 'none'; }
         function switchAdminTab(tab) { document.getElementById('secRequests').style.display = tab==='requests'?'block':'none'; document.getElementById('secUsers').style.display = tab==='users'?'block':'none'; document.getElementById('secMessages').style.display = tab==='messages'?'block':'none'; }
         
         async function fetchAdminData() { 
