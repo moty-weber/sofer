@@ -105,32 +105,36 @@
         .blog-body { font-size: 16px; color: #f1f5f9; line-height: 1.6; }
         .blog-body img { max-width: 100%; border-radius: 6px; margin: 15px 0; }
         
-        /* פארום קאמענטארן און נעיסטעד ריפלאיס */
+        /* פארום קאמענטארן און אינפיניט נעיסטעד טרעדס */
         .thread-section { margin-top: 25px; border-top: 1px solid #25334a; padding-top: 20px; }
-        .comment-box { background: #141b27; padding: 12px 16px; border-radius: 6px; margin-bottom: 10px; border-right: 3px solid var(--drive-blue); position: relative; }
-        .comment-box.reply-node { margin-left: 35px; border-right-color: var(--drive-green); background: #0f151f; }
+        
+        /* דער הויפט קאסטטומער באקס פונעם קאמענטאר */
+        .comment-wrapper { display: flex; flex-direction: column; width: 100%; }
+        .comment-box { background: #141b27; padding: 12px 16px; border-radius: 6px; margin-top: 10px; border-right: 3px solid var(--drive-blue); position: relative; box-sizing: border-box; }
+        
+        /* אינפיניט ריפלאיס סאב-קאנטעינער מיט א מעקסימום אריינרוקונג זיך צו היטן פון די ברעגן */
+        .replies-container { padding-left: 25px; border-left: 1px dashed rgba(255,255,255,0.05); width: 100%; box-sizing: border-box; }
+        
         .comment-meta { display: flex; justify-content: space-between; font-size: 12px; font-weight: bold; margin-bottom: 5px; }
         .comment-user { color: var(--drive-yellow); }
         .comment-time { color: var(--text-muted); }
         .comment-text { font-size: 14px; color: #cbd5e1; margin-bottom: 10px; }
         
-        /* עדיט און דיליט קנעפּלעך אינעם פאָרום */
         .comment-actions { font-size: 11px; margin-left: 15px; display: inline-flex; gap: 8px; }
         .action-link { color: var(--text-muted); cursor: pointer; text-decoration: underline; }
         .action-link:hover { color: white; }
         .action-link.delete-link { color: var(--drive-red); }
         .action-link.delete-link:hover { color: #ff5252; }
 
-        /* עמאדזשי רעאקציעס באר מיט HOVER TOOLTIP */
+        /* רעאקציעס */
         .reaction-row { display: flex; gap: 8px; align-items: center; margin-top: 8px; font-size: 13px; }
         .react-btn { background: #25334a; border: none; color: white; padding: 4px 8px; border-radius: 4px; cursor: pointer; position: relative; font-size: 12px; display: flex; align-items: center; gap: 4px; }
         .react-btn:hover { background: var(--drive-blue); }
-        
         .react-tooltip { display: none; position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.9); color: white; padding: 5px 10px; border-radius: 4px; font-size: 11px; white-space: nowrap; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); }
         .react-btn:hover .react-tooltip { display: block; }
 
         .reply-trigger { color: var(--drive-yellow); font-size: 12px; cursor: pointer; font-weight: bold; margin-left: 10px; text-decoration: underline; }
-        .comment-input-row { display: flex; gap: 10px; margin-top: 15px; }
+        .comment-input-row { display: flex; gap: 10px; margin-top: 15px; width: 100%; box-sizing: border-box; }
         .comment-input-row input { flex-grow: 1; background: #121824; border: 1px solid #25334a; border-radius: 6px; padding: 10px; color: white; font-size: 14px; }
         .comment-input-row button { background: var(--drive-blue); color: white; border: none; padding: 0 15px; border-radius: 6px; cursor: pointer; font-weight: bold; }
     </style>
@@ -249,7 +253,7 @@
     
     <script>
         // ************************************************************
-        // 1) דא קומט דיין Google Drive API Key פונקטליך:
+        // 1) דא קומט דיין Google Drive API Key:
         const API_KEY = "AIzaSyDEkcoogK9_8e4HOf7vSWFWEHKct21gjdE"; 
         const START_FOLDER_ID = "14v9raW-BX5EkdfK2-Yj8wDA5kGok2Tda"; 
 
@@ -265,7 +269,7 @@
         };
 
         const EMAILJS_PUBLIC_KEY = "2VeSFXHu7Jhf2qE-O";
-        const EMAILJS_SERVICE_ID = "service_0pgs1vp"; 
+        const EMAILJS_SERVICE_ID = "service_0pgs1vp";
         const EMAILJS_TEMPLATE_ID = "template_tq4bhu7";
 
         const ADMIN_TOKEN = "soferadmin"; 
@@ -406,10 +410,17 @@
             loadBlogPosts();
         }
 
-        // אויסמעקן א גאנציגע הויפט פאסט (נאר פארן עדמין)
         async function deleteMainPost(postId) {
-            if(confirm("Are you sure you want to delete this main update and all its comments permanently?")) {
+            if(confirm("Are you sure you want to delete this main update permanently?")) {
                 await db.collection('forum_posts').doc(postId).delete();
+                loadBlogPosts();
+            }
+        }
+
+        async function editMainPost(postId, currentHtml) {
+            const newHtml = prompt("Edit the update HTML/Text code directly:", currentHtml);
+            if(newHtml && newHtml.trim() !== "") {
+                await db.collection('forum_posts').doc(postId).update({ content: newHtml.trim() });
                 loadBlogPosts();
             }
         }
@@ -423,16 +434,38 @@
                 snapshot.forEach(doc => {
                     const postData = doc.data(); const postId = doc.id;
                     const timeString = postData.timestamp ? postData.timestamp.toDate().toLocaleString() : 'Just now';
-                    const deleteBtnHtml = isAdmin ? `<span class="action-link delete-link" onclick="deleteMainPost('${postId}')">Delete Update</span>` : '';
+                    
+                    const mainThumbs = postData.react_thumb ? Object.keys(postData.react_thumb).length : 0;
+                    const mainHearts = postData.react_heart ? Object.keys(postData.react_heart).length : 0;
+                    const mainThumbUsers = postData.react_thumb ? Object.values(postData.react_thumb).join(', ') : 'No one yet';
+                    const mainHeartUsers = postData.react_heart ? Object.values(postData.react_heart).join(', ') : 'No one yet';
+
+                    const adminActionsHtml = isAdmin ? `
+                        <div style="display:inline-flex; gap:10px; margin-left:15px;">
+                            <span class="action-link" onclick="editMainPost('${postId}', '${postData.content.replace(/'/g, "\\'")}')">Edit Update</span>
+                            <span class="action-link delete-link" onclick="deleteMainPost('${postId}')">Delete Update</span>
+                        </div>
+                    ` : '';
 
                     const postElement = document.createElement('div');
                     postElement.className = 'blog-post';
                     postElement.innerHTML = `
                         <div class="blog-time">
-                            <span>📅 Published: ${timeString}</span>
-                            ${deleteBtnHtml}
+                            <span>📅 Published: ${timeString} ${adminActionsHtml}</span>
                         </div>
                         <div class="blog-body">${postData.content}</div>
+                        
+                        <div class="reaction-row" style="margin-top:15px; border-bottom: 1px dashed #25334a; padding-bottom:15px;">
+                            <button class="react-btn" onclick="toggleMainPostReaction('${postId}', 'thumb')">
+                                👍 <span>${mainThumbs}</span>
+                                <div class="react-tooltip">Liked by: ${mainThumbUsers}</div>
+                            </button>
+                            <button class="react-btn" onclick="toggleMainPostReaction('${postId}', 'heart')">
+                                ❤️ <span>${mainHearts}</span>
+                                <div class="react-tooltip">Loved by: ${mainHeartUsers}</div>
+                            </button>
+                        </div>
+
                         <div class="thread-section">
                             <h4>Conversation Thread</h4>
                             <div id="comments-list-${postId}">Loading posts...</div>
@@ -448,168 +481,154 @@
             });
         }
 
+        async function toggleMainPostReaction(postId, type) {
+            const ref = db.collection('forum_posts').doc(postId);
+            const doc = await ref.get(); if(!doc.exists) return;
+            const data = doc.data();
+            let currentReacts = data['react_' + type] || {};
+            if(currentReacts[loggedInUserEmail]) { delete currentReacts[loggedInUserEmail]; } 
+            else { currentReacts[loggedInUserEmail] = loggedInUserName; }
+            await ref.update({ ['react_' + type]: currentReacts });
+        }
+
         async function submitComment(postId, parentId) {
-            const inputField = document.getElementById(`input-${postId}`);
-            const text = inputField.value.trim();
-            if(!text) return;
+            const inputField = parentId === 'root' ? document.getElementById(`input-${postId}`) : document.getElementById(`inline-input-${parentId}`);
+            const text = inputField.value.trim(); if(!text) return;
 
             await db.collection('forum_posts').doc(postId).collection('comments').add({
-                userName: loggedInUserName,
-                userEmail: loggedInUserEmail,
-                commentText: text,
-                parentId: parentId,
+                userName: loggedInUserName, userEmail: loggedInUserEmail, commentText: text, parentId: parentId,
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             });
             inputField.value = '';
+            if(parentId !== 'root') document.getElementById(`inline-replybox-${parentId}`).style.display = "none";
         }
 
+        // --- די אינפיניט נעיסטעד רעקורסיווע לאדן סיסטעם (Infinite Nested Loop System) ---
         function loadCommentsForPost(postId) {
             const container = document.getElementById(`comments-list-${postId}`);
             db.collection('forum_posts').doc(postId).collection('comments').orderBy('timestamp', 'asc').onSnapshot(snap => {
                 container.innerHTML = '';
                 if(snap.empty) { container.innerHTML = '<p style="color:var(--text-muted); font-size:13px; margin:0;">No comments in this thread yet.</p>'; return; }
                 
-                let roots = []; let replies = [];
+                let commentMap = {};
+                let rootComments = [];
+
                 snap.forEach(cDoc => {
-                    let data = cDoc.data(); data.id = cDoc.id;
-                    if(data.parentId === 'root' || !data.parentId) roots.push(data);
-                    else replies.push(data);
+                    let data = cDoc.data(); data.id = cDoc.id; data.replies = [];
+                    commentMap[data.id] = data;
+                    if (data.parentId === 'root' || !data.parentId) { rootComments.push(data); }
                 });
 
-                roots.forEach(r => {
-                    renderCommentNode(container, r, postId, false);
-                    replies.forEach(rep => {
-                        if(rep.parentId === r.id) { renderCommentNode(container, rep, postId, true); }
-                    });
+                // בויען די רעקורסיווע בוים סטראקטור אויטאָמאַטיש
+                snap.forEach(cDoc => {
+                    let data = commentMap[cDoc.id];
+                    if (data.parentId && data.parentId !== 'root' && commentMap[data.parentId]) {
+                        commentMap[data.parentId].replies.push(data);
+                    }
+                });
+
+                // אנהייבן רענדערן פונעם הויפט שורש אלס אראפ און אראפ אן קיין ענדע
+                rootComments.forEach(rootComment => {
+                    buildRecursiveHTMLNode(container, rootComment, postId);
                 });
             });
         }
 
-        // רענדערן א קאמענטאר שורה מיט EDIT / DELETE לאגיק
-        function renderCommentNode(container, c, postId, isReply) {
+        // די פונקציע וואס בויט אליין די טרעדס רעקורסיוו אראפ און אראפ אומענדליך!
+        function buildRecursiveHTMLNode(parentElement, c, postId) {
             const cTime = c.timestamp ? c.timestamp.toDate().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'Now';
-            const cDiv = document.createElement('div'); 
-            cDiv.className = isReply ? 'comment-box reply-node' : 'comment-box';
-            
             const thumbs = c.react_thumb ? Object.keys(c.react_thumb).length : 0;
             const hearts = c.react_heart ? Object.keys(c.react_heart).length : 0;
             const thumbUsers = c.react_thumb ? Object.values(c.react_thumb).join(', ') : 'No one yet';
             const heartUsers = c.react_heart ? Object.values(c.react_heart).join(', ') : 'No one yet';
 
-            // קאָנטראָלירן רשות: אויב ער איז דער מחבר אדער אויב ער איז דזשענעראל עדמין
             const isOwner = (c.userEmail === loggedInUserEmail);
-            const canEdit = isOwner; // נאר דער שרייבער קען עדיטן זיין אייגענעם טקסט
-            const canDelete = isOwner || isAdmin; // דער שרייבער אדער דער עדמין קענען אויסמעקן
+            const editHtml = isOwner ? `<span class="action-link" onclick="editCommentPrompt('${postId}', '${c.id}', '${c.commentText.replace(/'/g, "\\'")}')">Edit</span>` : '';
+            const deleteHtml = (isOwner || isAdmin) ? `<span class="action-link delete-link" onclick="deleteCommentAction('${postId}', '${c.id}')">Delete</span>` : '';
 
-            const editHtml = canEdit ? `<span class="action-link" onclick="editCommentPrompt('${postId}', '${c.id}', '${c.commentText.replace(/'/g, "\\'")}')">Edit</span>` : '';
-            const deleteHtml = canDelete ? `<span class="action-link delete-link" onclick="deleteCommentAction('${postId}', '${c.id}')">Delete</span>` : '';
-
-            cDiv.innerHTML = `
-                <div class="comment-meta">
-                    <span class="comment-user">
-                        ${c.userName} (${c.userEmail})
-                        <span class="comment-actions">${editHtml} ${deleteHtml}</span>
-                    </span>
-                    <span class="comment-time">${cTime}</span>
+            // באשאפן א קאמפלעט באנדל קארד פאר דעם נאד
+            const wrapper = document.createElement('div');
+            wrapper.className = 'comment-wrapper';
+            
+            wrapper.innerHTML = `
+                <div class="comment-box">
+                    <div class="comment-meta">
+                        <span class="comment-user">${c.userName} (${c.userEmail}) <span class="comment-actions">${editHtml} ${deleteHtml}</span></span>
+                        <span class="comment-time">${cTime}</span>
+                    </div>
+                    <div class="comment-text">${c.commentText}</div>
+                    <div class="reaction-row">
+                        <button class="react-btn" onclick="toggleReaction('${postId}', '${c.id}', 'thumb')">
+                            👍 <span>${thumbs}</span>
+                            <div class="react-tooltip">Liked by: ${thumbUsers}</div>
+                        </button>
+                        <button class="react-btn" onclick="toggleReaction('${postId}', '${c.id}', 'heart')">
+                            ❤️ <span>${hearts}</span>
+                            <div class="react-tooltip">Loved by: ${heartUsers}</div>
+                        </button>
+                        <span class="reply-trigger" onclick="openInlineReplyBox('${postId}', '${c.id}')">Reply</span>
+                    </div>
+                    <div id="inline-replybox-${c.id}" style="margin-top:10px; display:none;"></div>
                 </div>
-                <div class="comment-text" id="text-node-${c.id}">${c.commentText}</div>
-                <div class="reaction-row">
-                    <button class="react-btn" onclick="toggleReaction('${postId}', '${c.id}', 'thumb')">
-                        👍 <span>${thumbs}</span>
-                        <div class="react-tooltip">Liked by: ${thumbUsers}</div>
-                    </button>
-                    <button class="react-btn" onclick="toggleReaction('${postId}', '${c.id}', 'heart')">
-                        ❤️ <span>${hearts}</span>
-                        <div class="react-tooltip">Loved by: ${heartUsers}</div>
-                    </button>
-                    ${!isReply ? `<span class="reply-trigger" onclick="openInlineReplyBox('${postId}', '${c.id}')">Reply</span>` : ''}
-                </div>
-                <div id="inline-replybox-${c.id}" style="margin-top:10px; display:none;"></div>
             `;
-            container.appendChild(cDiv);
-        }
 
-        // פונקציע צו עדיטן א קאמענטאר (Edit Comment)
-        async function editCommentPrompt(postId, commentId, oldText) {
-            const newText = prompt("Edit your message:", oldText);
-            if(newText && newText.trim() !== "") {
-                await db.collection('forum_posts').doc(postId).collection('comments').doc(commentId).update({
-                    commentText: newText.trim()
+            // באשאפן דעם סאב-קאנטעינער פאר זיינע אייגענע אומענדליכע קינדער-ריפלאיס (Nested Container)
+            const subRepliesContainer = document.createElement('div');
+            subRepliesContainer.className = 'replies-container';
+            wrapper.appendChild(subRepliesContainer);
+            parentElement.appendChild(wrapper);
+
+            // רעקורסיווע רוף: אויב דער ריפלאי פארמאגט אליין נאך א ריפלאי, בוי אים אריין אינעווייניג!
+            if (c.replies && c.replies.length > 0) {
+                c.replies.forEach(subReply => {
+                    buildRecursiveHTMLNode(subRepliesContainer, subReply, postId);
                 });
             }
         }
 
-        // פונקציע צו דיליטן א קאמענטאר (Delete Comment)
+        function openInlineReplyBox(postId, commentId) {
+            const box = document.getElementById(`inline-replybox-${commentId}`); box.style.display = "block";
+            box.innerHTML = `<div class="comment-input-row"><input type="text" id="inline-input-${commentId}" placeholder="Reply to this message..."><button onclick="submitComment('${postId}', '${commentId}')">Post Reply</button></div>`;
+        }
+
+        async function editCommentPrompt(postId, commentId, oldText) {
+            const newText = prompt("Edit your message:", oldText);
+            if(newText && newText.trim() !== "") {
+                await db.collection('forum_posts').doc(postId).collection('comments').doc(commentId).update({ commentText: newText.trim() });
+            }
+        }
+
         async function deleteCommentAction(postId, commentId) {
             if(confirm("Are you sure you want to delete this message permanently?")) {
                 await db.collection('forum_posts').doc(postId).collection('comments').doc(commentId).delete();
             }
         }
 
-        function openInlineReplyBox(postId, commentId) {
-            const box = document.getElementById(`inline-replybox-${commentId}`);
-            box.style.display = "block";
-            box.innerHTML = `
-                <div class="comment-input-row">
-                    <input type="text" id="inline-input-${commentId}" placeholder="Reply to this message...">
-                    <button onclick="submitInlineReply('${postId}', '${commentId}')">Post Reply</button>
-                </div>
-            `;
-        }
-
-        async function submitInlineReply(postId, commentId) {
-            const input = document.getElementById(`inline-input-${commentId}`);
-            const text = input.value.trim(); if(!text) return;
-
-            await db.collection('forum_posts').doc(postId).collection('comments').add({
-                userName: loggedInUserName, userEmail: loggedInUserEmail, commentText: text,
-                parentId: commentId,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            });
-            document.getElementById(`inline-replybox-${commentId}`).style.display = "none";
-        }
-
         async function toggleReaction(postId, commentId, type) {
             const ref = db.collection('forum_posts').doc(postId).collection('comments').doc(commentId);
-            const doc = await ref.get(); if(!doc.exists) return;
-            const data = doc.data();
-            
+            const doc = await ref.get(); if(!doc.exists) return; const data = doc.data();
             let currentReacts = data['react_' + type] || {};
-            if(currentReacts[loggedInUserEmail]) { delete currentReacts[loggedInUserEmail]; } 
-            else { currentReacts[loggedInUserEmail] = loggedInUserName; }
-            
-            let updateObj = {}; updateObj['react_' + type] = currentReacts;
-            await ref.update(updateObj);
+            if(currentReacts[loggedInUserEmail]) { delete currentReacts[loggedInUserEmail]; } else { currentReacts[loggedInUserEmail] = loggedInUserName; }
+            await ref.update({ ['react_' + type]: currentReacts });
         }
 
         async function sendMessageToAdmin() {
             const text = document.getElementById('footerMessageText').value.trim(); if(!text) { alert('Please type a message.'); return; }
-            await db.collection('admin_messages').add({
-                name: loggedInUserName, email: loggedInUserEmail, message: text, status: "unread", timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            });
+            await db.collection('admin_messages').add({ name: loggedInUserName, email: loggedInUserEmail, message: text, status: "unread", timestamp: firebase.firestore.FieldValue.serverTimestamp() });
             alert('Message sent to Admin Panel!'); document.getElementById('footerMessageText').value = ""; 
         }
 
-        async function markMessageAsRead(msgId, currentStatus) {
-            if(currentStatus === "unread") {
-                await db.collection('admin_messages').doc(msgId).update({ status: "read" });
-                fetchAdminData();
-            }
-        }
+        async function markMessageAsRead(msgId, currentStatus) { if(currentStatus === "unread") { await db.collection('admin_messages').doc(msgId).update({ status: "read" }); fetchAdminData(); } }
 
         function listenForUpdates() {
             db.collection('access_requests').onSnapshot(snap => { if(!snap.empty && isAdmin) document.getElementById('adminPanelBtn').classList.add('badge-red'); });
             db.collection('admin_messages').where("status", "==", "unread").onSnapshot(snap => { 
-                if(!snap.empty && isAdmin) {
-                    document.getElementById('adminPanelBtn').classList.add('badge-red'); 
-                    document.getElementById('tabMsgBtn').classList.add('tab-badge-red');
-                } else { document.getElementById('tabMsgBtn').classList.remove('tab-badge-red'); }
+                if(!snap.empty && isAdmin) { document.getElementById('adminPanelBtn').classList.add('badge-red'); document.getElementById('tabMsgBtn').classList.add('tab-badge-red'); } 
+                else { document.getElementById('tabMsgBtn').classList.remove('tab-badge-red'); }
             });
-
             db.collection('forum_posts').orderBy('timestamp', 'desc').limit(1).onSnapshot(snap => {
                 if(!snap.empty) {
-                    const latestPost = snap.docs[0].data();
-                    const lastViewed = localStorage.getItem('lastViewedPostTime') || 0;
+                    const latestPost = snap.docs[0].data(); const lastViewed = localStorage.getItem('lastViewedPostTime') || 0;
                     const postTime = latestPost.timestamp ? latestPost.timestamp.toDate().getTime() : Date.now();
                     if(postTime > lastViewed) { document.getElementById('updatesMenuBtn').classList.add('badge-red'); }
                 }
@@ -627,56 +646,28 @@
             document.getElementById('secRequests').className = 'panel-section'; document.getElementById('secUsers').className = 'panel-section'; document.getElementById('secMessages').className = 'panel-section';
             if(tab === 'requests') { document.getElementById('tabReqBtn').classList.add('active'); document.getElementById('secRequests').classList.add('active'); } 
             else if(tab === 'users') { document.getElementById('tabUsersBtn').classList.add('active'); document.getElementById('secUsers').classList.add('active'); } 
-            else { document.getElementById('tabMsgBtn').classList.add('active'); document.getElementById('secMessages').classList.add('active'); document.getElementById('tabMsgBtn').classList.remove('tab-badge-red'); }
+            else { document.getElementById('tabMsgBtn').classList.add('active'); document.getElementById('secMessages').className = 'panel-section'; document.getElementById('tabMsgBtn').classList.remove('tab-badge-red'); }
         }
 
-        async function openAdminPanel() {
-            document.getElementById('adminPanelBtn').classList.remove('badge-red');
-            document.getElementById('adminModal').style.display = 'flex';
-            switchAdminTab('requests');
-            fetchAdminData();
-        }
+        async function openAdminPanel() { document.getElementById('adminPanelBtn').classList.remove('badge-red'); document.getElementById('adminModal').style.display = 'flex'; switchAdminTab('requests'); fetchAdminData(); }
 
         async function fetchAdminData() {
             const reqSection = document.getElementById('secRequests'); const usersSection = document.getElementById('secUsers'); const msgSection = document.getElementById('secMessages');
             reqSection.innerHTML = 'Loading...'; usersSection.innerHTML = 'Loading...'; msgSection.innerHTML = 'Loading...';
-
             try {
                 const reqSnapshot = await db.collection('access_requests').get();
                 reqSection.innerHTML = reqSnapshot.empty ? '<p>No pending requests.</p>' : '';
-                reqSnapshot.forEach(doc => {
-                    const d = doc.data(); const div = document.createElement('div'); div.className = 'list-item';
-                    div.innerHTML = `<div><strong>${d.name}</strong> (${d.email})</div><button class="action-btn" style="background-color:var(--drive-green)" onclick="approveUser('${d.email}', '${d.name}')">Approve</button>`;
-                    reqSection.appendChild(div);
-                });
+                reqSnapshot.forEach(doc => { const d = doc.data(); const div = document.createElement('div'); div.className = 'list-item'; div.innerHTML = `<div><strong>${d.name}</strong> (${d.email})</div><button class="action-btn" style="background-color:var(--drive-green)" onclick="approveUser('${d.email}', '${d.name}')">Approve</button>`; reqSection.appendChild(div); });
 
                 const usersSnapshot = await db.collection('allowed_users').get();
-                usersSection.innerHTML = usersSnapshot.empty ? '<p>No active users.</p>' : '';
-                document.getElementById('userCount').innerText = usersSnapshot.size;
-                usersSnapshot.forEach(doc => {
-                    const email = doc.id; const d = doc.data(); const div = document.createElement('div'); div.className = 'list-item approved';
-                    div.innerHTML = `<div><strong>${d.name || 'User'}</strong> (${email}) <br><small style="color:var(--text-muted)">${d.deviceId ? '🔒 Linked to Device' : '⏳ Waiting login'}</small></div><button class="action-btn" style="background-color:var(--drive-red)" onclick="revokeUser('${email}')">Revoke</button>`;
-                    usersSection.appendChild(div);
-                });
+                usersSection.innerHTML = usersSnapshot.empty ? '<p>No active users.</p>' : ''; document.getElementById('userCount').innerText = usersSnapshot.size;
+                usersSnapshot.forEach(doc => { const email = doc.id; const d = doc.data(); const div = document.createElement('div'); div.className = 'list-item approved'; div.innerHTML = `<div><strong>${d.name || 'User'}</strong> (${email}) <br><small style="color:var(--text-muted)">${d.deviceId ? '🔒 Linked to Device' : '⏳ Waiting login'}</small></div><button class="action-btn" style="background-color:var(--drive-red)" onclick="revokeUser('${email}')">Revoke</button>`; usersSection.appendChild(div); });
 
                 const msgSnapshot = await db.collection('admin_messages').orderBy('timestamp', 'desc').get();
                 msgSection.innerHTML = msgSnapshot.empty ? '<p>Inbox empty.</p>' : '';
                 msgSnapshot.forEach(doc => {
-                    const d = doc.data();
-                    const isUnread = (d.status === "unread");
-                    const itemClass = isUnread ? 'list-item msg-item unread' : 'list-item msg-item';
-                    const badge = isUnread ? '<span class="unread-badge">NEW</span>' : '';
-                    
-                    const div = document.createElement('div'); div.className = itemClass;
-                    div.onclick = () => markMessageAsRead(doc.id, d.status);
-                    div.innerHTML = `
-                        <div style="width:100%; display:flex; justify-content:space-between; color:var(--drive-yellow);">
-                            <strong>From: ${d.name} (${d.email}) ${badge}</strong>
-                            <button class="action-btn" style="background-color:rgba(234,67,53,0.2); color:var(--drive-red); padding:3px 8px; font-size:11px;" onclick="event.stopPropagation(); deleteMessage('${doc.id}')">Delete</button>
-                        </div>
-                        <div style="color:white; margin-top:5px; font-size:14px; line-height:1.4;">${d.message}</div>
-                    `;
-                    msgSection.appendChild(div);
+                    const d = doc.data(); const isUnread = (d.status === "unread"); const itemClass = isUnread ? 'list-item msg-item unread' : 'list-item msg-item'; const badge = isUnread ? '<span class="unread-badge">NEW</span>' : '';
+                    const div = document.createElement('div'); div.className = itemClass; div.onclick = () => markMessageAsRead(doc.id, d.status); div.innerHTML = `<div style="width:100%; display:flex; justify-content:space-between; color:var(--drive-yellow);"><strong>From: ${d.name} (${d.email}) ${badge}</strong><button class="action-btn" style="background-color:rgba(234,67,53,0.2); color:var(--drive-red); padding:3px 8px; font-size:11px;" onclick="event.stopPropagation(); deleteMessage('${doc.id}')">Delete</button></div><div style="color:white; margin-top:5px; font-size:14px; line-height:1.4;">${d.message}</div>`; msgSection.appendChild(div);
                 });
             } catch(error) { console.log(error); }
         }
