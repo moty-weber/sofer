@@ -95,16 +95,13 @@
         /* Picture-in-picture Mode */
         .player-modal.pip-mode { width: 350px; height: 240px; top: auto; left: auto; bottom: 130px; right: 20px; background: none; box-shadow: 0 10px 30px rgba(0,0,0,0.8); border-radius: 8px; overflow: hidden; }
         .player-modal.pip-mode .player-content { width: 100%; height: 100%; padding: 0; max-height: 100%; }
-        .player-modal.pip-mode video { height: 180px !important; }
+        .player-modal.pip-mode .video-wrapper { height: 180px !important; }
         .player-modal.pip-mode .close-player { top: 5px; right: 5px; font-size: 20px; background: rgba(0,0,0,0.6); border-radius: 50%; width: 25px; height: 25px; display: flex; align-items: center; justify-content: center; }
         .player-modal.pip-mode .minimize-player { top: 5px; right: 35px; font-size: 16px; background: rgba(0,0,0,0.6); border-radius: 50%; width: 25px; height: 25px; display: flex; align-items: center; justify-content: center; }
         .player-modal.pip-mode #videoModalCommentsSection { display: none !important; }
 
-        .video-wrapper { position: relative; width: 100%; }
-        .video-watermark { position: absolute; bottom: 55px; right: 20px; width: 50px; height: 50px; object-fit: contain; pointer-events: none; z-index: 10; opacity: 0.85; }
-
-        .video-js .vjs-playback-rate { display: block !important; }
-        .video-js .vjs-subs-caps-button { display: block !important; }
+        .video-wrapper { position: relative; width: 100%; height: 500px; background: #000; border-radius: 6px; overflow: hidden; }
+        .video-wrapper iframe { width: 100%; height: 100%; border: none; }
 
         .admin-tabs { display: flex; gap: 10px; margin-bottom: 15px; border-bottom: 1px solid #25334a; padding-bottom: 10px; }
         .tab-btn { background: #25334a; border: none; color: white; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: bold; }
@@ -225,6 +222,7 @@
             </div>
             
             <div class="main-container">
+                <!-- Continue Watching סעקציע -->
                 <div id="continueWatchingWrapper" style="display: none; margin-bottom: 40px;">
                     <h2 class="section-title">Continue Watching</h2>
                     <div class="grid" id="continueGrid"></div>
@@ -238,6 +236,7 @@
             </div>
         </div>
 
+        <!-- Favorites פערזענליכע בלאט -->
         <div id="favoritesPage">
             <div class="breadcrumb-container" style="background-color: #1c2638; margin-bottom: 20px;">
                 <button class="back-btn" onclick="showAppPage('library')">← Back to Main Menu</button>
@@ -249,6 +248,7 @@
             </div>
         </div>
 
+        <!-- Popular / Trending Pinned Page -->
         <div id="popularPage">
             <div class="breadcrumb-container" style="background-color: #1c2638; margin-bottom: 20px;">
                 <button class="back-btn" onclick="showAppPage('library')">← Back to Main Menu</button>
@@ -302,13 +302,13 @@
         </div>
     </div>
 
+    <!-- Video Player Modal - יעצט באזירט אויף א פראפעסיאנאלע סטרים סעטאָפּ -->
     <div class="player-modal" id="playerModal" onclick="closeVideoFromOutside(event)">
         <div class="player-content" onclick="event.stopPropagation()">
             <button class="minimize-player" onclick="togglePipMode()">🗕</button>
             <button class="close-player" onclick="closeVideo()">×</button>
-            <div class="video-wrapper">
-                <video id="my-video" class="video-js vjs-big-play-centered" controls preload="auto" width="900" height="500" crossorigin="anonymous"></video>
-                <img src="logo.png" class="video-watermark" alt="WM" onerror="this.style.display='none'">
+            <div class="video-wrapper" id="videoWrapperBox">
+                <!-- אייפרעים לאדנט זיך דינאמיש אן קיין דאונלאוד קוואטא ערארס -->
             </div>
             <div id="videoModalCommentsSection" style="margin-top:20px; border-top:1px solid #25334a; padding-top:15px;">
                 <h3 style="color: var(--drive-yellow); margin:0 0 10px 0;">Video Reactions & Messages</h3>
@@ -326,7 +326,6 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-    <script src="https://vjs.zencdn.net/8.3.0/video.min.js"></script>
     
     <script>
         const API_KEY = "AIzaSyDEkcoogK9_8e4HOf7vSWFWEHKct21gjdE"; 
@@ -352,7 +351,7 @@
         emailjs.init(EMAILJS_PUBLIC_KEY);
 
         let folderHistory = [{ id: START_FOLDER_ID, name: "Home" }];
-        let playerInstance = null; let isAdmin = false; let savedThumbnails = {}; let quillEditor = null;
+        let isAdmin = false; let savedThumbnails = {}; let quillEditor = null;
         let loggedInUserEmail = ""; let loggedInUserName = "User"; let generatedVerificationCode = ""; 
         let currentPlayingFileId = null; let currentEditingPostId = null;
         let isPipActive = false;
@@ -426,18 +425,9 @@
                 quillEditor = new Quill('#editor-container', { modules: { toolbar: [['bold', 'italic', 'underline'], [{ 'color': [] }, { 'background': [] }], ['image', 'link']] }, theme: 'snow' });
             }
             document.getElementById('userDisplayBadge').innerText = `${loggedInUserName} (${loggedInUserEmail})`;
-            playerInstance = videojs('my-video', { playbackRates: [0.5, 1, 1.25, 1.5, 1.75, 2], responsive: true, fluid: true });
-            
-            playerInstance.on('timeupdate', function() {
-                if (currentPlayingFileId && playerInstance.duration()) {
-                    const progress = (playerInstance.currentTime() / playerInstance.duration()) * 100;
-                    if (progress > 2 && progress < 98) { saveVideoProgress(currentPlayingFileId, playerInstance.currentTime(), playerInstance.duration()); } 
-                    else if (progress >= 98) { clearVideoProgress(currentPlayingFileId); }
-                }
-            });
 
             try { const thumbSnapshot = await db.collection('custom_thumbnails').get(); thumbSnapshot.forEach(doc => { savedThumbnails[doc.id] = doc.data().url; }); } catch(e) {}
-            loadFolder(START_FOLDER_ID, "Home"); setTimeout(() => { setupCustomButtons(); }, 1000);
+            loadFolder(START_FOLDER_ID, "Home");
         }
 
         async function markAsPopularManual(fileId, title, event) {
@@ -468,7 +458,7 @@
             });
         }
 
-        /* --- ווידעאו קאמענטארן און רעאקציעס לאגיק מיט לייק און דיליט פאר ריפלייס --- */
+        /* --- ווידעאו קאמענטארן און רעאקציעס לאגיק --- */
         function loadVideoMetaAndComments(fileId) {
             const reactionContainer = document.getElementById('videoReactionsContainer');
             db.collection('video_reactions').doc(fileId).onSnapshot(doc => {
@@ -554,7 +544,7 @@
             if (items.length === 0) { wrapper.style.display = 'none'; return; } wrapper.style.display = 'block';
             items.forEach(id => {
                 const item = progressList[id]; const pct = (item.time / item.duration) * 100; const card = document.createElement('div'); card.className = 'card video';
-                card.onclick = () => { playVideo(id); setTimeout(() => { playerInstance.currentTime(item.time); }, 800); };
+                card.onclick = () => { playVideo(id); };
                 card.innerHTML = `<button class="close-continue-btn" onclick="removeContinueItem('${id}', event)">×</button><div class="thumbnail-placeholder"><img src="${item.thumb || '🎬'}" style="width:100%;height:100%;object-fit:cover;"><div class="continue-progress-bg"><div class="continue-progress-fill" style="width: ${pct}%"></div></div></div><div class="card-info"><p class="card-title">${item.title}</p></div>`; container.appendChild(card);
             });
         }
@@ -763,27 +753,29 @@
             currentPlayingFileId = id; const modal = document.getElementById('playerModal'); 
             modal.style.display = 'flex'; modal.classList.remove('pip-mode'); isPipActive = false; 
             
-            const videoUrl = `https://www.googleapis.com/drive/v3/files/${id}?alt=media&key=${API_KEY}`;
-            playerInstance.src({type: 'video/mp4', src: videoUrl}); 
-            playerInstance.play(); 
+            // דינאמישע זיכערע שיפטונג צו אן עמבעד פּלייער צו בייפאסן די Google Download Limit
+            const wrapper = document.getElementById('videoWrapperBox');
+            wrapper.innerHTML = `<iframe src="https://drive.google.com/file/d/${id}/preview" allow="autoplay"></iframe>`;
+            
             loadVideoMetaAndComments(id); 
         }
         
-        function closeVideo() { document.getElementById('playerModal').style.display = 'none'; playerInstance.pause(); currentPlayingFileId = null; isPipActive = false; renderContinueWatching(); }
+        function closeVideo() { 
+            document.getElementById('playerModal').style.display = 'none'; 
+            document.getElementById('videoWrapperBox').innerHTML = ''; // אפשטעלן דעם סטרים גלייך ביים פארמאכן
+            currentPlayingFileId = null; isPipActive = false; renderContinueWatching(); 
+        }
         function closeVideoFromOutside(event) { if(!isPipActive) closeVideo(); }
-        function downloadVideo(fileId) { window.open(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${API_KEY}`, '_blank'); }
+        
+        function downloadVideo(fileId) { 
+            // אלטערנאטיווע פובליק בראוזער דאונלאוד לינק
+            window.open(`https://drive.google.com/uc?export=download&id=${fileId}`, '_blank'); 
+        }
+        
         function updateBreadcrumbs() { const container = document.getElementById('breadcrumbs'); let html = ''; folderHistory.forEach((folder, idx) => { if (idx === folderHistory.length - 1) { html += `<span>${folder.name}</span>`; } else { html += `<a href="#" onclick="showAppPage('library'); loadFolder('${folder.id}', '${folder.name}')">${folder.name}</a> / `; } }); container.innerHTML = html; }
         function goBack() { if (folderHistory.length > 1) { folderHistory.pop(); const prev = folderHistory[folderHistory.length - 1]; folderHistory.pop(); showAppPage('library'); loadFolder(prev.id, prev.name); } }
         
         function togglePipMode() { const modal = document.getElementById('playerModal'); if(!isPipActive) { modal.classList.add('pip-mode'); isPipActive = true; } else { modal.classList.remove('pip-mode'); isPipActive = false; } }
-        
-        function setupCustomButtons() {
-            if(!playerInstance) return;
-            const controlBar = playerInstance.controlBar; const volumeControl = controlBar.volumePanel.el();
-            const backBtn = document.createElement('button'); backBtn.className = 'vjs-control vjs-button vjs-skip-button'; backBtn.innerHTML = '⏪'; backBtn.onclick = function() { playerInstance.currentTime(playerInstance.currentTime() - 10); };
-            const fwdBtn = document.createElement('button'); fwdBtn.className = 'vjs-control vjs-button vjs-skip-button'; fwdBtn.innerHTML = '⏩'; fwdBtn.onclick = function() { playerInstance.currentTime(playerInstance.currentTime() + 10); };
-            volumeControl.parentNode.insertBefore(backBtn, volumeControl.nextSibling); volumeControl.parentNode.insertBefore(fwdBtn, backBtn.nextSibling);
-        }
     </script>
 </body>
 </html>
