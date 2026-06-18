@@ -125,7 +125,7 @@
         .footer-contact-bar input { background-color: var(--bg-dark); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 11px; border-radius: 6px; font-size: 14px; flex-grow: 1; max-width: 650px; box-sizing: border-box; }
         .footer-contact-bar button { background-color: var(--drive-yellow); color: #121824; border: none; padding: 11px 22px; font-weight: bold; border-radius: 6px; cursor: pointer; font-size: 14px; white-space: nowrap; }
 
-        /* אפדעיטס און פארום בלאט */
+        /* אָפּדעיטס און פאָרום בלאַט */
         .updates-container { max-width: 900px; margin: 30px auto; padding: 0 20px; }
         .admin-editor-box { background-color: var(--card-bg); padding: 20px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 30px; display: none; }
         .ql-container.ql-snow { border: 1px solid #25334a !important; background: #121824; color: white; border-radius: 0 0 6px 6px; font-size: 15px; }
@@ -139,7 +139,7 @@
         .blog-body { font-size: 16px; color: #f1f5f9; line-height: 1.6; }
         .blog-body img { max-width: 100%; border-radius: 6px; margin: 15px 0; }
         
-        /* פארום קאמענטארן */
+        /* פאָרום קאָמענטאַרן */
         .thread-section { margin-top: 25px; border-top: 1px solid #25334a; padding-top: 20px; }
         .comment-wrapper { display: flex; flex-direction: column; width: 100%; }
         .comment-box { background: #141b27; padding: 12px 16px; border-radius: 6px; margin-top: 10px; border-right: 3px solid var(--drive-blue); position: relative; box-sizing: border-box; }
@@ -166,7 +166,7 @@
         .comment-input-row input { flex-grow: 1; background: #121824; border: 1px solid #25334a; border-radius: 6px; padding: 10px; color: white; font-size: 14px; }
         .comment-input-row button { background: var(--drive-blue); color: white; border: none; padding: 0 15px; border-radius: 6px; cursor: pointer; font-weight: bold; }
         
-        /* סטילס פאר ווידעאו ריפליי לייקס און דיליט */
+        /* סטילס פֿאַר ווידעאָ ריפּליי לייקס און דיליט */
         .video-comment-item { border-bottom: 1px solid #1c2638; padding: 10px 0; display: flex; flex-direction: column; gap: 5px; }
         .video-comment-actions { display: flex; gap: 12px; align-items: center; margin-top: 5px; }
         .v-action-btn { background: none; border: none; color: var(--text-muted); font-size: 11px; cursor: pointer; padding: 0; text-decoration: underline; }
@@ -225,9 +225,6 @@
             </div>
             
             <div class="main-container">
-                <!-- סעירטש באר איז גענצליך אראפגענומען געווארן פון דא -->
-
-                <!-- Continue Watching סעקציע -->
                 <div id="continueWatchingWrapper" style="display: none; margin-bottom: 40px;">
                     <h2 class="section-title">Continue Watching</h2>
                     <div class="grid" id="continueGrid"></div>
@@ -241,7 +238,6 @@
             </div>
         </div>
 
-        <!-- Favorites פערזענליכע בלאט -->
         <div id="favoritesPage">
             <div class="breadcrumb-container" style="background-color: #1c2638; margin-bottom: 20px;">
                 <button class="back-btn" onclick="showAppPage('library')">← Back to Main Menu</button>
@@ -253,7 +249,6 @@
             </div>
         </div>
 
-        <!-- Popular / Trending Pinned Page -->
         <div id="popularPage">
             <div class="breadcrumb-container" style="background-color: #1c2638; margin-bottom: 20px;">
                 <button class="back-btn" onclick="showAppPage('library')">← Back to Main Menu</button>
@@ -307,7 +302,6 @@
         </div>
     </div>
 
-    <!-- Video Player Modal -->
     <div class="player-modal" id="playerModal" onclick="closeVideoFromOutside(event)">
         <div class="player-content" onclick="event.stopPropagation()">
             <button class="minimize-player" onclick="togglePipMode()">🗕</button>
@@ -316,7 +310,6 @@
                 <video id="my-video" class="video-js vjs-big-play-centered" controls preload="auto" width="900" height="500" crossorigin="anonymous"></video>
                 <img src="logo.png" class="video-watermark" alt="WM" onerror="this.style.display='none'">
             </div>
-            <!-- קאמענטארן און עמאודזשיס פאר יעדע ווידעאו ספעציעל -->
             <div id="videoModalCommentsSection" style="margin-top:20px; border-top:1px solid #25334a; padding-top:15px;">
                 <h3 style="color: var(--drive-yellow); margin:0 0 10px 0;">Video Reactions & Messages</h3>
                 <div class="reaction-row" id="videoReactionsContainer"></div>
@@ -770,7 +763,7 @@
             currentPlayingFileId = id; const modal = document.getElementById('playerModal'); 
             modal.style.display = 'flex'; modal.classList.remove('pip-mode'); isPipActive = false; 
             
-            const videoUrl = `https://www.googleapis.com/drive/v3/files/${id}?alt=media&key=${API_KEY}&export=download`;
+            const videoUrl = `https://www.googleapis.com/drive/v3/files/${id}?alt=media&key=${API_KEY}`;
             playerInstance.src({type: 'video/mp4', src: videoUrl}); 
             playerInstance.play(); 
             loadVideoMetaAndComments(id); 
