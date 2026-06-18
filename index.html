@@ -29,7 +29,10 @@
         .nav-btn { background-color: #25334a; border: 1px solid rgba(255,255,255,0.1); color: white; padding: 8px 16px; border-radius: 6px; cursor: pointer; text-decoration: none; font-weight: bold; font-size: 14px; position: relative; }
         .nav-btn:hover { background-color: var(--drive-blue); }
         #adminPanelBtn { display: none; background-color: #7b1fa2; }
+        
         .badge-red::after { content: ''; position: absolute; top: -3px; right: -3px; width: 10px; height: 10px; background-color: var(--drive-red); border-radius: 50%; border: 2px solid var(--bg-dark); }
+        .tab-btn { position: relative; }
+        .tab-badge-red::after { content: ''; position: absolute; top: 2px; right: 2px; width: 8px; height: 8px; background-color: var(--drive-red); border-radius: 50%; }
 
         .profile-pic { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--drive-blue); object-fit: cover; background-color: white; }
         .breadcrumb-container { padding: 15px 25px; background-color: rgba(28, 38, 56, 0.5); display: flex; align-items: center; gap: 10px; }
@@ -69,7 +72,6 @@
         .player-content, .admin-content { width: 80%; max-width: 900px; position: relative; background-color: var(--bg-dark); padding: 25px; border-radius: 8px; color: white; }
         .close-player { position: absolute; top: -40px; right: 0; color: white; font-size: 30px; background: none; border: none; cursor: pointer; z-index: 1010; }
 
-        /* פאנעל ליסטע */
         .admin-tabs { display: flex; gap: 10px; margin-bottom: 15px; border-bottom: 1px solid #25334a; padding-bottom: 10px; }
         .tab-btn { background: #25334a; border: none; color: white; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: bold; }
         .tab-btn.active { background-color: var(--drive-blue); }
@@ -78,7 +80,6 @@
         .list-item { background: #1c2638; padding: 12px; margin: 8px 0; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid var(--drive-blue); }
         .list-item.approved { border-left-color: var(--drive-green); }
         
-        /* פריוואטע מעסעדזשעס: Unread / Read סטיל פונקטליך */
         .list-item.msg-item { border-left-color: #7b1fa2; align-items: flex-start; flex-direction: column; gap: 5px; cursor: pointer; background-color: #141b27; transition: background 0.2s; }
         .list-item.msg-item.unread { background-color: #222d42; border-left-width: 6px; font-weight: bold; border-left-color: var(--drive-red); }
         .unread-badge { background-color: var(--drive-red); color: white; font-size: 11px; padding: 2px 6px; border-radius: 4px; margin-left: 8px; font-weight: bold; }
@@ -90,7 +91,7 @@
         .footer-contact-bar input { background-color: var(--bg-dark); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 11px; border-radius: 6px; font-size: 14px; flex-grow: 1; max-width: 650px; box-sizing: border-box; }
         .footer-contact-bar button { background-color: var(--drive-yellow); color: #121824; border: none; padding: 11px 22px; font-weight: bold; border-radius: 6px; cursor: pointer; font-size: 14px; white-space: nowrap; }
 
-        /* אפדעיטס און פארום בלאט פנים */
+        /* אפדעיטס און פארום בלאט */
         .updates-container { max-width: 900px; margin: 30px auto; padding: 0 20px; }
         .admin-editor-box { background-color: var(--card-bg); padding: 20px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 30px; display: none; }
         .ql-container.ql-snow { border: 1px solid #25334a !important; background: #121824; color: white; border-radius: 0 0 6px 6px; font-size: 15px; }
@@ -100,17 +101,35 @@
         .ql-snow .ql-picker { color: white !important; }
         
         .blog-post { background-color: var(--card-bg); border-radius: 8px; border-top: 4px solid var(--drive-yellow); padding: 25px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-        .blog-time { font-size: 12px; color: var(--text-muted); margin-bottom: 15px; }
+        .blog-time { font-size: 12px; color: var(--text-muted); margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
         .blog-body { font-size: 16px; color: #f1f5f9; line-height: 1.6; }
         .blog-body img { max-width: 100%; border-radius: 6px; margin: 15px 0; }
         
-        /* פארום קאמענטארן / טרעדס סטיל */
+        /* פארום קאמענטארן און נעיסטעד ריפלאיס */
         .thread-section { margin-top: 25px; border-top: 1px solid #25334a; padding-top: 20px; }
-        .comment-box { background: #141b27; padding: 12px 16px; border-radius: 6px; margin-bottom: 10px; border-right: 3px solid var(--drive-blue); }
+        .comment-box { background: #141b27; padding: 12px 16px; border-radius: 6px; margin-bottom: 10px; border-right: 3px solid var(--drive-blue); position: relative; }
+        .comment-box.reply-node { margin-left: 35px; border-right-color: var(--drive-green); background: #0f151f; }
         .comment-meta { display: flex; justify-content: space-between; font-size: 12px; font-weight: bold; margin-bottom: 5px; }
         .comment-user { color: var(--drive-yellow); }
         .comment-time { color: var(--text-muted); }
-        .comment-text { font-size: 14px; color: #cbd5e1; }
+        .comment-text { font-size: 14px; color: #cbd5e1; margin-bottom: 10px; }
+        
+        /* עדיט און דיליט קנעפּלעך אינעם פאָרום */
+        .comment-actions { font-size: 11px; margin-left: 15px; display: inline-flex; gap: 8px; }
+        .action-link { color: var(--text-muted); cursor: pointer; text-decoration: underline; }
+        .action-link:hover { color: white; }
+        .action-link.delete-link { color: var(--drive-red); }
+        .action-link.delete-link:hover { color: #ff5252; }
+
+        /* עמאדזשי רעאקציעס באר מיט HOVER TOOLTIP */
+        .reaction-row { display: flex; gap: 8px; align-items: center; margin-top: 8px; font-size: 13px; }
+        .react-btn { background: #25334a; border: none; color: white; padding: 4px 8px; border-radius: 4px; cursor: pointer; position: relative; font-size: 12px; display: flex; align-items: center; gap: 4px; }
+        .react-btn:hover { background: var(--drive-blue); }
+        
+        .react-tooltip { display: none; position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.9); color: white; padding: 5px 10px; border-radius: 4px; font-size: 11px; white-space: nowrap; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); }
+        .react-btn:hover .react-tooltip { display: block; }
+
+        .reply-trigger { color: var(--drive-yellow); font-size: 12px; cursor: pointer; font-weight: bold; margin-left: 10px; text-decoration: underline; }
         .comment-input-row { display: flex; gap: 10px; margin-top: 15px; }
         .comment-input-row input { flex-grow: 1; background: #121824; border: 1px solid #25334a; border-radius: 6px; padding: 10px; color: white; font-size: 14px; }
         .comment-input-row button { background: var(--drive-blue); color: white; border: none; padding: 0 15px; border-radius: 6px; cursor: pointer; font-weight: bold; }
@@ -118,6 +137,7 @@
 </head>
 <body>
 
+    <!-- לאגין סקרין -->
     <div class="lock-screen" id="lockScreen">
         <div class="lock-box" id="loginPanel">
             <h2 style="margin-top:0; color: var(--drive-yellow);">sofer cloud access</h2>
@@ -143,11 +163,12 @@
         </div>
     </div>
 
+    <!-- הויפט אפפ סקרין -->
     <div id="mainApp">
         <header>
             <div class="brand-area"><h1 onclick="showAppPage('library')">sofer video cloud</h1></div>
             <div class="menu-area">
-                <button class="nav-btn" onclick="showAppPage('updates')">Updates & Forum</button>
+                <button class="nav-btn" id="updatesMenuBtn" onclick="showAppPage('updates')">Updates & Forum</button>
                 <a href="about.html" class="nav-btn">About Me</a>
                 <button id="adminPanelBtn" class="nav-btn" onclick="openAdminPanel()">Admin Panel</button>
                 <img src="logo.png" class="profile-pic" alt="Profile" onerror="this.src='https://via.placeholder.com/45?text=sofer'">
@@ -190,6 +211,7 @@
         </div>
     </div>
 
+    <!-- עדמין פאנעל מאדאל -->
     <div class="admin-modal" id="adminModal">
         <div class="admin-content">
             <button class="close-player" onclick="document.getElementById('adminModal').style.display='none'">×</button>
@@ -205,6 +227,7 @@
         </div>
     </div>
 
+    <!-- ווידעאו פלעיער -->
     <div class="player-modal" id="playerModal" onclick="closeVideoFromOutside(event)">
         <div class="player-content" onclick="event.stopPropagation()">
             <button class="close-player" onclick="closeVideo()">×</button>
@@ -217,6 +240,7 @@
         </div>
     </div>
 
+    <!-- SDK Scripts -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
@@ -240,7 +264,6 @@
             measurementId: "G-FCFZWE5LD4"
         };
 
-        // 3) EmailJS קליענט אינפארמאציע:
         const EMAILJS_PUBLIC_KEY = "2VeSFXHu7Jhf2qE-O";
         const EMAILJS_SERVICE_ID = "service_0pgs1vp"; 
         const EMAILJS_TEMPLATE_ID = "template_tq4bhu7";
@@ -256,7 +279,7 @@
         let playerInstance = null;
         let isAdmin = false;
         let savedThumbnails = {};
-        let quillEditor = null; // האלט דעם ווארד עדיטאר
+        let quillEditor = null;
         
         let loggedInUserEmail = "";
         let loggedInUserName = "User";
@@ -276,12 +299,12 @@
             listenForUpdates();
         };
 
-        // סוויטשן צווישן די לייברערי און דעם נייעם פארום בלאט
         function showAppPage(page) {
             if(page === 'updates') {
+                document.getElementById('updatesMenuBtn').classList.remove('badge-red');
                 document.getElementById('librarySection').style.display = 'none';
                 document.getElementById('updatesPage').style.display = 'block';
-                loadBlogPosts(); // לאדן פארום טרעדס
+                loadBlogPosts();
             } else {
                 document.getElementById('librarySection').style.display = 'block';
                 document.getElementById('updatesPage').style.display = 'none';
@@ -356,7 +379,6 @@
             if(isAdmin) {
                 document.getElementById('adminPanelBtn').style.display = 'block';
                 document.getElementById('adminEditorBox').style.display = 'block';
-                // איניציאליזירן דעם פולן פראפעסיאנאלן ווארד עדיטאר פארן עדמין
                 quillEditor = new Quill('#editor-container', {
                     modules: { toolbar: [['bold', 'italic', 'underline'], [{ 'color': [] }, { 'background': [] }], ['image', 'link']] },
                     theme: 'snow'
@@ -372,7 +394,6 @@
             loadFolder(START_FOLDER_ID, "Home");
         }
 
-        // --- פארום לאגיק: ארויסלאדן און באשאפן אפדעיטס טרעדס אינערהאלב FIREBASE ---
         async function publishAdminUpdate() {
             const htmlContent = quillEditor.root.innerHTML;
             if(quillEditor.getText().trim().length === 0) { alert('Please write something first.'); return; }
@@ -381,8 +402,16 @@
                 content: htmlContent,
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             });
-            quillEditor.setText(''); // רייניגן דעם עדיטאר
+            quillEditor.setText('');
             loadBlogPosts();
+        }
+
+        // אויסמעקן א גאנציגע הויפט פאסט (נאר פארן עדמין)
+        async function deleteMainPost(postId) {
+            if(confirm("Are you sure you want to delete this main update and all its comments permanently?")) {
+                await db.collection('forum_posts').doc(postId).delete();
+                loadBlogPosts();
+            }
         }
 
         function loadBlogPosts() {
@@ -391,34 +420,35 @@
 
             db.collection('forum_posts').orderBy('timestamp', 'desc').onSnapshot(snapshot => {
                 listContainer.innerHTML = '';
-                if(snapshot.empty) { listContainer.innerHTML = '<p style="color:var(--text-muted)">No updates published yet.</p>'; return; }
-
                 snapshot.forEach(doc => {
-                    const postData = doc.data();
-                    const postId = doc.id;
+                    const postData = doc.data(); const postId = doc.id;
                     const timeString = postData.timestamp ? postData.timestamp.toDate().toLocaleString() : 'Just now';
+                    const deleteBtnHtml = isAdmin ? `<span class="action-link delete-link" onclick="deleteMainPost('${postId}')">Delete Update</span>` : '';
 
                     const postElement = document.createElement('div');
                     postElement.className = 'blog-post';
                     postElement.innerHTML = `
-                        <div class="blog-time">📅 Published: ${timeString}</div>
+                        <div class="blog-time">
+                            <span>📅 Published: ${timeString}</span>
+                            ${deleteBtnHtml}
+                        </div>
                         <div class="blog-body">${postData.content}</div>
                         <div class="thread-section">
                             <h4>Conversation Thread</h4>
                             <div id="comments-list-${postId}">Loading posts...</div>
                             <div class="comment-input-row">
                                 <input type="text" id="input-${postId}" placeholder="Write a message in this thread...">
-                                <button onclick="submitComment('${postId}')">Post</button>
+                                <button onclick="submitComment('${postId}', 'root')">Post Message</button>
                             </div>
                         </div>
                     `;
                     listContainer.appendChild(postElement);
-                    loadCommentsForPost(postId); // לאדן די שמועס שורות פאר דעם טרעד
+                    loadCommentsForPost(postId);
                 });
             });
         }
 
-        async function submitComment(postId) {
+        async function submitComment(postId, parentId) {
             const inputField = document.getElementById(`input-${postId}`);
             const text = inputField.value.trim();
             if(!text) return;
@@ -427,6 +457,7 @@
                 userName: loggedInUserName,
                 userEmail: loggedInUserEmail,
                 commentText: text,
+                parentId: parentId,
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             });
             inputField.value = '';
@@ -437,49 +468,151 @@
             db.collection('forum_posts').doc(postId).collection('comments').orderBy('timestamp', 'asc').onSnapshot(snap => {
                 container.innerHTML = '';
                 if(snap.empty) { container.innerHTML = '<p style="color:var(--text-muted); font-size:13px; margin:0;">No comments in this thread yet.</p>'; return; }
+                
+                let roots = []; let replies = [];
                 snap.forEach(cDoc => {
-                    const c = cDoc.data();
-                    const cTime = c.timestamp ? c.timestamp.toDate().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'Now';
-                    const cDiv = document.createElement('div'); cDiv.className = 'comment-box';
-                    cDiv.innerHTML = `
-                        <div class="comment-meta">
-                            <span class="comment-user">${c.userName} (${c.userEmail})</span>
-                            <span class="comment-time">${cTime}</span>
-                        </div>
-                        <div class="comment-text">${c.commentText}</div>
-                    `;
-                    container.appendChild(cDiv);
+                    let data = cDoc.data(); data.id = cDoc.id;
+                    if(data.parentId === 'root' || !data.parentId) roots.push(data);
+                    else replies.push(data);
+                });
+
+                roots.forEach(r => {
+                    renderCommentNode(container, r, postId, false);
+                    replies.forEach(rep => {
+                        if(rep.parentId === r.id) { renderCommentNode(container, rep, postId, true); }
+                    });
                 });
             });
         }
 
-        // --- פריוואטע מעסעדזשעס: מיט UNREAD / READ לאגיק פונקטליך פונעם בילד ---
-        async function sendMessageToAdmin() {
-            const text = document.getElementById('footerMessageText').value.trim();
-            if(!text) { alert('Please type a message.'); return; }
+        // רענדערן א קאמענטאר שורה מיט EDIT / DELETE לאגיק
+        function renderCommentNode(container, c, postId, isReply) {
+            const cTime = c.timestamp ? c.timestamp.toDate().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'Now';
+            const cDiv = document.createElement('div'); 
+            cDiv.className = isReply ? 'comment-box reply-node' : 'comment-box';
+            
+            const thumbs = c.react_thumb ? Object.keys(c.react_thumb).length : 0;
+            const hearts = c.react_heart ? Object.keys(c.react_heart).length : 0;
+            const thumbUsers = c.react_thumb ? Object.values(c.react_thumb).join(', ') : 'No one yet';
+            const heartUsers = c.react_heart ? Object.values(c.react_heart).join(', ') : 'No one yet';
 
-            await db.collection('admin_messages').add({
-                name: loggedInUserName, email: loggedInUserEmail, message: text,
-                status: "unread", // שטענדיג אריינגעשיקט אלס Unread אויטאָמאַטיש
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            });
-            alert('Message sent to Admin Panel!');
-            document.getElementById('footerMessageText').value = ""; 
+            // קאָנטראָלירן רשות: אויב ער איז דער מחבר אדער אויב ער איז דזשענעראל עדמין
+            const isOwner = (c.userEmail === loggedInUserEmail);
+            const canEdit = isOwner; // נאר דער שרייבער קען עדיטן זיין אייגענעם טקסט
+            const canDelete = isOwner || isAdmin; // דער שרייבער אדער דער עדמין קענען אויסמעקן
+
+            const editHtml = canEdit ? `<span class="action-link" onclick="editCommentPrompt('${postId}', '${c.id}', '${c.commentText.replace(/'/g, "\\'")}')">Edit</span>` : '';
+            const deleteHtml = canDelete ? `<span class="action-link delete-link" onclick="deleteCommentAction('${postId}', '${c.id}')">Delete</span>` : '';
+
+            cDiv.innerHTML = `
+                <div class="comment-meta">
+                    <span class="comment-user">
+                        ${c.userName} (${c.userEmail})
+                        <span class="comment-actions">${editHtml} ${deleteHtml}</span>
+                    </span>
+                    <span class="comment-time">${cTime}</span>
+                </div>
+                <div class="comment-text" id="text-node-${c.id}">${c.commentText}</div>
+                <div class="reaction-row">
+                    <button class="react-btn" onclick="toggleReaction('${postId}', '${c.id}', 'thumb')">
+                        👍 <span>${thumbs}</span>
+                        <div class="react-tooltip">Liked by: ${thumbUsers}</div>
+                    </button>
+                    <button class="react-btn" onclick="toggleReaction('${postId}', '${c.id}', 'heart')">
+                        ❤️ <span>${hearts}</span>
+                        <div class="react-tooltip">Loved by: ${heartUsers}</div>
+                    </button>
+                    ${!isReply ? `<span class="reply-trigger" onclick="openInlineReplyBox('${postId}', '${c.id}')">Reply</span>` : ''}
+                </div>
+                <div id="inline-replybox-${c.id}" style="margin-top:10px; display:none;"></div>
+            `;
+            container.appendChild(cDiv);
         }
 
-        // מאכן א מעסעדזש אלס געלייענט (Read) ווען דער עדמין קליקט עס
+        // פונקציע צו עדיטן א קאמענטאר (Edit Comment)
+        async function editCommentPrompt(postId, commentId, oldText) {
+            const newText = prompt("Edit your message:", oldText);
+            if(newText && newText.trim() !== "") {
+                await db.collection('forum_posts').doc(postId).collection('comments').doc(commentId).update({
+                    commentText: newText.trim()
+                });
+            }
+        }
+
+        // פונקציע צו דיליטן א קאמענטאר (Delete Comment)
+        async function deleteCommentAction(postId, commentId) {
+            if(confirm("Are you sure you want to delete this message permanently?")) {
+                await db.collection('forum_posts').doc(postId).collection('comments').doc(commentId).delete();
+            }
+        }
+
+        function openInlineReplyBox(postId, commentId) {
+            const box = document.getElementById(`inline-replybox-${commentId}`);
+            box.style.display = "block";
+            box.innerHTML = `
+                <div class="comment-input-row">
+                    <input type="text" id="inline-input-${commentId}" placeholder="Reply to this message...">
+                    <button onclick="submitInlineReply('${postId}', '${commentId}')">Post Reply</button>
+                </div>
+            `;
+        }
+
+        async function submitInlineReply(postId, commentId) {
+            const input = document.getElementById(`inline-input-${commentId}`);
+            const text = input.value.trim(); if(!text) return;
+
+            await db.collection('forum_posts').doc(postId).collection('comments').add({
+                userName: loggedInUserName, userEmail: loggedInUserEmail, commentText: text,
+                parentId: commentId,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            document.getElementById(`inline-replybox-${commentId}`).style.display = "none";
+        }
+
+        async function toggleReaction(postId, commentId, type) {
+            const ref = db.collection('forum_posts').doc(postId).collection('comments').doc(commentId);
+            const doc = await ref.get(); if(!doc.exists) return;
+            const data = doc.data();
+            
+            let currentReacts = data['react_' + type] || {};
+            if(currentReacts[loggedInUserEmail]) { delete currentReacts[loggedInUserEmail]; } 
+            else { currentReacts[loggedInUserEmail] = loggedInUserName; }
+            
+            let updateObj = {}; updateObj['react_' + type] = currentReacts;
+            await ref.update(updateObj);
+        }
+
+        async function sendMessageToAdmin() {
+            const text = document.getElementById('footerMessageText').value.trim(); if(!text) { alert('Please type a message.'); return; }
+            await db.collection('admin_messages').add({
+                name: loggedInUserName, email: loggedInUserEmail, message: text, status: "unread", timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            alert('Message sent to Admin Panel!'); document.getElementById('footerMessageText').value = ""; 
+        }
+
         async function markMessageAsRead(msgId, currentStatus) {
             if(currentStatus === "unread") {
                 await db.collection('admin_messages').doc(msgId).update({ status: "read" });
-                fetchAdminData(); // ריפרעשן די ליסטע
+                fetchAdminData();
             }
         }
 
         function listenForUpdates() {
             db.collection('access_requests').onSnapshot(snap => { if(!snap.empty && isAdmin) document.getElementById('adminPanelBtn').classList.add('badge-red'); });
-            // דער רויטער באדזש אינדרויסן וועט זיך אויך אנצינדן נאר אויב עס זענען דא פאקטישע UNREAD מעסעדזשעס
             db.collection('admin_messages').where("status", "==", "unread").onSnapshot(snap => { 
-                if(!snap.empty && isAdmin) document.getElementById('adminPanelBtn').classList.add('badge-red'); 
+                if(!snap.empty && isAdmin) {
+                    document.getElementById('adminPanelBtn').classList.add('badge-red'); 
+                    document.getElementById('tabMsgBtn').classList.add('tab-badge-red');
+                } else { document.getElementById('tabMsgBtn').classList.remove('tab-badge-red'); }
+            });
+
+            db.collection('forum_posts').orderBy('timestamp', 'desc').limit(1).onSnapshot(snap => {
+                if(!snap.empty) {
+                    const latestPost = snap.docs[0].data();
+                    const lastViewed = localStorage.getItem('lastViewedPostTime') || 0;
+                    const postTime = latestPost.timestamp ? latestPost.timestamp.toDate().getTime() : Date.now();
+                    if(postTime > lastViewed) { document.getElementById('updatesMenuBtn').classList.add('badge-red'); }
+                }
             });
         }
 
@@ -494,7 +627,7 @@
             document.getElementById('secRequests').className = 'panel-section'; document.getElementById('secUsers').className = 'panel-section'; document.getElementById('secMessages').className = 'panel-section';
             if(tab === 'requests') { document.getElementById('tabReqBtn').classList.add('active'); document.getElementById('secRequests').classList.add('active'); } 
             else if(tab === 'users') { document.getElementById('tabUsersBtn').classList.add('active'); document.getElementById('secUsers').classList.add('active'); } 
-            else { document.getElementById('tabMsgBtn').classList.add('active'); document.getElementById('secMessages').classList.add('active'); }
+            else { document.getElementById('tabMsgBtn').classList.add('active'); document.getElementById('secMessages').classList.add('active'); document.getElementById('tabMsgBtn').classList.remove('tab-badge-red'); }
         }
 
         async function openAdminPanel() {
@@ -526,7 +659,6 @@
                     usersSection.appendChild(div);
                 });
 
-                // לאדן פריוואטע מעסעדזשעס מיט UNREAD / READ קלאסיפֿיקאציע
                 const msgSnapshot = await db.collection('admin_messages').orderBy('timestamp', 'desc').get();
                 msgSection.innerHTML = msgSnapshot.empty ? '<p>Inbox empty.</p>' : '';
                 msgSnapshot.forEach(doc => {
@@ -535,9 +667,8 @@
                     const itemClass = isUnread ? 'list-item msg-item unread' : 'list-item msg-item';
                     const badge = isUnread ? '<span class="unread-badge">NEW</span>' : '';
                     
-                    const div = document.createElement('div'); 
-                    div.className = itemClass;
-                    div.onclick = () => markMessageAsRead(doc.id, d.status); // ווען מען קליקט ווערט עס Read פונקטליך!
+                    const div = document.createElement('div'); div.className = itemClass;
+                    div.onclick = () => markMessageAsRead(doc.id, d.status);
                     div.innerHTML = `
                         <div style="width:100%; display:flex; justify-content:space-between; color:var(--drive-yellow);">
                             <strong>From: ${d.name} (${d.email}) ${badge}</strong>
