@@ -1,801 +1,406 @@
-<!DOCTYPE html><html lang="en"><head>
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>sofer video cloud</title>
-
     <link href="https://vjs.zencdn.net/8.3.0/video-js.css" rel="stylesheet" />
-
     
-
     <style>
-
         :root {
-
             --bg-dark: #121824;
-
             --card-bg: #1c2638;
-
             --drive-blue: #1a73e8;
-
             --drive-green: #0f9d58;
-
             --drive-yellow: #f4b400;
-
+            --drive-red: #ea4335;
             --text-light: #ffffff;
-
             --text-muted: #9aa0a6;
-
         }
 
-
-
-        body {
-
-            font-family: 'Segoe UI', Arial, sans-serif;
-
-            background-color: var(--bg-dark);
-
-            color: var(--text-light);
-
-            margin: 0;
-
-            padding: 0;
-
-        }
-
-
-
+        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: var(--bg-dark); color: var(--text-light); margin: 0; padding: 0; }
         #mainApp { display: none; }
 
-
-
-        header {
-
-            background-color: var(--card-bg);
-
-            border-bottom: 3px solid var(--drive-blue);
-
-            padding: 15px 20px;
-
-            display: flex;
-
-            justify-content: space-between;
-
-            align-items: center;
-
-        }
-
-
-
+        header { background-color: var(--card-bg); border-bottom: 3px solid var(--drive-blue); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
         .brand-area h1 { margin: 0; font-size: 24px; }
-
         .menu-area { display: flex; align-items: center; gap: 15px; }
-
         
-
-        .nav-btn {
-
-            background-color: #25334a;
-
-            border: 1px solid rgba(255,255,255,0.1);
-
-            color: white;
-
-            padding: 8px 16px;
-
-            border-radius: 6px;
-
-            cursor: pointer;
-
-            text-decoration: none;
-
-            font-weight: bold;
-
-            font-size: 14px;
-
-        }
-
+        .nav-btn { background-color: #25334a; border: 1px solid rgba(255,255,255,0.1); color: white; padding: 8px 16px; border-radius: 6px; cursor: pointer; text-decoration: none; font-weight: bold; font-size: 14px; }
         .nav-btn:hover { background-color: var(--drive-blue); }
-
         #adminPanelBtn { display: none; background-color: #7b1fa2; }
-
-
 
         .profile-pic { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--drive-blue); object-fit: cover; background-color: white; }
 
-
-
         .breadcrumb-container { padding: 15px 25px; background-color: rgba(28, 38, 56, 0.5); display: flex; align-items: center; gap: 10px; }
-
         .back-btn { background-color: var(--drive-blue); border: none; color: white; padding: 5px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; }
-
         .breadcrumbs { color: var(--text-muted); font-size: 16px; }
-
         .breadcrumbs a { color: var(--drive-yellow); text-decoration: none; margin: 0 5px; font-weight: bold; }
-
         .breadcrumbs span { margin: 0 5px; color: var(--text-light); }
 
-
-
         .main-container { padding: 25px; max-width: 1400px; margin: 0 auto; }
-
         .section-title { border-left: 5px solid var(--drive-yellow); padding-left: 10px; margin-bottom: 20px; }
-
         
-
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; justify-content: center; }
 
-
-
         .card { background-color: var(--card-bg); border-radius: 8px; overflow: hidden; transition: transform 0.2s; cursor: pointer; border: 1px solid rgba(255,255,255,0.05); position: relative; }
-
         .card:hover { transform: translateY(-5px); }
-
         .card.folder { border-top: 4px solid var(--drive-yellow); }
-
         .card.video { border-top: 4px solid var(--drive-green); }
 
-
-
         .thumbnail-placeholder { height: 130px; background: #25334a; display: flex; align-items: center; justify-content: center; font-size: 40px; position: relative; }
-
         .card-info { padding: 12px; }
-
         .card-title { font-size: 15px; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 600; }
 
-
-
-        .admin-card-overlay {
-
-            display: none;
-
-            position: absolute;
-
-            top: 5px; left: 5px;
-
-            background: rgba(0,0,0,0.8);
-
-            padding: 4px 8px; border-radius: 4px;
-
-            font-size: 11px; color: var(--drive-yellow); z-index: 5;
-
-        }
-
-
-
+        .admin-card-overlay { display: none; position: absolute; top: 5px; left: 5px; background: rgba(0,0,0,0.8); padding: 4px 8px; border-radius: 4px; font-size: 11px; color: var(--drive-yellow); z-index: 5; }
         .download-icon-btn { position: absolute; bottom: 10px; right: 10px; background-color: var(--drive-blue); color: white; border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; z-index: 2; }
 
-
-
         /* לאגין סקרין */
-
         .lock-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-dark); display: flex; justify-content: center; align-items: center; z-index: 2000; }
-
         .lock-box { background-color: var(--card-bg); padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); text-align: center; width: 90%; max-width: 400px; border-top: 4px solid var(--drive-blue); }
-
         .lock-box input, .lock-box textarea { width: 100%; padding: 12px; margin: 10px 0; background-color: var(--bg-dark); border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 6px; box-sizing: border-box; }
-
         .lock-box button { width: 100%; padding: 12px; background-color: var(--drive-blue); color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-
         .lock-box button:hover { background-color: var(--drive-green); }
-
         .switch-link { color: var(--drive-yellow); cursor: pointer; display: inline-block; margin-top: 15px; font-size: 14px; }
 
-
-
-        /* פלעיער און עדמין מאדאלס */
-
+        /* מאדאלס */
         .player-modal, .admin-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center; }
-
         .player-content, .admin-content { width: 80%; max-width: 900px; position: relative; background-color: var(--bg-dark); padding: 20px; border-radius: 8px; color: white; }
-
         .close-player { position: absolute; top: -40px; right: 0; color: white; font-size: 30px; background: none; border: none; cursor: pointer; z-index: 1010; }
-
         .video-wrapper { position: relative; width: 100%; }
-
         .video-watermark { position: absolute; bottom: 55px; right: 15px; width: 50px; height: 50px; opacity: 0.6; pointer-events: none; z-index: 10; object-fit: contain; }
-
         .vjs-skip-button { font-size: 1.5em; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #ccc; }
 
-
-
-        /* עדמין פאנעל טעקסט ליסטע */
-
-        .req-list-item { background: #1c2638; padding: 10px; margin: 8px 0; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid var(--drive-blue); }
-
-    </style></head><body>
-
-
+        /* עדמין פאנעל פנים */
+        .admin-tabs { display: flex; gap: 10px; margin-bottom: 15px; border-bottom: 1px solid #25334a; padding-bottom: 10px; }
+        .tab-btn { background: #25334a; border: none; color: white; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .tab-btn.active { background-color: var(--drive-blue); }
+        .panel-section { display: none; max-height: 350px; overflow-y: auto; }
+        .panel-section.active { display: block; }
+        .list-item { background: #1c2638; padding: 12px; margin: 8px 0; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid var(--drive-blue); }
+        .list-item.approved { border-left-color: var(--drive-green); }
+        .action-btn { padding: 6px 12px; border-radius: 4px; border: none; color: white; font-weight: bold; cursor: pointer; }
+    </style>
+</head>
+<body>
 
     <div class="lock-screen" id="lockScreen">
-
         <div class="lock-box" id="loginPanel">
-
             <h2 style="margin-top:0; color: var(--drive-yellow);">sofer cloud access</h2>
-
             <p style="color: var(--text-muted); font-size: 14px;">Enter your Email Address to unlock the library.</p>
-
             <input type="email" id="accessEmailInput" placeholder="Enter your registered email...">
-
             <button onclick="checkAccess()">Unlock Library</button>
-
             <span class="switch-link" onclick="togglePanels(true)">Don't have access? Request Access</span>
-
         </div>
-
-
 
         <div class="lock-box" id="requestPanel" style="display: none;">
-
             <h2 style="margin-top:0; color: var(--drive-blue);">Request Access</h2>
-
             <p style="color: var(--text-muted); font-size: 14px;">Your request will be sent directly to the Admin Panel.</p>
-
             <input type="text" id="reqName" placeholder="Your Full Name...">
-
             <input type="email" id="reqEmail" placeholder="Your Email Address...">
-
             <textarea id="reqNote" placeholder="Reason for request..." rows="3"></textarea>
-
             <button onclick="submitAccessRequest()">Submit Request</button>
-
             <span class="switch-link" onclick="togglePanels(false)">Already requested? Log In</span>
-
         </div>
-
     </div>
-
-
 
     <div id="mainApp">
-
         <header>
-
             <div class="brand-area"><h1>sofer video cloud</h1></div>
-
             <div class="menu-area">
-
                 <a href="about.html" class="nav-btn">About Me</a>
-
                 <button id="adminPanelBtn" class="nav-btn" onclick="openAdminPanel()">Admin Panel</button>
-
                 <img src="logo.png" class="profile-pic" alt="Profile" onerror="this.src='https://via.placeholder.com/45?text=sofer'">
-
             </div>
-
         </header>
 
-
-
         <div class="breadcrumb-container">
-
             <button class="back-btn" onclick="goBack()">← Back</button>
-
             <div class="breadcrumbs" id="breadcrumbs"></div>
-
         </div>
-
-
 
         <div class="main-container">
-
             <h2 class="section-title">Folders</h2>
-
             <div class="grid" id="foldersGrid"></div>
-
             <div style="margin-top: 40px;"></div>
-
             <h2 class="section-title">Videos</h2>
-
             <div class="grid" id="videosGrid"></div>
-
         </div>
-
     </div>
-
-
 
     <div class="admin-modal" id="adminModal">
-
         <div class="admin-content">
-
             <button class="close-player" onclick="document.getElementById('adminModal').style.display='none'">×</button>
-
             <h2 style="color: var(--drive-yellow); margin-top:0;">sofer Cloud Admin Panel</h2>
-
-            <h3 style="border-bottom: 1px solid #25334a; padding-bottom:10px;">Pending Access Requests</h3>
-
-            <div id="adminRequestsList" style="max-height: 400px; overflow-y: auto;">Loading requests...</div>
-
-        </div>
-
-    </div>
-
-
-
-    <div class="player-modal" id="playerModal" onclick="closeVideoFromOutside(event)">
-
-        <div class="player-content" onclick="event.stopPropagation()">
-
-            <button class="close-player" onclick="closeVideo()">×</button>
-
-            <div class="video-wrapper">
-
-                <video id="my-video" class="video-js vjs-big-play-centered" controls preload="auto" width="900" height="500">
-
-                    <p class="vjs-no-js">To view this video please enable JavaScript</p>
-
-                </video>
-
-                <img src="logo.png" class="video-watermark" alt="WM" onerror="this.style.display='none'">
-
+            
+            <div class="admin-tabs">
+                <button class="tab-btn active" id="tabReqBtn" onclick="switchAdminTab('requests')">Pending Requests</button>
+                <button class="tab-btn" id="tabUsersBtn" onclick="switchAdminTab('users')">Approved Users (<span id="userCount">0</span>)</button>
             </div>
 
+            <div id="secRequests" class="panel-section active">Loading requests...</div>
+            
+            <div id="secUsers" class="panel-section">Loading active users...</div>
         </div>
-
     </div>
 
-
+    <div class="player-modal" id="playerModal" onclick="closeVideoFromOutside(event)">
+        <div class="player-content" onclick="event.stopPropagation()">
+            <button class="close-player" onclick="closeVideo()">×</button>
+            <div class="video-wrapper">
+                <video id="my-video" class="video-js vjs-big-play-centered" controls preload="auto" width="900" height="500">
+                    <p class="vjs-no-js">To view this video please enable JavaScript</p>
+                </video>
+                <img src="logo.png" class="video-watermark" alt="WM" onerror="this.style.display='none'">
+            </div>
+        </div>
+    </div>
 
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-
     <script src="https://vjs.zencdn.net/8.3.0/video.min.js"></script>
-
     
-
     <script>
-
         // ************************************************************
-
         // 1) לייג אריין דיין Google Drive API Key פונקטליך דא:
-
         const API_KEY = "AIzaSyDEkcoogK9_8e4HOf7vSWFWEHKct21gjdE"; 
-
         const START_FOLDER_ID = "14v9raW-BX5EkdfK2-Yj8wDA5kGok2Tda"; 
 
-
-
-        // 2) דיינע פולע Firebase דעטאלן זענען שוין דא פערפעקט אריינגעשטעלט:
-
+        // 2) פירבעיס קאנסול דעטאלן:
         const firebaseConfig = {
-
             apiKey: "AIzaSyDqkaFHG6eGB2BASDpjr94KPqBTaDTZDQw",
-
             authDomain: "sofer-video-cloud.firebaseapp.com",
-
             projectId: "sofer-video-cloud",
-
             storageBucket: "sofer-video-cloud.firebasestorage.app",
-
             messagingSenderId: "408981111758",
-
             appId: "1:408981111758:web:15b060660475995f58a19f",
-
             measurementId: "G-FCFZWE5LD4"
-
         };
 
-
-
-        const ADMIN_TOKEN = "soferadmin"; // סודיע'דיגע לאגין קאד פאר דיר אלס הויפט עדמין
-
+        const ADMIN_TOKEN = "soferadmin"; 
         // ************************************************************
 
-
-
-        // איניציאליזירן Firebase
-
         firebase.initializeApp(firebaseConfig);
-
         const db = firebase.firestore();
 
-
-
         let folderHistory = [{ id: START_FOLDER_ID, name: "Home" }];
-
         let playerInstance = null;
-
         let isAdmin = false;
-
         let savedThumbnails = {};
 
-
-
-        // אויטאמאטישע "Remember Me" לאגיק
+        // גענערייט א קליינע סודיע'דיגע דעווייס-איידי פונעם קאמפיוטער
+        function getDeviceFingerprint() {
+            return navigator.userAgent + (navigator.hardwareConcurrency || 2) + (navigator.deviceMemory || 4);
+        }
 
         window.onload = function() {
-
             const savedEmail = localStorage.getItem('soferUserEmail');
-
-            if (savedEmail) {
-
-                autoLogin(savedEmail);
-
-            }
-
+            if (savedEmail) { autoLogin(savedEmail); }
         };
 
-
-
         function togglePanels(showRequest) {
-
             document.getElementById('loginPanel').style.display = showRequest ? 'none' : 'block';
-
             document.getElementById('requestPanel').style.display = showRequest ? 'block' : 'none';
-
         }
-
-
 
         async function checkAccess() {
-
             const input = document.getElementById('accessEmailInput').value.trim().toLowerCase();
-
-            if (!input) { alert('Please enter an email or admin token.'); return; }
-
-
-
-            // אויב דו לייגסט אריין דעם ספציעלן עדמין טאקען אנשטאט אן אימעיל
+            if (!input) { alert('Please enter an email.'); return; }
 
             if (input === ADMIN_TOKEN || input === "mw6559154@gmail.com") {
-
                 isAdmin = true;
-
                 localStorage.setItem('soferUserEmail', "mw6559154@gmail.com");
-
                 unlockApp();
-
                 return;
-
             }
-
-
-
-            // קאנטראלירן אין דאטאבאזע פאר באנוצער צוטריט
 
             const userDoc = await db.collection('allowed_users').doc(input).get();
-
             if (userDoc.exists && userDoc.data().approved) {
+                const currentDevice = getDeviceFingerprint();
+                const userData = userDoc.data();
+
+                // Device Lock לאגיק - קאנטראלירן אויב דער אימעיל איז שוין פארכאפט דורך אן אנדערן בראוזער
+                if (userData.deviceId && userData.deviceId !== currentDevice) {
+                    alert('Access Denied! This account is already linked to another device. You cannot share accounts.');
+                    return;
+                }
+
+                // אויב דאס איז דאס ערשטע מאל, פארשליס דעם אימעיל צו דעם דעווייס
+                if (!userData.deviceId) {
+                    await db.collection('allowed_users').doc(input).update({ deviceId: currentDevice });
+                }
 
                 isAdmin = false;
-
                 localStorage.setItem('soferUserEmail', input);
-
                 unlockApp();
-
             } else {
-
-                alert('Access Denied. Your email is either not registered or pending admin approval.');
-
+                alert('Access Denied. Email not approved.');
             }
-
         }
-
-
 
         function autoLogin(email) {
-
             if (email === "mw6559154@gmail.com") { isAdmin = true; unlockApp(); } 
-
             else { unlockApp(); }
-
         }
-
-
 
         async function unlockApp() {
-
             document.getElementById('lockScreen').style.display = 'none';
-
             document.getElementById('mainApp').style.display = 'block';
-
             if(isAdmin) document.getElementById('adminPanelBtn').style.display = 'block';
-
             
-
             playerInstance = videojs('my-video');
-
             setupCustomButtons();
-
             
-
-            // לאדן פערמאַנענטע קאסטום טאמבנעילס פון די דאטאבאזע
-
             try {
-
                 const thumbSnapshot = await db.collection('custom_thumbnails').get();
-
                 thumbSnapshot.forEach(doc => { savedThumbnails[doc.id] = doc.data().url; });
-
-            } catch(e) { console.log("Firestore setup pending..."); }
-
-
+            } catch(e) {}
 
             loadFolder(START_FOLDER_ID, "Home");
-
         }
-
-
 
         async function submitAccessRequest() {
-
             const name = document.getElementById('reqName').value.trim();
-
             const email = document.getElementById('reqEmail').value.trim().toLowerCase();
-
             const note = document.getElementById('reqNote').value.trim();
-
-
-
-            if(!name || !email) { alert('Please enter both Name and Email.'); return; }
-
-
+            if(!name || !email) { alert('Fill fields.'); return; }
 
             await db.collection('access_requests').doc(email).set({
-
-                name: name,
-
-                email: email,
-
-                note: note,
-
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
-
+                name: name, email: email, note: note, timestamp: firebase.firestore.FieldValue.serverTimestamp()
             });
-
-
-
-            alert('Your request has been successfully submitted to the Admin Panel!');
-
+            alert('Request submitted to Admin!');
             togglePanels(false);
-
         }
 
-
+        // עפענען דעם באנייטן פאנעל מיט די צוויי טאבס
+        function switchAdminTab(tab) {
+            if(tab === 'requests') {
+                document.getElementById('tabReqBtn').className = 'tab-btn active';
+                document.getElementById('tabUsersBtn').className = 'tab-btn';
+                document.getElementById('secRequests').className = 'panel-section active';
+                document.getElementById('secUsers').className = 'panel-section';
+            } else {
+                document.getElementById('tabReqBtn').className = 'tab-btn';
+                document.getElementById('tabUsersBtn').className = 'tab-btn active';
+                document.getElementById('secRequests').className = 'panel-section';
+                document.getElementById('secUsers').className = 'panel-section active';
+            }
+        }
 
         async function openAdminPanel() {
-
             document.getElementById('adminModal').style.display = 'flex';
+            switchAdminTab('requests');
+            fetchAdminData();
+        }
 
-            const listContainer = document.getElementById('adminRequestsList');
+        async function fetchAdminData() {
+            const reqSection = document.getElementById('secRequests');
+            const usersSection = document.getElementById('secUsers');
+            reqSection.innerHTML = 'Loading...'; usersSection.innerHTML = 'Loading...';
 
-            listContainer.innerHTML = 'Fetching requests...';
-
-
-
-            const snapshot = await db.collection('access_requests').get();
-
-            listContainer.innerHTML = '';
-
-
-
-            if(snapshot.empty) { listContainer.innerHTML = '<p>No pending requests.</p>'; return; }
-
-
-
-            snapshot.forEach(doc => {
-
-                const data = doc.data();
-
-                const item = document.createElement('div');
-
-                item.className = 'req-list-item';
-
-                item.innerHTML = `
-
-                    <div>
-
-                        <strong>${data.name}</strong> (${data.email})<br>
-
-                        <small style="color:var(--text-muted)">Message: ${data.note || 'None'}</small>
-
-                    </div>
-
-                    <button class="nav-btn" style="background-color:var(--drive-green);" onclick="approveUser('${data.email}')">Approve Access</button>
-
-                `;
-
-                listContainer.appendChild(item);
-
+            // 1. פעטשן בקשות
+            const reqSnapshot = await db.collection('access_requests').get();
+            reqSection.innerHTML = reqSnapshot.empty ? '<p>No pending requests.</p>' : '';
+            reqSnapshot.forEach(doc => {
+                const d = doc.data();
+                const div = document.createElement('div'); div.className = 'list-item';
+                div.innerHTML = `<div><strong>${d.name}</strong> (${d.email})</div>
+                                 <button class="action-btn" style="background-color:var(--drive-green)" onclick="approveUser('${d.email}', '${d.name}')">Approve</button>`;
+                reqSection.appendChild(div);
             });
 
+            // 2. פעטשן עקזיסטירנדיגע באנוצער פארן ארויסווארפן סיסטעם
+            const usersSnapshot = await db.collection('allowed_users').get();
+            usersSection.innerHTML = usersSnapshot.empty ? '<p>No active users.</p>' : '';
+            document.getElementById('userCount').innerText = usersSnapshot.size;
+            
+            usersSnapshot.forEach(doc => {
+                const email = doc.id;
+                const d = doc.data();
+                const div = document.createElement('div'); div.className = 'list-item approved';
+                div.innerHTML = `<div><strong>${d.name || 'User'}</strong> (${email}) <br><small style="color:var(--text-muted)">${d.deviceId ? '🔒 Linked to Device' : '⏳ Waiting first login'}</small></div>
+                                 <button class="action-btn" style="background-color:var(--drive-red)" onclick="revokeUser('${email}')">Revoke Access</button>`;
+                usersSection.appendChild(div);
+            });
         }
 
-
-
-        async function approveUser(email) {
-
-            await db.collection('allowed_users').doc(email).set({ approved: true });
-
+        async function approveUser(email, name) {
+            await db.collection('allowed_users').doc(email).set({ approved: true, name: name, deviceId: null });
             await db.collection('access_requests').doc(email).delete();
-
-            alert(`Access granted to ${email}!`);
-
-            openAdminPanel();
-
+            fetchAdminData();
         }
 
-
+        // די פונקציע וואס ווארפט ארויס א מענטש פערמאַנענט און רעסעטעד זיין דעווייס לאק
+        async function revokeUser(email) {
+            if(confirm(`Are you sure you want to remove access for ${email}?`)) {
+                await db.collection('allowed_users').doc(email).delete();
+                alert('Access successfully revoked.');
+                fetchAdminData();
+            }
+        }
 
         async function changeThumbnailPrompt(fileId, event) {
-
             event.stopPropagation();
-
-            const newImgUrl = prompt("Enter the absolute URL of the new image thumbnail:");
-
+            const newImgUrl = prompt("Enter the absolute URL of the new image thumbnail (from ImgBB / Postimages):");
             if (newImgUrl) {
-
                 await db.collection('custom_thumbnails').doc(fileId).set({ url: newImgUrl });
-
                 savedThumbnails[fileId] = newImgUrl;
-
                 const container = document.getElementById(`thumb-${fileId}`);
-
                 container.innerHTML = `<img src="${newImgUrl}" style="width:100%;height:100%;object-fit:cover;">`;
-
                 alert("Thumbnail saved permanently!");
-
             }
-
         }
 
-
-
         async function loadFolder(folderId, folderName) {
-
             const index = folderHistory.findIndex(f => f.id === folderId);
-
             if (index !== -1) { folderHistory = folderHistory.slice(0, index + 1); } 
-
             else { folderHistory.push({ id: folderId, name: folderName }); }
 
-
-
             updateBreadcrumbs();
-
             const foldersGrid = document.getElementById('foldersGrid');
-
             const videosGrid = document.getElementById('videosGrid');
-
             foldersGrid.innerHTML = 'Loading...'; videosGrid.innerHTML = 'Loading...';
 
-
-
             try {
-
                 const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+trashed=false&fields=files(id,name,mimeType,thumbnailLink)&key=${API_KEY}`;
-
                 const response = await fetch(url);
-
                 const data = await response.json();
-
-
 
                 foldersGrid.innerHTML = ''; videosGrid.innerHTML = '';
 
-
-
                 if (data.files && data.files.length > 0) {
-
                     data.files.forEach(file => {
-
                         const card = document.createElement('div');
-
                         const adminStyle = isAdmin ? 'style="display:block;"' : '';
-
                         const adminOverlay = `<div class="admin-card-overlay" ${adminStyle} onclick="changeThumbnailPrompt('${file.id}', event)">⚙️ Edit Thumbnail</div>`;
-
-                        
-
                         const currentThumb = savedThumbnails[file.id] || file.thumbnailLink;
 
-
-
                         if (file.mimeType === 'application/vnd.google-apps.folder') {
-
-                            card.className = 'card folder';
-
-                            card.onclick = () => loadFolder(file.id, file.name);
-
-                            card.innerHTML = `
-
-                                ${adminOverlay}
-
-                                <div class="thumbnail-placeholder" id="thumb-${file.id}">
-
-                                    ${savedThumbnails[file.id] ? `<img src="${savedThumbnails[file.id]}" style="width:100%;height:100%;object-fit:cover;">` : '📁'}
-
-                                </div>
-
-                                <div class="card-info"><p class="card-title">${file.name}</p></div>
-
-                            `;
-
+                            card.className = 'card folder'; card.onclick = () => loadFolder(file.id, file.name);
+                            card.innerHTML = `${adminOverlay}<div class="thumbnail-placeholder" id="thumb-${file.id}">${savedThumbnails[file.id] ? `<img src="${savedThumbnails[file.id]}" style="width:100%;height:100%;object-fit:cover;">` : '📁'}</div><div class="card-info"><p class="card-title">${file.name}</p></div>`;
                             foldersGrid.appendChild(card);
-
                         } else if (file.mimeType.startsWith('video/')) {
-
-                            card.className = 'card video';
-
-                            card.onclick = (e) => { if(!e.target.classList.contains('download-icon-btn') && !e.target.classList.contains('admin-card-overlay')) playVideo(file.id); };
-
-                            card.innerHTML = `
-
-                                ${adminOverlay}
-
-                                <div class="thumbnail-placeholder" id="thumb-${file.id}">
-
-                                    ${currentThumb ? `<img src="${currentThumb}" style="width:100%;height:100%;object-fit:cover;">` : '🎬'}
-
-                                </div>
-
-                                <div class="card-info"><p class="card-title">${file.name}</p></div>
-
-                                <button class="download-icon-btn" onclick="downloadVideo('${file.id}')" title="Download">↓</button>
-
-                            `;
-
+                            card.className = 'card video'; card.onclick = (e) => { if(!e.target.classList.contains('download-icon-btn') && !e.target.classList.contains('admin-card-overlay')) playVideo(file.id); };
+                            card.innerHTML = `${adminOverlay}<div class="thumbnail-placeholder" id="thumb-${file.id}"><img src="${currentThumb || '🎬'}" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='https://via.placeholder.com/220x130?text=Video'"></div><div class="card-info"><p class="card-title">${file.name}</p></div><button class="download-icon-btn" onclick="downloadVideo('${file.id}')">↓</button>`;
                             videosGrid.appendChild(card);
-
                         }
-
                     });
-
-                } else {
-
-                    foldersGrid.innerHTML = '<p style="color:var(--text-muted)">No folders here.</p>';
-
-                    videosGrid.innerHTML = '<p style="color:var(--text-muted)">No videos here.</p>';
-
-                }
-
-            } catch (error) { foldersGrid.innerHTML = '<p style="color:red">Error loading cloud content. Verify your Google API Key.</p>'; }
-
+                } else { foldersGrid.innerHTML = '<p style="color:var(--text-muted)">No folders.</p>'; videosGrid.innerHTML = '<p style="color:var(--text-muted)">No videos.</p>'; }
+            } catch (error) { foldersGrid.innerHTML = '<p style="color:red">Error loading layout.</p>'; }
         }
-
-
 
         function setupCustomButtons() {
-
-            const controlBar = playerInstance.controlBar;
-
-            const volumeControl = controlBar.volumePanel.el();
-
-            const backBtn = document.createElement('button');
-
-            backBtn.className = 'vjs-control vjs-button vjs-skip-button'; backBtn.innerHTML = '⏪';
-
-            backBtn.onclick = function() { playerInstance.currentTime(playerInstance.currentTime() - 10); };
-
-            const fwdBtn = document.createElement('button');
-
-            fwdBtn.className = 'vjs-control vjs-button vjs-skip-button'; fwdBtn.innerHTML = '⏩';
-
-            fwdBtn.onclick = function() { playerInstance.currentTime(playerInstance.currentTime() + 10); };
-
-            volumeControl.parentNode.insertBefore(backBtn, volumeControl.nextSibling);
-
-            backBtn.parentNode.insertBefore(fwdBtn, backBtn.nextSibling);
-
+            const controlBar = playerInstance.controlBar; const volumeControl = controlBar.volumePanel.el();
+            const backBtn = document.createElement('button'); backBtn.className = 'vjs-control vjs-button vjs-skip-button'; backBtn.innerHTML = '⏪'; backBtn.onclick = function() { playerInstance.currentTime(playerInstance.currentTime() - 10); };
+            const fwdBtn = document.createElement('button'); fwdBtn.className = 'vjs-control vjs-button vjs-skip-button'; fwdBtn.innerHTML = '⏩'; fwdBtn.onclick = function() { playerInstance.currentTime(playerInstance.currentTime() + 10); };
+            volumeControl.parentNode.insertBefore(backBtn, volumeControl.nextSibling); backBtn.parentNode.insertBefore(fwdBtn, backBtn.nextSibling);
         }
 
-
-
         function goBack() { if (folderHistory.length > 1) { folderHistory.pop(); const prev = folderHistory[folderHistory.length - 1]; folderHistory.pop(); loadFolder(prev.id, prev.name); } }
-
         function updateBreadcrumbs() { const container = document.getElementById('breadcrumbs'); let html = ''; folderHistory.forEach((folder, idx) => { if (idx === folderHistory.length - 1) { html += `<span>${folder.name}</span>`; } else { html += `<a href="#" onclick="loadFolder('${folder.id}', '${folder.name}')">${folder.name}</a> / `; } }); container.innerHTML = html; }
-
         function playVideo(fileId) { document.getElementById('playerModal').style.display = 'flex'; playerInstance.src({ type: 'video/mp4', src: `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${API_KEY}` }); playerInstance.playbackRates([0.5, 1, 1.25, 1.5, 2]); playerInstance.play(); const videoEl = playerInstance.tech({ IWillNotUseThisInAMonth: true }).el(); playerInstance.off('doubleclick'); playerInstance.off('dblclick'); videoEl.ondblclick = function(e) { const rect = videoEl.getBoundingClientRect(); if ((e.clientX - rect.left) > rect.width / 2) { playerInstance.currentTime(playerInstance.currentTime() + 10); } else { playerInstance.currentTime(playerInstance.currentTime() - 10); } }; }
-
         function closeVideoFromOutside(event) { closeVideo(); }
-
         function closeVideo() { document.getElementById('playerModal').style.display = 'none'; playerInstance.pause(); }
-
         function downloadVideo(fileId) { window.open(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${API_KEY}`, '_blank'); }
-
-    </script></body></html>
+    </script>
+</body>
+</html>
