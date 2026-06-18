@@ -44,19 +44,20 @@
         .nav-btn:hover { background-color: var(--drive-blue); }
         #adminPanelBtn { display: none; background-color: #7b1fa2; }
         
-        /* ☰ Options Hamburger Style */
-        .menu-trigger-btn { background: none; border: none; color: white; font-size: 28px; cursor: pointer; display: flex; align-items: center; }
+        /* ☰ Options Hamburger Style with Red Dot support */
+        .menu-trigger-container { position: relative; display: inline-block; }
+        .menu-trigger-btn { background: none; border: none; color: white; font-size: 28px; cursor: pointer; display: flex; align-items: center; padding: 0; }
+        
+        .global-notification-dot { position: absolute; top: 2px; right: -2px; width: 10px; height: 10px; background-color: var(--drive-red); border-radius: 50%; display: none; border: 2px solid var(--card-bg); }
 
         /* Slide Menu (Side Drawer) */
         .slide-menu { position: fixed; top: 0; right: -320px; width: 320px; height: 100%; background-color: var(--card-bg); box-shadow: -5px 0 25px rgba(0,0,0,0.5); z-index: 1600; transition: right 0.3s ease; padding: 25px; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px; overflow-y: auto; border-left: 2px solid var(--drive-blue); }
         .slide-menu.open { right: 0; }
         .slide-menu-close { background: none; border: none; color: white; font-size: 30px; cursor: pointer; align-self: flex-start; }
-        .slide-section-title { font-size: 16px; color: var(--drive-yellow); border-bottom: 1px solid #25334a; padding-bottom: 5px; margin: 5px 0; font-weight: bold; }
+        .slide-section-title { font-size: 16px; color: var(--drive-yellow); border-bottom: 1px solid #25334a; padding-bottom: 5px; margin: 5px 0; font-weight: bold; position: relative; }
         .theme-select-box { background: #121824; border: 1px solid rgba(255,255,255,0.1); padding: 8px; border-radius: 6px; color: white; width: 100%; cursor: pointer; }
 
-        .badge-red::after { content: ''; position: absolute; top: -3px; right: -3px; width: 10px; height: 10px; background-color: var(--drive-red); border-radius: 50%; border: 2px solid var(--bg-dark); }
-        .tab-btn { position: relative; }
-        .tab-badge-red::after { content: ''; position: absolute; top: 2px; right: 2px; width: 8px; height: 8px; background-color: var(--drive-red); border-radius: 50%; }
+        .red-badge-counter { background-color: var(--drive-red); color: white; font-size: 11px; padding: 2px 6px; border-radius: 10px; float: right; font-weight: bold; margin-top: 2px; }
 
         .profile-pic { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--drive-blue); object-fit: cover; background-color: white; }
         .breadcrumb-container { padding: 15px 25px; background-color: rgba(28, 38, 56, 0.5); display: flex; align-items: center; gap: 10px; }
@@ -137,7 +138,6 @@
         
         .list-item.msg-item { border-left-color: #7b1fa2; align-items: flex-start; flex-direction: column; gap: 5px; cursor: pointer; background-color: #141b27; transition: background 0.2s; }
         .list-item.msg-item.unread { background-color: #222d42; border-left-width: 6px; font-weight: bold; border-left-color: var(--drive-red); }
-        .unread-badge { background-color: var(--drive-red); color: white; font-size: 11px; padding: 2px 6px; border-radius: 4px; margin-left: 8px; font-weight: bold; }
 
         /* קאנטאקט באר */
         .footer-contact-bar { position: fixed; bottom: 0; left: 0; width: 100%; background-color: var(--card-bg); border-top: 3px solid var(--drive-yellow); padding: 15px 25px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; gap: 15px; z-index: 900; box-shadow: 0 -5px 15px rgba(0,0,0,0.3); }
@@ -146,29 +146,35 @@
         .footer-contact-bar input { background-color: var(--bg-dark); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 11px; border-radius: 6px; font-size: 14px; flex-grow: 1; max-width: 650px; box-sizing: border-box; }
         .footer-contact-bar button { background-color: var(--drive-yellow); color: #121824; border: none; padding: 11px 22px; font-weight: bold; border-radius: 6px; cursor: pointer; font-size: 14px; white-space: nowrap; }
 
-        /* פורום */
+        /* פארום & קאמענטארן */
         .updates-container { max-width: 900px; margin: 30px auto; padding: 0 20px; }
         .admin-editor-box { background-color: var(--card-bg); padding: 20px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 30px; display: none; }
+        
+        /* פולקאמע עדיטאר סטיילס */
         .ql-container.ql-snow { border: 1px solid #25334a !important; background: #121824; color: white; border-radius: 0 0 6px 6px; font-size: 15px; }
         .ql-toolbar.ql-snow { background: #25334a; border: 1px solid #25334a !important; border-radius: 6px 6px 0 0; }
+        .ql-snow .ql-stroke { stroke: #fff !important; }
+        .ql-snow .ql-fill { fill: #fff !important; }
+        .ql-snow .ql-picker { color: #fff !important; }
+        .ql-snow .ql-picker-options { background-color: var(--card-bg) !important; border: 1px solid #25334a !important; }
         
         .blog-post { background-color: var(--card-bg); border-radius: 8px; border-top: 4px solid var(--drive-yellow); padding: 25px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
         .blog-time { font-size: 12px; color: var(--text-muted); margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
         .blog-body { font-size: 16px; color: #f1f5f9; line-height: 1.6; }
+        .blog-body img { max-width: 100%; border-radius: 6px; margin: 10px 0; }
         
         .thread-section { margin-top: 25px; border-top: 1px solid #25334a; padding-top: 20px; }
-        .comment-wrapper { display: flex; flex-direction: column; width: 100%; }
         .comment-box { background: #141b27; padding: 12px 16px; border-radius: 6px; margin-top: 10px; border-right: 3px solid var(--drive-blue); position: relative; box-sizing: border-box; }
-        .replies-container { padding-left: 25px; border-left: 1px dashed rgba(255,255,255,0.05); width: 100%; box-sizing: border-box; }
         
-        .reaction-row { display: flex; gap: 8px; align-items: center; margin-top: 8px; font-size: 13px; flex-wrap: wrap; }
-        .react-btn { background: #25334a; border: none; color: white; padding: 4px 8px; border-radius: 4px; cursor: pointer; position: relative; font-size: 12px; display: flex; align-items: center; gap: 4px; }
-        .react-btn:hover { background: var(--drive-blue); }
-        .react-tooltip { display: none; position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.9); color: white; padding: 5px 10px; border-radius: 4px; font-size: 11px; white-space: nowrap; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); }
-        .react-btn:hover .react-tooltip { display: block; }
-        .comment-input-row { display: flex; gap: 10px; margin-top: 15px; width: 100%; box-sizing: border-box; }
-        .comment-input-row input { flex-grow: 1; background: #121824; border: 1px solid #25334a; border-radius: 6px; padding: 10px; color: white; font-size: 14px; }
-        .comment-input-row button { background: var(--drive-blue); color: white; border: none; padding: 0 15px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        /* נייע עמאדזשי פאנעל פאר יוזערס */
+        .emoji-reactions-bar { display: flex; gap: 5px; margin-top: 8px; flex-wrap: wrap; align-items: center; }
+        .emoji-btn { background: #25334a; border: none; color: white; padding: 3px 7px; border-radius: 4px; cursor: pointer; font-size: 12px; display: flex; align-items: center; gap: 4px; transition: background 0.2s; }
+        .emoji-btn:hover { background: var(--drive-blue); }
+        .emoji-btn.active { background: #0d47a1; border: 1px solid var(--drive-blue); }
+        .reply-trigger-link { font-size: 12px; color: var(--drive-yellow); cursor: pointer; margin-left: 12px; font-weight: bold; text-decoration: none; display: inline-block; margin-top: 8px; }
+        .reply-trigger-link:hover { text-decoration: underline; }
+
+        .nested-replies-container { padding-left: 20px; border-left: 2px dashed #25334a; margin-top: 10px; display: flex; flex-direction: column; gap: 5px; width: 100%; box-sizing: border-box; }
     </style>
 </head>
 <body>
@@ -205,9 +211,9 @@
         <div class="slide-section-title">Navigation Controls</div>
         <button class="nav-btn" style="margin-bottom:10px; background-color: var(--drive-blue);" onclick="toggleOptionsDrawer(false); backToMainHomeBase()">🏠 Home Base</button>
         <button class="nav-btn" style="margin-bottom:10px;" onclick="toggleOptionsDrawer(false); showAppPage('favorites')">⭐ Bookmarked Favorites</button>
-        <button class="nav-btn" style="margin-bottom:10px;" id="updatesMenuBtn" onclick="toggleOptionsDrawer(false); showAppPage('updates')">📰 Updates & Forum</button>
+        <button class="nav-btn" style="margin-bottom:10px;" id="updatesMenuBtn" onclick="toggleOptionsDrawer(false); showAppPage('updates')">📰 Updates & Forum <span class="red-badge-counter" id="badgeForumNav" style="display:none;">!</span></button>
         <a href="about.html" class="nav-btn" style="text-align:center; margin-bottom:10px; text-decoration:none;">👤 About Me</a>
-        <button id="adminPanelBtn" class="nav-btn" style="margin-bottom:10px;" onclick="toggleOptionsDrawer(false); openAdminPanel()">⚙️ Admin Panel</button>
+        <button id="adminPanelBtn" class="nav-btn" style="margin-bottom:10px;" onclick="toggleOptionsDrawer(false); openAdminPanel()">⚙️ Admin Panel <span class="red-badge-counter" id="badgeAdminNav" style="display:none;">0</span></button>
 
         <div class="slide-section-title">Theme Customizer</div>
         <select class="theme-select-box" style="margin-bottom: 15px;" onchange="changeTheme(this.value)">
@@ -217,8 +223,7 @@
             <option value="accent-purple">Royal Purple</option>
         </select>
 
-        <!-- Curated Trending / Popular Section - Moved here inside the bar ONLY -->
-        <div class="slide-section-title">Trending & Popular Pinned</div>
+        <div class="slide-section-title">Trending & Popular Pinned <span class="red-badge-counter" id="badgePopularNav" style="display:none;">New</span></div>
         <div id="trendingGrid" style="display: flex; flex-direction: column; gap: 10px; max-height: 250px; overflow-y: auto; padding-right: 5px;">Loading curated trends...</div>
     </div>
 
@@ -226,8 +231,11 @@
         <header>
             <div class="brand-area"><h1 onclick="backToMainHomeBase()">sofer video cloud</h1></div>
             <div class="menu-area">
-                <!-- ☰ Options Menu Trigger -->
-                <button class="menu-trigger-btn" id="menuHamburgerBtn" onclick="toggleOptionsDrawer(true)">☰</button>
+                <div class="menu-trigger-container">
+                    <!-- ☰ Options Menu Trigger with Red notification indicator dot -->
+                    <button class="menu-trigger-btn" id="menuHamburgerBtn" onclick="toggleOptionsDrawer(true)">☰</button>
+                    <div class="global-notification-dot" id="globalAlertDot"></div>
+                </div>
                 <img src="logo.png" class="profile-pic" alt="Profile" onerror="this.src='https://via.placeholder.com/45?text=sofer'">
             </div>
         </header>
@@ -276,7 +284,7 @@
             <div class="updates-container">
                 <div class="admin-editor-box" id="adminEditorBox">
                     <h3 style="margin-top:0; color:var(--drive-yellow);" id="editorBoxTitle">Publish a Rich Update</h3>
-                    <div id="editor-container" style="height: 200px; margin-bottom: 15px;"></div>
+                    <div id="editor-container" style="height: 250px; margin-bottom: 15px;"></div>
                     <button class="nav-btn" style="background-color: var(--drive-green); text-align:center;" onclick="publishAdminUpdate()">Publish Post</button>
                 </div>
                 <div id="blogPostsList">Loading threads...</div>
@@ -294,6 +302,7 @@
     <!-- Admin Panel Modal -->
     <div class="admin-modal" id="adminModal">
         <div class="admin-content">
+            <button class="close-player" style="right: 50px; font-size:14px; background:var(--drive-blue); padding:5px 10px; border-radius:4px; top:-35px;" onclick="hideAdminPanel(); backToMainHomeBase();">🏠 Go to Home Base</button>
             <button class="close-player" onclick="hideAdminPanel()">×</button>
             <h2 style="color: var(--drive-yellow); margin-top:0; margin-bottom: 20px;">sofer Cloud Admin Panel</h2>
             <div class="admin-tabs">
@@ -359,19 +368,30 @@
         let playerInstance = null; let isAdmin = false; let savedThumbnails = {}; let quillEditor = null;
         let loggedInUserEmail = ""; let loggedInUserName = "User"; let currentPlayingFileId = null;
         let currentSearchTimeout = null; let isPipActive = false; let generatedVerificationCode = "";
-        let currentEditingPostId = null;
+
+        // Notification States
+        let lastSeenPostCount = parseInt(localStorage.getItem('sofer_seen_posts') || '0');
+        let lastSeenPopularCount = parseInt(localStorage.getItem('sofer_seen_popular') || '0');
+        let activeRequestsCount = 0;
 
         window.onload = function() {
             const savedEmail = localStorage.getItem('soferUserEmail');
             const savedName = localStorage.getItem('soferUserName') || "Approved User";
             if (savedEmail) { loggedInUserEmail = savedEmail; loggedInUserName = savedName; autoLogin(savedEmail); }
             const savedTheme = localStorage.getItem('sofer_theme'); if(savedTheme) changeTheme(savedTheme);
-            listenForUpdates();
+            setupNotificationListeners();
         };
 
         function toggleOptionsDrawer(open) {
             const menu = document.getElementById('optionsSlideMenu');
-            if(open) menu.classList.add('open'); else menu.classList.remove('open');
+            if(open) {
+                menu.classList.add('open');
+                // Clear popular badge upon opening options side drawer
+                document.getElementById('badgePopularNav').style.display = 'none';
+                checkGlobalNotificationState();
+            } else {
+                menu.classList.remove('open');
+            }
         }
 
         function changeTheme(theme) {
@@ -396,10 +416,57 @@
             document.getElementById('updatesPage').style.display = 'none';
             document.getElementById('favoritesPage').style.display = 'none';
             
-            if(page === 'updates') { document.getElementById('updatesPage').style.display = 'block'; loadBlogPosts(); } 
+            if(page === 'updates') { 
+                document.getElementById('updatesPage').style.display = 'block'; 
+                loadBlogPosts();
+                document.getElementById('badgeForumNav').style.display = 'none';
+            } 
             else if(page === 'favorites') { document.getElementById('favoritesPage').style.display = 'block'; renderFavorites(); } 
             else { document.getElementById('librarySection').style.display = 'block'; renderContinueWatching(); }
             loadTrendingVideos();
+            setTimeout(checkGlobalNotificationState, 1000);
+        }
+
+        /* --- גלאבאלע נאָטיפיקאַטיאָן סיסטעם --- */
+        function setupNotificationListeners() {
+            db.collection('forum_posts').onSnapshot(snap => {
+                if(snap.size > lastSeenPostCount && document.getElementById('updatesPage').style.display !== 'block') {
+                    document.getElementById('badgeForumNav').style.display = 'inline-block';
+                }
+                localStorage.setItem('sofer_total_posts', snap.size);
+                checkGlobalNotificationState();
+            });
+
+            db.collection('trending_videos').onSnapshot(snap => {
+                if(snap.size > lastSeenPopularCount) {
+                    document.getElementById('badgePopularNav').style.display = 'inline-block';
+                }
+                localStorage.setItem('sofer_total_popular', snap.size);
+                checkGlobalNotificationState();
+            });
+
+            db.collection('access_requests').onSnapshot(snap => {
+                activeRequestsCount = snap.size;
+                if(isAdmin && snap.size > 0) {
+                    document.getElementById('badgeAdminNav').style.display = 'inline-block';
+                    document.getElementById('badgeAdminNav').innerText = snap.size;
+                } else {
+                    document.getElementById('badgeAdminNav').style.display = 'none';
+                }
+                checkGlobalNotificationState();
+            });
+        }
+
+        function checkGlobalNotificationState() {
+            const isForumAlert = document.getElementById('badgeForumNav').style.display === 'inline-block';
+            const isPopularAlert = document.getElementById('badgePopularNav').style.display === 'inline-block';
+            const isAdminAlert = isAdmin && activeRequestsCount > 0;
+
+            if(isForumAlert || isPopularAlert || isAdminAlert) {
+                document.getElementById('globalAlertDot').style.display = 'block';
+            } else {
+                document.getElementById('globalAlertDot').style.display = 'none';
+            }
         }
 
         function togglePanels(showRequest) {
@@ -459,7 +526,20 @@
             if(isAdmin) {
                 document.getElementById('adminPanelBtn').style.display = 'block';
                 document.getElementById('adminEditorBox').style.display = 'block';
-                quillEditor = new Quill('#editor-container', { modules: { toolbar: [['bold', 'italic', 'underline']] }, theme: 'snow' });
+                
+                // פולקאמע ריטש טעקסט עדיטאר מיט אלע אפציעס
+                quillEditor = new Quill('#editor-container', { 
+                    modules: { 
+                        toolbar: [
+                            [{ 'font': [] }, { 'size': ['small', false, 'large', 'huge'] }],
+                            ['bold', 'italic', 'underline', 'strike'],
+                            [{ 'color': [] }, { 'background': [] }],
+                            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                            ['link', 'image', 'clean']
+                        ] 
+                    }, 
+                    theme: 'snow' 
+                });
             }
             document.getElementById('userDisplayBadge').innerText = `${loggedInUserName}`;
             
@@ -478,53 +558,36 @@
             } catch(e) {}
             loadFolder(START_FOLDER_ID, "Home");
             loadTrendingVideos();
-            setTimeout(() => { setupCustomButtons(); }, 1000);
+            setTimeout(() => { setupCustomButtons(); setupNotificationListeners(); }, 1000);
         }
 
-        /* --- גלאבאלע סעירטש סיסטעם פונעם גאנצן דרייוו פערפעקט --- */
         function filterGlobalCloudContent() {
             clearTimeout(currentSearchTimeout);
             const query = document.getElementById('cloudSearchInput').value.toLowerCase().trim();
-            
             if(query === "") {
                 const curFolder = folderHistory[folderHistory.length - 1] || { id: START_FOLDER_ID, name: "Home" };
                 folderHistory.pop(); loadFolder(curFolder.id, curFolder.name); return;
             }
-
             currentSearchTimeout = setTimeout(async () => {
-                const foldersGrid = document.getElementById('foldersGrid');
-                const videosGrid = document.getElementById('videosGrid');
-                foldersGrid.innerHTML = '<p>Searching total system cloud archive...</p>';
-                videosGrid.innerHTML = '<p>Searching total system cloud archive...</p>';
-
+                const foldersGrid = document.getElementById('foldersGrid'); const videosGrid = document.getElementById('videosGrid');
+                foldersGrid.innerHTML = '<p>Searching total system cloud archive...</p>'; videosGrid.innerHTML = '<p>Searching total system cloud archive...</p>';
                 try {
                     const escapedQuery = query.replace(/'/g, "\\'");
                     const url = `https://www.googleapis.com/drive/v3/files?q=name+contains+'${escapedQuery}'+and+trashed=false&fields=files(id,name,mimeType,thumbnailLink)&key=${API_KEY}`;
                     const res = await fetch(url); const data = await res.json();
-                    
                     foldersGrid.innerHTML = ''; videosGrid.innerHTML = '';
                     let favs = JSON.parse(localStorage.getItem('sofer_favs') || '[]');
-
                     if (data.files && data.files.length > 0) {
                         data.files.forEach(file => {
-                            const card = document.createElement('div');
-                            card.setAttribute('data-id', file.id); card.setAttribute('data-name', file.name);
-                            card.setAttribute('data-thumb', savedThumbnails[file.id] || file.thumbnailLink || '');
+                            const card = document.createElement('div'); card.setAttribute('data-id', file.id); card.setAttribute('data-name', file.name); card.setAttribute('data-thumb', savedThumbnails[file.id] || file.thumbnailLink || '');
                             const isFav = favs.some(f => f.id === file.id) ? '❤️' : '🤍';
-                            const adminOverlayHtml = isAdmin ? `
-                                <div class="admin-card-overlay" style="display:block;" onclick="changeThumbnailPrompt('${file.id}', event)">⚙️ Thumbnail</div>
-                                <div class="admin-popular-overlay" style="display:block;" onclick="markAsPopularManual('${file.id}', '${file.name.replace(/'/g, "\\'")}', event)">⭐ Set Popular</div>
-                                <div class="admin-unpopular-overlay" style="display:block;" onclick="removeFromPopularManual('${file.id}', event)">❌ Unset Popular</div>
-                            ` : '';
-
+                            const adminOverlayHtml = isAdmin ? `<div class="admin-card-overlay" style="display:block;" onclick="changeThumbnailPrompt('${file.id}', event)">⚙️ Thumbnail</div><div class="admin-popular-overlay" style="display:block;" onclick="markAsPopularManual('${file.id}', '${file.name.replace(/'/g, "\\'")}', event)">⭐ Set Popular</div><div class="admin-unpopular-overlay" style="display:block;" onclick="removeFromPopularManual('${file.id}', event)">❌ Unset Popular</div>` : '';
                             if (file.mimeType === 'application/vnd.google-apps.folder') {
-                                card.className = 'card folder';
-                                card.onclick = () => { document.getElementById('cloudSearchInput').value = ''; loadFolder(file.id, file.name); };
+                                card.className = 'card folder'; card.onclick = () => { document.getElementById('cloudSearchInput').value = ''; loadFolder(file.id, file.name); };
                                 card.innerHTML = `${adminOverlayHtml}<div class="thumbnail-placeholder">${savedThumbnails[file.id] ? `<img src="${savedThumbnails[file.id]}" style="width:100%;height:100%;object-fit:cover;">` : '📁'}</div><div class="card-info"><p class="card-title">${file.name}</p></div>`;
                                 foldersGrid.appendChild(card);
                             } else if (file.mimeType.startsWith('video/')) {
-                                card.className = 'card video';
-                                card.onclick = (e) => { if(!e.target.classList.contains('download-icon-btn') && !e.target.classList.contains('admin-card-overlay') && !e.target.classList.contains('admin-popular-overlay') && !e.target.classList.contains('admin-unpopular-overlay') && !e.target.classList.contains('fav-btn')) playVideo(file.id); };
+                                card.className = 'card video'; card.onclick = (e) => { if(!e.target.classList.contains('download-icon-btn') && !e.target.classList.contains('admin-card-overlay') && !e.target.classList.contains('admin-popular-overlay') && !e.target.classList.contains('admin-unpopular-overlay') && !e.target.classList.contains('fav-btn')) playVideo(file.id); };
                                 card.innerHTML = `${adminOverlayHtml}<button class="fav-btn" onclick="toggleFavorite('${file.id}', event)">${isFav}</button><div class="thumbnail-placeholder"><img src="${savedThumbnails[file.id] || file.thumbnailLink || '🎬'}" style="width:100%;height:100%;object-fit:cover;"></div><div class="card-info"><p class="card-title">${file.name}</p></div><button class="download-icon-btn" onclick="downloadVideo('${file.id}')">↓</button>`;
                                 videosGrid.appendChild(card);
                             }
@@ -536,11 +599,9 @@
             }, 600);
         }
 
-        /* --- מאנועלע פאפולער קנעפּלעך פארן אדמין --- */
         async function markAsPopularManual(fileId, title, event) {
             event.stopPropagation();
-            const cardEl = document.querySelector(`[data-id="${fileId}"]`);
-            const thumb = cardEl ? cardEl.getAttribute('data-thumb') : '';
+            const cardEl = document.querySelector(`[data-id="${fileId}"]`); const thumb = cardEl ? cardEl.getAttribute('data-thumb') : '';
             await db.collection('trending_videos').doc(fileId).set({ title: title, thumb: thumb || '', views: 100 });
             alert('Pinned to Trending & Popular list successfully!'); loadTrendingVideos();
         }
@@ -555,47 +616,25 @@
 
         function saveVideoProgress(fileId, time, duration) {
             let progressList = JSON.parse(localStorage.getItem('sofer_progress') || '{}');
-            const cardEl = document.querySelector(`[data-id="${fileId}"]`);
-            const title = cardEl ? cardEl.getAttribute('data-name') : 'Video';
-            const thumb = cardEl ? cardEl.getAttribute('data-thumb') : '';
+            const cardEl = document.querySelector(`[data-id="${fileId}"]`); const title = cardEl ? cardEl.getAttribute('data-name') : 'Video'; const thumb = cardEl ? cardEl.getAttribute('data-thumb') : '';
             progressList[fileId] = { time: time, duration: duration, title: title, thumb: thumb, timestamp: Date.now() };
             localStorage.setItem('sofer_progress', JSON.stringify(progressList));
         }
 
-        function clearVideoProgress(fileId) {
-            let progressList = JSON.parse(localStorage.getItem('sofer_progress') || '{}');
-            delete progressList[fileId]; localStorage.setItem('sofer_progress', JSON.stringify(progressList));
-        }
-
-        function removeContinueItem(fileId, event) {
-            event.stopPropagation(); clearVideoProgress(fileId); renderContinueWatching();
-        }
+        function clearVideoProgress(fileId) { let progressList = JSON.parse(localStorage.getItem('sofer_progress') || '{}'); delete progressList[fileId]; localStorage.setItem('sofer_progress', JSON.stringify(progressList)); }
+        function removeContinueItem(fileId, event) { event.stopPropagation(); clearVideoProgress(fileId); renderContinueWatching(); }
 
         function renderContinueWatching() {
-            const container = document.getElementById('continueGrid');
-            const wrapper = document.getElementById('continueWatchingWrapper');
-            const currentFolder = folderHistory[folderHistory.length - 1];
-            
+            const container = document.getElementById('continueGrid'); const wrapper = document.getElementById('continueWatchingWrapper'); const currentFolder = folderHistory[folderHistory.length - 1];
             if (!currentFolder || currentFolder.id !== START_FOLDER_ID) { wrapper.style.display = 'none'; return; }
-            container.innerHTML = '';
-            let progressList = JSON.parse(localStorage.getItem('sofer_progress') || '{}');
-            let items = Object.keys(progressList);
-
+            container.innerHTML = ''; let progressList = JSON.parse(localStorage.getItem('sofer_progress') || '{}'); let items = Object.keys(progressList);
             if (items.length === 0) { wrapper.style.display = 'none'; return; }
             wrapper.style.display = 'block';
-
             items.forEach(id => {
                 const item = progressList[id]; const pct = (item.time / item.duration) * 100;
                 const card = document.createElement('div'); card.className = 'card video';
                 card.onclick = () => { playVideo(id); setTimeout(() => { playerInstance.currentTime(item.time); }, 800); };
-                card.innerHTML = `
-                    <button class="close-continue-btn" onclick="removeContinueItem('${id}', event)">×</button>
-                    <div class="thumbnail-placeholder">
-                        <img src="${item.thumb || '🎬'}" style="width:100%;height:100%;object-fit:cover;">
-                        <div class="continue-progress-bg"><div class="continue-progress-fill" style="width: ${pct}%"></div></div>
-                    </div>
-                    <div class="card-info"><p class="card-title">${item.title}</p></div>
-                `;
+                card.innerHTML = `<button class="close-continue-btn" onclick="removeContinueItem('${id}', event)">×</button><div class="thumbnail-placeholder"><img src="${item.thumb || '🎬'}" style="width:100%;height:100%;object-fit:cover;"><div class="continue-progress-bg"><div class="continue-progress-fill" style="width: ${pct}%"></div></div></div><div class="card-info"><p class="card-title">${item.title}</p></div>`;
                 container.appendChild(card);
             });
         }
@@ -605,15 +644,18 @@
             db.collection('trending_videos').orderBy('views', 'desc').limit(5).onSnapshot(snap => {
                 container.innerHTML = '';
                 if(snap.empty) { container.innerHTML = '<p style="font-size:13px; color:var(--text-muted);">No popular media.</p>'; return; }
+                
+                // Track count for notifications
+                if(document.getElementById('optionsSlideMenu').classList.contains('open')) {
+                    lastSeenPopularCount = snap.size;
+                    localStorage.setItem('sofer_seen_popular', snap.size);
+                }
+
                 snap.forEach(doc => {
-                    const data = doc.data(); 
-                    const row = document.createElement('div');
+                    const data = doc.data(); const row = document.createElement('div');
                     row.style.cssText = "display:flex; align-items:center; gap:10px; background:#25334a; padding:8px; border-radius:6px; cursor:pointer;";
                     row.onclick = () => { toggleOptionsDrawer(false); playVideo(doc.id); };
-                    row.innerHTML = `
-                        <img src="${data.thumb || 'logo.png'}" style="width:50px; height:35px; object-fit:cover; border-radius:4px;">
-                        <div style="font-size:13px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:180px;">${data.title}</div>
-                    `;
+                    row.innerHTML = `<img src="${data.thumb || 'logo.png'}" style="width:50px; height:35px; object-fit:cover; border-radius:4px;"><div style="font-size:13px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:180px;">${data.title}</div>`;
                     container.appendChild(row);
                 });
             });
@@ -625,7 +667,7 @@
                 recRow.innerHTML = ''; const data = doc.exists ? doc.data() : {};
                 ['thumb', 'heart', 'fire', 'wow'].forEach(type => {
                     const count = data['react_' + type] ? Object.keys(data['react_' + type]).length : 0;
-                    recRow.innerHTML += `<button class="react-btn" onclick="toggleVideoReaction('${fileId}', '${type}')">${type==='thumb'?'👍':type==='heart'?'❤️':type==='fire'?'🔥':'😮'} <span>${count}</span></button>`;
+                    recRow.innerHTML += `<button class="react-btn" onclick="toggleVideoReaction('${fileId}', '${type}')">${type=='thumb'?'👍':type=='heart'?'❤️':type=='fire'?'🔥':'😮'} <span>${count}</span></button>`;
                 });
             });
             const comList = document.getElementById('videoCommentsList');
@@ -650,9 +692,7 @@
 
         function toggleFavorite(fileId, event) {
             event.stopPropagation(); let favs = JSON.parse(localStorage.getItem('sofer_favs') || '[]');
-            const cardEl = document.querySelector(`[data-id="${fileId}"]`);
-            const title = cardEl ? cardEl.getAttribute('data-name') : 'Video';
-            const thumb = cardEl ? cardEl.getAttribute('data-thumb') : '';
+            const cardEl = document.querySelector(`[data-id="${fileId}"]`); const title = cardEl ? cardEl.getAttribute('data-name') : 'Video'; const thumb = cardEl ? cardEl.getAttribute('data-thumb') : '';
             const index = favs.findIndex(f => f.id === fileId);
             if (index === -1) { favs.push({ id: fileId, title: title, thumb: thumb }); event.target.innerText = '❤️'; } 
             else { favs.splice(index, 1); event.target.innerText = '🤍'; }
@@ -660,8 +700,7 @@
         }
 
         function renderFavorites() {
-            const container = document.getElementById('favoritesGrid'); container.innerHTML = '';
-            let favs = JSON.parse(localStorage.getItem('sofer_favs') || '[]');
+            const container = document.getElementById('favoritesGrid'); container.innerHTML = ''; let favs = JSON.parse(localStorage.getItem('sofer_favs') || '[]');
             if (favs.length === 0) { container.innerHTML = '<p>No favorites added yet.</p>'; return; }
             favs.forEach(item => {
                 const card = document.createElement('div'); card.className = 'card video'; card.onclick = () => playVideo(item.id);
@@ -670,6 +709,7 @@
             });
         }
 
+        /* --- קאמיוניטי פארום & עמאָדזשיס & Infinite Replies --- */
         async function publishAdminUpdate() {
             const htmlContent = quillEditor.root.innerHTML; if(quillEditor.getText().trim().length === 0) return;
             await db.collection('forum_posts').add({ content: htmlContent, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
@@ -680,6 +720,10 @@
             const listContainer = document.getElementById('blogPostsList'); listContainer.innerHTML = 'Loading threads...';
             db.collection('forum_posts').orderBy('timestamp', 'desc').onSnapshot(snapshot => {
                 listContainer.innerHTML = '';
+                
+                lastSeenPostCount = snapshot.size;
+                localStorage.setItem('sofer_seen_posts', snapshot.size);
+
                 snapshot.forEach(doc => {
                     const postData = doc.data(); const postId = doc.id;
                     const timeString = postData.timestamp ? postData.timestamp.toDate().toLocaleString() : 'Just now';
@@ -687,30 +731,93 @@
                     postElement.innerHTML = `
                         <div class="blog-time"><span>📅 Published: ${timeString}</span></div>
                         <div class="blog-body">${postData.content}</div>
+                        
+                        <!-- Emoji panel for Main Post -->
+                        <div class="emoji-reactions-bar" id="reactions-post-${postId}"></div>
+
                         <div class="thread-section">
-                            <div id="comments-list-${postId}">Loading posts...</div>
-                            <div class="comment-input-row">
-                                <input type="text" id="input-${postId}" placeholder="Write a message in thread...">
-                                <button onclick="submitComment('${postId}')">Post</button>
+                            <div id="nested-comments-root-${postId}" style="display:flex; flex-direction:column; gap:8px;">Loading conversations...</div>
+                            <div class="comment-input-row" style="margin-top:15px;">
+                                <input type="text" id="input-root-${postId}" placeholder="Write a message in thread...">
+                                <button onclick="submitNestedComment('${postId}', 'root')">Post</button>
                             </div>
                         </div>`;
-                    listContainer.appendChild(postElement); loadCommentsForPost(postId);
+                    listContainer.appendChild(postElement);
+                    listenToReactions('forum_posts', postId, `reactions-post-${postId}`);
+                    loadNestedComments(postId, 'root', `nested-comments-root-${postId}`);
                 });
             });
         }
 
-        async function submitComment(postId) {
-            const inputField = document.getElementById(`input-${postId}`); const text = inputField.value.trim(); if(!text) return;
-            await db.collection('forum_posts').doc(postId).collection('comments').add({ userName: loggedInUserName, commentText: text, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
+        async function submitNestedComment(postId, parentId) {
+            const inputField = document.getElementById(`input-${parentId}-${postId}`); const text = inputField.value.trim(); if(!text) return;
+            await db.collection('forum_posts').doc(postId).collection('comments').add({
+                userName: loggedInUserName,
+                commentText: text,
+                parentId: parentId,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
             inputField.value = '';
         }
 
-        function loadCommentsForPost(postId) {
-            const container = document.getElementById(`comments-list-${postId}`);
-            db.collection('forum_posts').doc(postId).collection('comments').orderBy('timestamp', 'asc').onSnapshot(snap => {
-                container.innerHTML = ''; if(snap.empty) { container.innerHTML = '<p style="font-size:12px; color:var(--text-muted);">No thread replies yet.</p>'; return; }
-                snap.forEach(cDoc => { const c = cDoc.data(); container.innerHTML += `<div class="comment-box"><div class="comment-meta"><span class="comment-user">${c.userName}</span></div><div class="comment-text">${c.commentText}</div></div>`; });
+        function loadNestedComments(postId, targetParentId, containerId) {
+            const container = document.getElementById(containerId);
+            db.collection('forum_posts').doc(postId).collection('comments').where('parentId', '==', targetParentId).orderBy('timestamp', 'asc').onSnapshot(snap => {
+                container.innerHTML = '';
+                if(snap.empty) {
+                    if(targetParentId === 'root') container.innerHTML = '<p style="font-size:12px; color:var(--text-muted);">No thread replies yet.</p>';
+                    return;
+                }
+                snap.forEach(cDoc => {
+                    const c = cDoc.data(); const commentId = cDoc.id;
+                    const cBox = document.createElement('div'); cBox.className = 'comment-box';
+                    cBox.innerHTML = `
+                        <div class="comment-meta"><span class="comment-user">${c.userName}</span></div>
+                        <div class="comment-text">${c.commentText}</div>
+                        
+                        <!-- Emoji panel for Comment Reply -->
+                        <div class="emoji-reactions-bar" id="reactions-comment-${commentId}"></div>
+
+                        <a class="reply-trigger-link" onclick="toggleReplyInputBox('${postId}', '${commentId}')">↳ Reply</a>
+                        <div id="reply-box-wrapper-${commentId}" style="display:none; margin-top:10px;">
+                            <div class="comment-input-row">
+                                <input type="text" id="input-${commentId}-${postId}" placeholder="Reply to ${c.userName}...">
+                                <button onclick="submitNestedComment('${postId}', '${commentId}')">Reply</button>
+                            </div>
+                        </div>
+                        <div class="nested-replies-container" id="nested-container-${commentId}"></div>
+                    `;
+                    container.appendChild(cBox);
+                    listenToReactions(`forum_posts/${postId}/comments`, commentId, `reactions-comment-${commentId}`);
+                    loadNestedComments(postId, commentId, `nested-container-${commentId}`);
+                });
             });
+        }
+
+        function toggleReplyInputBox(postId, commentId) {
+            const box = document.getElementById(`reply-box-wrapper-${commentId}`);
+            box.style.display = box.style.display === 'none' ? 'block' : 'none';
+        }
+
+        /* --- גלאבאלע עמוזשי רעאקציעס פונקציעס --- */
+        function listenToReactions(collectionPath, docId, targetElementId) {
+            db.collection(collectionPath).doc(docId).onSnapshot(doc => {
+                const el = document.getElementById(targetElementId); if(!el) return;
+                el.innerHTML = ''; const data = doc.exists ? doc.data() : {};
+                ['👍', '❤️', '🔥', '😮', '😂', '😢'].forEach(emoji => {
+                    const reactMap = data['emoji_' + emoji] || {};
+                    const count = Object.keys(reactMap).length;
+                    const hasReacted = reactMap[loggedInUserEmail] ? 'active' : '';
+                    el.innerHTML += `<button class="emoji-btn ${hasReacted}" onclick="toggleEmojiReaction('${collectionPath}', '${docId}', '${emoji}')">${emoji} <span>${count}</span></button>`;
+                });
+            });
+        }
+
+        async function toggleEmojiReaction(collectionPath, docId, emoji) {
+            const ref = db.collection(collectionPath).doc(docId); const doc = await ref.get();
+            let data = doc.exists ? doc.data() : {}; let current = data['emoji_' + emoji] || {};
+            if(current[loggedInUserEmail]) delete current[loggedInUserEmail]; else current[loggedInUserEmail] = loggedInUserName;
+            await ref.set({ ['emoji_' + emoji]: current }, { merge: true });
         }
 
         async function loadFolder(folderId, folderName) {
@@ -726,11 +833,7 @@
                 data.files.forEach(file => {
                     const card = document.createElement('div'); card.setAttribute('data-id', file.id); card.setAttribute('data-name', file.name); card.setAttribute('data-thumb', savedThumbnails[file.id] || file.thumbnailLink || '');
                     const isFav = favs.some(f => f.id === file.id) ? '❤️' : '🤍';
-                    const adminOverlayHtml = isAdmin ? `
-                        <div class="admin-card-overlay" style="display:block;" onclick="changeThumbnailPrompt('${file.id}', event)">⚙️ Thumbnail</div>
-                        <div class="admin-popular-overlay" style="display:block;" onclick="markAsPopularManual('${file.id}', '${file.name.replace(/'/g, "\\'")}', event)">⭐ Set Popular</div>
-                        <div class="admin-unpopular-overlay" style="display:block;" onclick="removeFromPopularManual('${file.id}', event)">❌ Unset Popular</div>
-                    ` : '';
+                    const adminOverlayHtml = isAdmin ? `<div class="admin-card-overlay" style="display:block;" onclick="changeThumbnailPrompt('${file.id}', event)">⚙️ Thumbnail</div><div class="admin-popular-overlay" style="display:block;" onclick="markAsPopularManual('${file.id}', '${file.name.replace(/'/g, "\\'")}', event)">⭐ Set Popular</div><div class="admin-unpopular-overlay" style="display:block;" onclick="removeFromPopularManual('${file.id}', event)">❌ Unset Popular</div>` : '';
 
                     if (file.mimeType === 'application/vnd.google-apps.folder') {
                         card.className = 'card folder'; card.onclick = () => loadFolder(file.id, file.name);
@@ -756,7 +859,7 @@
         
         async function changeThumbnailPrompt(fileId, event) { event.stopPropagation(); const newImgUrl = prompt("Enter image URL:"); if (newImgUrl) { await db.collection('custom_thumbnails').doc(fileId).set({ url: newImgUrl }); savedThumbnails[fileId] = newImgUrl; loadFolder(folderHistory[folderHistory.length-1].id, folderHistory[folderHistory.length-1].name); } }
         function openAdminPanel() { document.getElementById('adminModal').style.display = 'flex'; switchAdminTab('requests'); fetchAdminData(); }
-        function hideAdminPanel() { document.getElementById('adminModal').style.display = 'none'; }
+        function hideAdminPanel() { document.getElementById('adminModal').style.display = 'none'; setTimeout(checkGlobalNotificationState, 800); }
         function switchAdminTab(tab) { document.getElementById('secRequests').style.display = tab==='requests'?'block':'none'; document.getElementById('secUsers').style.display = tab==='users'?'block':'none'; document.getElementById('secMessages').style.display = tab==='messages'?'block':'none'; }
         
         async function fetchAdminData() { 
@@ -771,7 +874,6 @@
         }
         async function approveUser(email, name) { await db.collection('allowed_users').doc(email).set({ approved: true, name: name }); await db.collection('access_requests').doc(email).delete(); fetchAdminData(); }
 
-        function listenForUpdates() {}
         async function sendMessageToAdmin() { const text = document.getElementById('footerMessageText').value.trim(); if(!text) return; await db.collection('admin_messages').add({ name: loggedInUserName, message: text, timestamp: firebase.firestore.FieldValue.serverTimestamp() }); alert('Message sent!'); document.getElementById('footerMessageText').value=''; }
         
         function setupCustomButtons() {
