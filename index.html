@@ -28,7 +28,7 @@
         body { font-family: 'Segoe UI', Arial, sans-serif; background-color: var(--bg-dark); color: var(--text-light); margin: 0; padding: 0; position: relative; min-height: 100vh; padding-bottom: 120px; box-sizing: border-box; transition: background 0.3s, color 0.3s; }
         #mainApp, #updatesPage, #favoritesPage, #popularPage { display: none; }
 
-        header { background-color: var(--card-bg); border-bottom: 3px solid var(--drive-blue); padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; position: relative; }
+        header { background-color: var(--card-bg); border-bottom: 3px solid var(--drive-blue); padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; position: relative; min-height: 110px; box-sizing: border-box; }
         
         /* Sidebar Styles */
         .menu-toggle-btn { background: none; border: none; color: var(--text-light); font-size: 26px; cursor: pointer; z-index: 1001; }
@@ -42,10 +42,18 @@
         .theme-select-container label { font-size: 13px; color: var(--text-muted); display: block; margin-bottom: 8px; }
         .theme-dropdown { width: 100%; padding: 8px; background: var(--bg-dark); color: var(--text-light); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; }
 
-        /* Centered Logo & Brand */
-        .brand-center { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); display: flex; align-items: center; gap: 12px; cursor: pointer; }
-        .brand-logo-img { width: 55px; height: 55px; object-fit: contain; }
-        .brand-center h1 { margin: 0; font-size: 24px; font-weight: bold; color: var(--text-light); }
+        /* Centered Logo & Brand + Search Container */
+        .brand-center-container { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; gap: 8px; width: 45%; max-width: 550px; }
+        .brand-logo-row { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+        .brand-logo-img { width: 45px; height: 45px; object-fit: contain; }
+        .brand-logo-row h1 { margin: 0; font-size: 22px; font-weight: bold; color: var(--text-light); white-space: nowrap; }
+        
+        /* Centered Library Search Bar */
+        .global-search-wrapper { display: flex; width: 100%; gap: 6px; }
+        .global-search-wrapper input { flex-grow: 1; background: var(--bg-dark); border: 1px solid rgba(255,255,255,0.15); border-radius: 20px; padding: 6px 14px; color: white; font-size: 13px; outline: none; }
+        .global-search-wrapper input:focus { border-color: var(--drive-blue); }
+        .global-search-wrapper button { background: var(--drive-blue); border: none; color: white; border-radius: 20px; padding: 6px 15px; font-weight: bold; font-size: 12px; cursor: pointer; }
+        .global-search-wrapper button:hover { background: var(--drive-green); }
 
         /* Right Profile Area */
         .header-right-profile { display: flex; align-items: center; gap: 10px; cursor: pointer; background: rgba(255,255,255,0.05); padding: 5px 12px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); }
@@ -77,6 +85,7 @@
         .card.video { border-top: 4px solid var(--drive-green); }
 
         .thumbnail-placeholder { height: 130px; background: #25334a; display: flex; align-items: center; justify-content: center; font-size: 40px; position: relative; }
+        .thumbnail-placeholder img { width: 100%; height: 100%; object-fit: cover; }
         .card-info { padding: 12px; position: relative; padding-right: 40px; }
         .card-title { font-size: 15px; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 600; }
 
@@ -97,7 +106,7 @@
         /* לאגין סקרין */
         .lock-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-dark); display: flex; justify-content: center; align-items: center; z-index: 2000; }
         .lock-box { background-color: var(--card-bg); padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); text-align: center; width: 90%; max-width: 420px; border-top: 4px solid var(--drive-blue); }
-        .lock-screen input, .lock-screen textarea, .admin-content input, .admin-content textarea { width: 100%; padding: 12px; margin: 10px 0; background-color: var(--bg-dark); border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 6px; box-sizing: border-box; }
+        .lock-screen input, .lock-screen textarea, .admin-content input, .admin-content textarea, .profile-modal-content input { width: 100%; padding: 12px; margin: 10px 0; background-color: var(--bg-dark); border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 6px; box-sizing: border-box; }
         .lock-box button { width: 100%; padding: 12px; background-color: var(--drive-blue); color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px; }
         .lock-box button:hover { background-color: var(--drive-green); }
         .switch-link { color: var(--drive-yellow); cursor: pointer; display: inline-block; margin-top: 15px; font-size: 14px; }
@@ -198,6 +207,11 @@
         .v-action-btn.v-delete:hover { color: #ff5252; }
         .v-like-btn { background: #25334a; border: none; color: white; padding: 3px 6px; border-radius: 4px; font-size: 11px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; text-decoration: none; }
         .v-like-btn.active { background: #0d47a1; border: 1px solid var(--drive-blue); }
+
+        .profile-upload-btn-label { display: block; background: #25334a; color: white; text-align: center; padding: 10px; border-radius: 6px; border: 1px dashed rgba(255,255,255,0.2); font-weight: bold; cursor: pointer; margin: 10px 0; font-size: 13px; }
+        .profile-upload-btn-label:hover { background: var(--drive-blue); }
+        .profile-preview-box { text-align: center; margin-bottom: 10px; }
+        .profile-preview-box img { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 2px solid var(--drive-yellow); background: white; }
     </style>
 </head>
 <body>
@@ -230,28 +244,40 @@
 
     <div id="mainApp">
         <header>
+            <!-- Left Side: Hamburger Icon -->
             <button class="menu-toggle-btn" onclick="toggleSidebar(true)">☰</button>
             
-            <div class="brand-center" onclick="showAppPage('library')">
-                <img src="logo.png" class="brand-logo-img" alt="Logo" onerror="this.src='https://via.placeholder.com/55?text=sofer'">
-                <h1>sofer video cloud</h1>
+            <!-- Center Side: Logo, Company Name AND Central Search Bar -->
+            <div class="brand-center-container">
+                <div class="brand-logo-row" onclick="resetLibraryToHome()">
+                    <img src="logo.png" class="brand-logo-img" alt="Logo" onerror="this.src='https://via.placeholder.com/55?text=sofer'">
+                    <h1>sofer video cloud</h1>
+                </div>
+                <!-- Global Library Search Input -->
+                <div class="global-search-wrapper">
+                    <input type="text" id="globalLibrarySearchInput" placeholder="Search across all synchronized network cloud media..." onkeydown="if(event.key === 'Enter') triggerLibrarySearch()">
+                    <button onclick="triggerLibrarySearch()">Search</button>
+                </div>
             </div>
             
+            <!-- Right Side: User Profile Trigger -->
             <div class="header-right-profile" onclick="openProfileModal()">
                 <span class="profile-name-span" id="headerProfileName">Loading...</span>
                 <img src="logo.png" class="profile-pic" id="headerProfilePic" alt="Profile" onerror="this.src='https://via.placeholder.com/45?text=sofer'">
             </div>
         </header>
 
+        <!-- Slide-out Sidebar Menu Container -->
         <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar(false)"></div>
         <div class="sidebar-menu" id="sidebarMenu">
-            <button class="nav-btn" onclick="toggleSidebar(false); showAppPage('library');">🏠 Library Home</button>
+            <button class="nav-btn" onclick="toggleSidebar(false); resetLibraryToHome();">🏠 Library Home</button>
             <button class="nav-btn" id="favMenuBtn" onclick="toggleSidebar(false); showAppPage('favorites');">My Favorites</button>
             <button class="nav-btn" id="popularMenuBtn" onclick="toggleSidebar(false); showAppPage('popular');">⭐ Trending Popular</button>
             <button class="nav-btn" id="updatesMenuBtn" onclick="toggleSidebar(false); showAppPage('updates');">Updates & Forum</button>
             <a href="about.html" class="nav-btn" onclick="toggleSidebar(false);">About Me</a>
             <button id="adminPanelBtn" class="nav-btn" onclick="toggleSidebar(false); openAdminPanel();">Admin Panel</button>
             
+            <!-- Custom Theme Changer Dropdown inside Menu -->
             <div class="theme-select-container">
                 <label>🎨 Select Visual Workspace Theme:</label>
                 <select class="theme-dropdown" onchange="changeAppTheme(this.value)" id="themeDropdownField">
@@ -271,6 +297,7 @@
             </div>
             
             <div class="main-container">
+                <!-- Continue Watching סעקציע -->
                 <div id="continueWatchingWrapper" style="display: none; margin-bottom: 40px;">
                     <h2 class="section-title">Continue Watching</h2>
                     <div class="grid" id="continueGrid"></div>
@@ -284,6 +311,7 @@
             </div>
         </div>
 
+        <!-- Favorites פערזענליכע בלאט -->
         <div id="favoritesPage">
             <div class="breadcrumb-container" style="background-color: #1c2638; margin-bottom: 20px;">
                 <button class="back-btn" onclick="showAppPage('library')">← Back to Main Menu</button>
@@ -295,6 +323,7 @@
             </div>
         </div>
 
+        <!-- Popular / Trending Pinned Page -->
         <div id="popularPage">
             <div class="breadcrumb-container" style="background-color: #1c2638; margin-bottom: 20px;">
                 <button class="back-btn" onclick="showAppPage('library')">← Back to Main Menu</button>
@@ -332,17 +361,23 @@
         </div>
     </div>
 
+    <!-- Personal Profile Customization Modal -->
     <div class="profile-modal" id="profileModal">
         <div class="profile-modal-content">
             <button class="close-profile" onclick="closeProfileModal()">×</button>
             <h2 style="color: var(--drive-yellow); margin-top: 0;">My Profile Account</h2>
             <p style="color: var(--text-muted); font-size: 13px;">Personalize how you appear in video comments and forum logs.</p>
             
+            <div class="profile-preview-box">
+                <img id="profileModalPreviewImg" src="logo.png" onerror="this.src='https://via.placeholder.com/70?text=User'">
+            </div>
+
             <label style="font-weight: bold; font-size:14px;">Profile Nickname / Display Name:</label>
             <input type="text" id="profileNicknameInput" placeholder="Enter custom nickname...">
             
-            <label style="font-weight: bold; font-size:14px; margin-top: 10px; display:block;">Profile Avatar Image URL:</label>
-            <input type="text" id="profilePicUrlInput" placeholder="Paste custom direct image link URL...">
+            <label style="font-weight: bold; font-size:14px; margin-top: 10px; display:block;">Upload Avatar Picture:</label>
+            <label class="profile-upload-btn-label" for="profileImageFileInput">📁 Choose Image File (JPG/PNG)</label>
+            <input type="file" id="profileImageFileInput" accept="image/*" style="display:none;" onchange="previewSelectedProfileImage(this)">
             
             <button class="nav-btn" style="background-color: var(--drive-blue); width: 100%; margin-top: 15px;" onclick="saveUserProfileData()">Save Profile Settings</button>
         </div>
@@ -364,6 +399,7 @@
         </div>
     </div>
 
+    <!-- Video Player Modal -->
     <div class="player-modal" id="playerModal" onclick="closeVideoFromOutside(event)">
         <div class="player-content" onclick="event.stopPropagation()">
             <button class="minimize-player" onclick="togglePipMode()">🗕</button>
@@ -419,6 +455,7 @@
         let generatedVerificationCode = ""; 
         let currentPlayingFileId = null; let currentEditingPostId = null;
         let isPipActive = false;
+        let base64ImageString = "";
 
         function getDeviceFingerprint() { return navigator.userAgent + (navigator.hardwareConcurrency || 2) + (navigator.deviceMemory || 4); }
 
@@ -448,21 +485,32 @@
 
         function openProfileModal() {
             document.getElementById('profileNicknameInput').value = loggedInUserName;
-            document.getElementById('profilePicUrlInput').value = userProfilePicUrl === 'logo.png' ? '' : userProfilePicUrl;
+            document.getElementById('profileModalPreviewImg').src = userProfilePicUrl;
+            base64ImageString = userProfilePicUrl;
             document.getElementById('profileModal').style.display = 'flex';
         }
+        
         function closeProfileModal() { document.getElementById('profileModal').style.display = 'none'; }
+
+        function previewSelectedProfileImage(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    base64ImageString = e.target.result;
+                    document.getElementById('profileModalPreviewImg').src = base64ImageString;
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
 
         async function saveUserProfileData() {
             const nick = document.getElementById('profileNicknameInput').value.trim();
-            const url = document.getElementById('profilePicUrlInput').value.trim();
             if (!nick) { alert('Please enter a nickname.'); return; }
             
             loggedInUserName = nick;
-            userProfilePicUrl = url || "logo.png";
+            userProfilePicUrl = base64ImageString || "logo.png";
             localStorage.setItem('soferUserName', nick);
             
-            // Sync up onto Firestore
             await db.collection('allowed_users').doc(loggedInUserEmail).set({
                 name: nick,
                 avatar: userProfilePicUrl
@@ -475,6 +523,65 @@
             alert('Your dynamic profile has been updated!');
             closeProfileModal();
             if(document.getElementById('updatesPage').style.display === 'block') { loadBlogPosts(); }
+        }
+
+        /* Centered Global Search Engine Functionality across Google Drive Library */
+        async function triggerLibrarySearch() {
+            const query = document.getElementById('globalLibrarySearchInput').value.trim();
+            if(!query) { alert('Please type a search word first.'); return; }
+            
+            showAppPage('library');
+            toggleSidebar(false);
+            
+            document.getElementById('foldersTitle').style.display = 'none';
+            document.getElementById('foldersGrid').innerHTML = '';
+            document.getElementById('videosSpacer').style.display = 'none';
+            document.getElementById('videosTitle').innerText = `Search Results For: "${query}"`;
+            
+            const videosGrid = document.getElementById('videosGrid');
+            videosGrid.innerHTML = 'Searching cloud archive matrix...';
+            
+            // Clean up the search string safely for Google Drive metadata API
+            const safeQuery = query.replace(/'/g, "\\'");
+            const url = `https://www.googleapis.com/drive/v3/files?q=name+contains+'${safeQuery}'+and+mimeType+style='video/'+and+trashed=false&fields=files(id,name,mimeType,thumbnailLink)&key=${API_KEY}`;
+            
+            try {
+                const res = await fetch(url);
+                const data = await res.json();
+                videosGrid.innerHTML = '';
+                let favs = JSON.parse(localStorage.getItem('sofer_favs') || '[]');
+                
+                if(data.files && data.files.length > 0) {
+                    data.files.forEach(file => {
+                        const card = document.createElement('div');
+                        card.setAttribute('data-id', file.id);
+                        card.setAttribute('data-name', file.name);
+                        card.setAttribute('data-thumb', savedThumbnails[file.id] || file.thumbnailLink || '');
+                        
+                        const adminOverlayHtml = isAdmin ? `<div class="admin-card-overlay" style="display:block;" onclick="changeThumbnailPrompt('${file.id}', event)">⚙️ Edit Thumbnail</div><div class="admin-popular-overlay" style="display:block;" onclick="markAsPopularManual('${file.id}', '${file.name.replace(/'/g, "\\'")}', event)">⭐ Set Popular</div>` : ''; 
+                        const currentThumb = savedThumbnails[file.id] || file.thumbnailLink;
+                        const isFav = favs.some(f => f.id === file.id) ? '❤️' : '🤍';
+                        
+                        card.className = 'card video';
+                        card.onclick = (e) => { if(!e.target.classList.contains('download-icon-btn') && !e.target.classList.contains('admin-card-overlay') && !e.target.classList.contains('admin-popular-overlay') && !e.target.classList.contains('fav-btn')) playVideo(file.id); };
+                        card.innerHTML = `${adminOverlayHtml}<button class="fav-btn" onclick="toggleFavorite('${file.id}', event)">${isFav}</button><div class="thumbnail-placeholder" id="thumb-${file.id}"><img src="${currentThumb || '🎬'}" onerror="this.src='https://via.placeholder.com/220x130?text=Video'"></div><div class="card-info"><p class="card-title">${file.name}</p></div><button class="download-icon-btn" onclick="downloadVideo('${file.id}')">↓</button>`;
+                        videosGrid.appendChild(card);
+                    });
+                } else {
+                    videosGrid.innerHTML = '<p>No matching video files discovered in this cloud partition.</p>';
+                }
+            } catch(e) {
+                videosGrid.innerHTML = '<p>Error executing cloud search index query.</p>';
+            }
+        }
+
+        function resetLibraryToHome() {
+            document.getElementById('globalLibrarySearchInput').value = '';
+            document.getElementById('foldersTitle').style.display = 'block';
+            document.getElementById('videosSpacer').style.display = 'block';
+            document.getElementById('videosTitle').innerText = 'Videos';
+            showAppPage('library');
+            loadFolder(START_FOLDER_ID, "Home");
         }
 
         function showAppPage(page) {
@@ -796,7 +903,6 @@
         async function sendMessageToAdmin() {
             const text = document.getElementById('footerMessageText').value.trim(); if(!text) { alert('Please type a message.'); return; }
             try { 
-                // Private message sends the original administrative details
                 await db.collection('admin_messages').add({ 
                     name: localStorage.getItem('soferUserName') || loggedInUserName, 
                     email: loggedInUserEmail, 
@@ -836,7 +942,7 @@
             if (favs.length === 0) { container.innerHTML = '<p>No favorites added yet.</p>'; return; }
             favs.forEach(item => {
                 const card = document.createElement('div'); card.className = 'card video'; card.onclick = () => playVideo(item.id);
-                card.innerHTML = `<button class="fav-btn" onclick="toggleFavorite('${item.id}', event); renderFavorites();">❤️</button><div class="thumbnail-placeholder"><img src="${item.thumb || '🎬'}" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='https://via.placeholder.com/220x130?text=Video'"></div><div class="card-info"><p class="card-title">${item.title}</p></div><button class="download-icon-btn" onclick="downloadVideo('${item.id}')">↓</button>`; container.appendChild(card);
+                card.innerHTML = `<button class="fav-btn" onclick="toggleFavorite('${item.id}', event); renderFavorites();">❤️</button><div class="thumbnail-placeholder"><img src="${item.thumb || '🎬'}" onerror="this.src='https://via.placeholder.com/220x130?text=Video'"></div><div class="card-info"><p class="card-title">${item.title}</p></div><button class="download-icon-btn" onclick="downloadVideo('${item.id}')">↓</button>`; container.appendChild(card);
             });
         }
 
@@ -873,7 +979,7 @@
 
         async function changeThumbnailPrompt(fileId, event) {
             event.stopPropagation(); const newImgUrl = prompt("Enter image URL:");
-            if (newImgUrl) { await db.collection('custom_thumbnails').doc(fileId).set({ url: newImgUrl }); savedThumbnails[fileId] = newImgUrl; const container = document.getElementById(`thumb-${fileId}`); container.innerHTML = `<img src="${newImgUrl}" style="width:100%;height:100%;object-fit:cover;">`; }
+            if (newImgUrl) { await db.collection('custom_thumbnails').doc(fileId).set({ url: newImgUrl }); savedThumbnails[fileId] = newImgUrl; const container = document.getElementById(`thumb-${fileId}`); container.innerHTML = `<img src="${newImgUrl}">`; }
         }
 
         async function loadFolder(folderId, folderName) {
@@ -893,10 +999,10 @@
                     
                     if (file.mimeType === 'application/vnd.google-apps.folder') {
                         card.className = 'card folder'; card.onclick = () => { showAppPage('library'); loadFolder(file.id, file.name); };
-                        card.innerHTML = `${adminOverlayHtml}<div class="thumbnail-placeholder" id="thumb-${file.id}">${savedThumbnails[file.id] ? `<img src="${savedThumbnails[file.id]}" style="width:100%;height:100%;object-fit:cover;">` : '📁'}</div><div class="card-info"><p class="card-title">${file.name}</p></div>`; foldersGrid.appendChild(card);
+                        card.innerHTML = `${adminOverlayHtml}<div class="thumbnail-placeholder" id="thumb-${file.id}">${savedThumbnails[file.id] ? `<img src="${savedThumbnails[file.id]}">` : '📁'}</div><div class="card-info"><p class="card-title">${file.name}</p></div>`; foldersGrid.appendChild(card);
                     } else if (file.mimeType.startsWith('video/')) {
                         card.className = 'card video'; card.onclick = (e) => { if(!e.target.classList.contains('download-icon-btn') && !e.target.classList.contains('admin-card-overlay') && !e.target.classList.contains('admin-popular-overlay') && !e.target.classList.contains('fav-btn')) playVideo(file.id); };
-                        card.innerHTML = `${adminOverlayHtml}<button class="fav-btn" onclick="toggleFavorite('${file.id}', event)">${isFav}</button><div class="thumbnail-placeholder" id="thumb-${file.id}"><img src="${currentThumb || '🎬'}" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='https://via.placeholder.com/220x130?text=Video'"></div><div class="card-info"><p class="card-title">${file.name}</p></div><button class="download-icon-btn" onclick="downloadVideo('${file.id}')">↓</button>`; videosGrid.appendChild(card);
+                        card.innerHTML = `${adminOverlayHtml}<button class="fav-btn" onclick="toggleFavorite('${file.id}', event)">${isFav}</button><div class="thumbnail-placeholder" id="thumb-${file.id}"><img src="${currentThumb || '🎬'}" onerror="this.src='https://via.placeholder.com/220x130?text=Video'"></div><div class="card-info"><p class="card-title">${file.name}</p></div><button class="download-icon-btn" onclick="downloadVideo('${file.id}')">↓</button>`; videosGrid.appendChild(card);
                     }
                 });
             } else { foldersGrid.innerHTML = '<p>No folders.</p>'; videosGrid.innerHTML = '<p>No videos.</p>'; }
