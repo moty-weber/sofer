@@ -116,25 +116,24 @@
         /* מאדאלס */
         .player-modal, .admin-modal, .profile-modal { display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center; }
         #playerModal, #adminModal, #profileModal { display: none; }
-        .player-content, .admin-content, .profile-modal-content { width: 80%; max-width: 900px; position: relative; background-color: var(--bg-dark); padding: 25px; border-radius: 8px; color: white; max-height: 90vh; overflow-y: auto; }
+        .player-content, .admin-content, .profile-modal-content { width: 80%; max-width: 900px; position: relative; background-color: var(--bg-dark); padding: 25px; border-radius: 8px; color: white; max-height: 90vh; overflow-y: auto; transition: all 0.3s ease; }
         .profile-modal-content { max-width: 450px; border-top: 4px solid var(--drive-yellow); }
         .close-player { position: absolute; top: -40px; right: 0; color: white; font-size: 30px; background: none; border: none; cursor: pointer; z-index: 1010; }
         .minimize-player { position: absolute; top: -40px; right: 40px; color: white; font-size: 25px; background: none; border: none; cursor: pointer; z-index: 1010; }
         .close-profile { position: absolute; top: 15px; right: 20px; color: white; font-size: 24px; background: none; border: none; cursor: pointer; }
 
-        /* Picture-in-picture Mode */
-        .player-modal.pip-mode { width: 350px; height: 240px; top: auto; left: auto; bottom: 130px; right: 20px; background: none; box-shadow: 0 10px 30px rgba(0,0,0,0.8); border-radius: 8px; overflow: hidden; }
-        .player-modal.pip-mode .player-content { width: 100%; height: 100%; padding: 0; max-height: 100%; }
-        .player-modal.pip-mode video { height: 180px !important; }
-        .player-modal.pip-mode .close-player { top: 5px; right: 5px; font-size: 20px; background: rgba(0,0,0,0.6); border-radius: 50%; width: 25px; height: 25px; display: flex; align-items: center; justify-content: center; }
-        .player-modal.pip-mode .minimize-player { top: 5px; right: 35px; font-size: 16px; background: rgba(0,0,0,0.6); border-radius: 50%; width: 25px; height: 25px; display: flex; align-items: center; justify-content: center; }
+        /* Picture-in-picture Mode Workspace Layout Fix */
+        .player-modal.pip-mode { pointer-events: none; background: none; }
+        .player-modal.pip-mode .player-content { pointer-events: auto; width: 360px; height: 260px; position: fixed; bottom: 140px; right: 20px; top: auto; left: auto; background: var(--card-bg); box-shadow: 0 10px 35px rgba(0,0,0,0.8); border: 2px solid var(--drive-blue); padding: 10px; border-radius: 8px; overflow: hidden; }
+        .player-modal.pip-mode .video-wrapper { height: 180px; }
+        .player-modal.pip-mode .video-wrapper iframe { height: 100% !important; }
+        .player-modal.pip-mode .close-player { top: 5px; right: 5px; font-size: 20px; background: rgba(0,0,0,0.7); border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; }
+        .player-modal.pip-mode .minimize-player { top: 5px; right: 35px; font-size: 14px; background: rgba(0,0,0,0.7); border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; }
         .player-modal.pip-mode #videoModalCommentsSection { display: none !important; }
 
-        .video-wrapper { position: relative; width: 100%; }
+        .video-wrapper { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 6px; overflow: hidden; }
+        .video-wrapper iframe { width: 100%; height: 100%; border: none; }
         .video-watermark { position: absolute; bottom: 55px; right: 20px; width: 50px; height: 50px; object-fit: contain; pointer-events: none; z-index: 10; opacity: 0.85; }
-
-        .video-js .vjs-playback-rate { display: block !important; }
-        .video-js .vjs-subs-caps-button { display: block !important; }
 
         .admin-tabs { display: flex; gap: 10px; margin-bottom: 15px; border-bottom: 1px solid #25334a; padding-bottom: 10px; }
         .tab-btn { background: #25334a; border: none; color: white; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: bold; }
@@ -213,44 +212,32 @@
         .profile-preview-box { text-align: center; margin-bottom: 10px; }
         .profile-preview-box img { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 2px solid var(--drive-yellow); background: white; }
 
-        /* ============================================================
-           🖥️📱 MOBILE RESPONSIVENESS MATRIX & COUPLING ENGINE 
-           ============================================================ */
+        /* Mobile responsiveness queries matrix mappings */
         @media (max-width: 768px) {
             header { display: flex; flex-direction: column; align-items: stretch; justify-content: flex-start; gap: 15px; padding: 15px; min-height: auto; }
-            
-            /* Top Controls Row mapping */
             .menu-toggle-btn { align-self: flex-start; font-size: 28px; margin-bottom: -40px; }
             .header-right-profile { align-self: flex-end; padding: 4px 10px; }
-            
-            /* Center Branding & Search shifts into block layout */
             .brand-center-container { position: static; transform: none; width: 100%; max-width: 100%; margin-top: 10px; gap: 12px; }
             .brand-logo-row .brand-logo-img { width: 40px; height: 40px; }
             .brand-logo-row h1 { font-size: 19px; }
             .global-search-wrapper { width: 100%; }
-
-            /* Grid scaling tweaks */
             .grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
             .thumbnail-placeholder { height: 100px; font-size: 30px; }
             .card-title { font-size: 13px; }
             .main-container { padding: 15px; }
-
-            /* Absolute player alignment on tiny Viewports */
             .player-content, .admin-content, .profile-modal-content { width: 95%; padding: 15px; }
             .close-player { top: -35px; right: 5px; font-size: 26px; }
             .minimize-player { top: -35px; right: 40px; font-size: 22px; }
-
-            /* Comment layouts formatting */
             .replies-container { padding-left: 10px; }
             .comment-box { padding: 10px; gap: 8px; }
             .comment-avatar { width: 28px; height: 28px; }
             .comment-text { font-size: 13px; }
-
-            /* Footer stacking adjustments */
             .footer-contact-bar { flex-direction: column; gap: 10px; padding: 15px; min-height: auto; height: auto; position: static; margin-top: 40px; border-bottom: 3px solid var(--drive-yellow); }
             .footer-contact-bar input { max-width: 100%; width: 100%; }
             .footer-contact-bar button { width: 100%; text-align: center; }
             body { padding-bottom: 0; }
+            .player-modal.pip-mode .player-content { width: 280px; height: 210px; bottom: 20px; right: 10px; }
+            .player-modal.pip-mode .video-wrapper { height: 140px; }
         }
     </style>
 </head>
@@ -284,30 +271,25 @@
 
     <div id="mainApp">
         <header>
-            <!-- Left Side: Hamburger Icon -->
             <button class="menu-toggle-btn" onclick="toggleSidebar(true)">☰</button>
             
-            <!-- Center Side: Logo, Company Name AND Central Search Bar -->
             <div class="brand-center-container">
                 <div class="brand-logo-row" onclick="resetLibraryToHome()">
                     <img src="logo.png" class="brand-logo-img" alt="Logo" onerror="this.src='https://via.placeholder.com/55?text=sofer'">
                     <h1>sofer video cloud</h1>
                 </div>
-                <!-- Global Library Search Input -->
                 <div class="global-search-wrapper">
                     <input type="text" id="globalLibrarySearchInput" placeholder="Search across all synchronized network cloud media..." onkeydown="if(event.key === 'Enter') triggerLibrarySearch()">
                     <button onclick="triggerLibrarySearch()">Search</button>
                 </div>
             </div>
             
-            <!-- Right Side: User Profile Trigger -->
             <div class="header-right-profile" onclick="openProfileModal()">
                 <span class="profile-name-span" id="headerProfileName">Loading...</span>
                 <img src="logo.png" class="profile-pic" id="headerProfilePic" alt="Profile" onerror="this.src='https://via.placeholder.com/45?text=sofer'">
             </div>
         </header>
 
-        <!-- Slide-out Sidebar Menu Container -->
         <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar(false)"></div>
         <div class="sidebar-menu" id="sidebarMenu">
             <button class="nav-btn" onclick="toggleSidebar(false); resetLibraryToHome();">🏠 Library Home</button>
@@ -317,7 +299,6 @@
             <a href="about.html" class="nav-btn" onclick="toggleSidebar(false);">About Me</a>
             <button id="adminPanelBtn" class="nav-btn" onclick="toggleSidebar(false); openAdminPanel();">Admin Panel</button>
             
-            <!-- Custom Theme Changer Dropdown inside Menu -->
             <div class="theme-select-container">
                 <label>🎨 Select Visual Workspace Theme:</label>
                 <select class="theme-dropdown" onchange="changeAppTheme(this.value)" id="themeDropdownField">
@@ -337,7 +318,6 @@
             </div>
             
             <div class="main-container">
-                <!-- Continue Watching סעקציע -->
                 <div id="continueWatchingWrapper" style="display: none; margin-bottom: 40px;">
                     <h2 class="section-title">Continue Watching</h2>
                     <div class="grid" id="continueGrid"></div>
@@ -351,7 +331,6 @@
             </div>
         </div>
 
-        <!-- Favorites פערזענליכע בלאט -->
         <div id="favoritesPage">
             <div class="breadcrumb-container" style="background-color: #1c2638; margin-bottom: 20px;">
                 <button class="back-btn" onclick="showAppPage('library')">← Back to Main Menu</button>
@@ -363,7 +342,6 @@
             </div>
         </div>
 
-        <!-- Popular / Trending Pinned Page -->
         <div id="popularPage">
             <div class="breadcrumb-container" style="background-color: #1c2638; margin-bottom: 20px;">
                 <button class="back-btn" onclick="showAppPage('library')">← Back to Main Menu</button>
@@ -401,7 +379,6 @@
         </div>
     </div>
 
-    <!-- Personal Profile Customization Modal -->
     <div class="profile-modal" id="profileModal">
         <div class="profile-modal-content">
             <button class="close-profile" onclick="closeProfileModal()">×</button>
@@ -439,15 +416,12 @@
         </div>
     </div>
 
-    <!-- Video Player Modal -->
     <div class="player-modal" id="playerModal" onclick="closeVideoFromOutside(event)">
         <div class="player-content" onclick="event.stopPropagation()">
             <button class="minimize-player" onclick="togglePipMode()">🗕</button>
             <button class="close-player" onclick="closeVideo()">×</button>
-            <div class="video-wrapper">
-                <video id="my-video" class="video-js vjs-big-play-centered" controls preload="auto" width="900" height="500" crossorigin="anonymous"></video>
-                <img src="logo.png" class="video-watermark" alt="WM" onerror="this.style.display='none'">
-            </div>
+            <div class="video-wrapper" id="videoWrapperEngineBox">
+                </div>
             <div id="videoModalCommentsSection" style="margin-top:20px; border-top:1px solid #25334a; padding-top:15px;">
                 <h3 style="color: var(--drive-yellow); margin:0 0 10px 0;">Video Reactions & Messages</h3>
                 <div class="reaction-row" id="videoReactionsContainer"></div>
@@ -464,7 +438,6 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-    <script src="https://vjs.zencdn.net/8.3.0/video.min.js"></script>
     
     <script>
         const API_KEY = "AIzaSyDEkcoogK9_8e4HOf7vSWFWEHKct21gjdE"; 
@@ -490,7 +463,7 @@
         emailjs.init(EMAILJS_PUBLIC_KEY);
 
         let folderHistory = [{ id: START_FOLDER_ID, name: "Home" }];
-        let playerInstance = null; let isAdmin = false; let savedThumbnails = {}; let quillEditor = null;
+        let isAdmin = false; let savedThumbnails = {}; let quillEditor = null;
         let loggedInUserEmail = ""; let loggedInUserName = "Approved User"; let userProfilePicUrl = "logo.png";
         let generatedVerificationCode = ""; 
         let currentPlayingFileId = null; let currentEditingPostId = null;
@@ -565,7 +538,7 @@
             if(document.getElementById('updatesPage').style.display === 'block') { loadBlogPosts(); }
         }
 
-        /* Centered Global Search Engine Functionality across Google Drive Library */
+        /* Centered Global Search Engine Functionality across Google Drive Library Matrix Setup */
         async function triggerLibrarySearch() {
             const query = document.getElementById('globalLibrarySearchInput').value.trim();
             if(!query) { alert('Please type a search word first.'); return; }
@@ -582,7 +555,8 @@
             videosGrid.innerHTML = 'Searching cloud archive matrix...';
             
             const safeQuery = query.replace(/'/g, "\\'");
-            const url = `https://www.googleapis.com/drive/v3/files?q=name+contains+'${safeQuery}'+and+mimeType+style='video/'+and+trashed=false&fields=files(id,name,mimeType,thumbnailLink)&key=${API_KEY}`;
+            // Query format string synchronization syntax corrected
+            const url = `https://www.googleapis.com/drive/v3/files?q=name+contains+'${safeQuery}'+and+mimeType+contains+'video/'+and+trashed=false&fields=files(id,name,mimeType,thumbnailLink)&key=${API_KEY}`;
             
             try {
                 const res = await fetch(url);
@@ -695,18 +669,9 @@
             document.getElementById('headerProfileName').innerText = loggedInUserName;
             document.getElementById('headerProfilePic').src = userProfilePicUrl;
             document.getElementById('userDisplayBadge').innerText = `${loggedInUserName} (${loggedInUserEmail})`;
-            playerInstance = videojs('my-video', { playbackRates: [0.5, 1, 1.25, 1.5, 1.75, 2], responsive: true, fluid: true });
-            
-            playerInstance.on('timeupdate', function() {
-                if (currentPlayingFileId && playerInstance.duration()) {
-                    const progress = (playerInstance.currentTime() / playerInstance.duration()) * 100;
-                    if (progress > 2 && progress < 98) { saveVideoProgress(currentPlayingFileId, playerInstance.currentTime(), playerInstance.duration()); } 
-                    else if (progress >= 98) { clearVideoProgress(currentPlayingFileId); }
-                }
-            });
 
             try { const thumbSnapshot = await db.collection('custom_thumbnails').get(); thumbSnapshot.forEach(doc => { savedThumbnails[doc.id] = doc.data().url; }); } catch(e) {}
-            loadFolder(START_FOLDER_ID, "Home"); setTimeout(() => { setupCustomButtons(); }, 1000);
+            loadFolder(START_FOLDER_ID, "Home");
         }
 
         async function markAsPopularManual(fileId, title, event) {
@@ -828,7 +793,7 @@
             if (items.length === 0) { wrapper.style.display = 'none'; return; } wrapper.style.display = 'block';
             items.forEach(id => {
                 const item = progressList[id]; const pct = (item.time / item.duration) * 100; const card = document.createElement('div'); card.className = 'card video';
-                card.onclick = () => { playVideo(id); setTimeout(() => { playerInstance.currentTime(item.time); }, 800); };
+                card.onclick = () => { playVideo(id); };
                 card.innerHTML = `<button class="close-continue-btn" onclick="removeContinueItem('${id}', event)">×</button><div class="thumbnail-placeholder"><img src="${item.thumb || '🎬'}" style="width:100%;height:100%;object-fit:cover;"><div class="continue-progress-bg"><div class="continue-progress-fill" style="width: ${pct}%"></div></div></div><div class="card-info"><p class="card-title">${item.title}</p></div>`; container.appendChild(card);
             });
         }
@@ -1049,34 +1014,45 @@
         }
         
         function playVideo(id) { 
-            currentPlayingFileId = id; const modal = document.getElementById('playerModal'); 
-            modal.style.display = 'flex'; modal.classList.remove('pip-mode'); isPipActive = false; 
+            currentPlayingFileId = id; 
+            const modal = document.getElementById('playerModal'); 
+            modal.style.display = 'flex'; 
+            modal.classList.remove('pip-mode'); 
+            isPipActive = false; 
             
-            const googleStreamUrl = `https://www.googleapis.com/drive/v3/files/${id}?alt=media&key=${API_KEY}`;
+            // Integrated Official Google Drive Embedded Iframe Engine to bypass the Quota Exceeded Matrix entirely
+            const googleIframeUrl = `https://drive.google.com/file/d/${id}/preview`;
+            const wrapperBox = document.getElementById('videoWrapperEngineBox');
+            wrapperBox.innerHTML = `<iframe src="${googleIframeUrl}" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
             
-            playerInstance.src({type: 'video/mp4', src: googleStreamUrl}); 
-            playerInstance.play(); 
             loadVideoMetaAndComments(id); 
         }
         
-        function closeVideo() { document.getElementById('playerModal').style.display = 'none'; playerInstance.pause(); currentPlayingFileId = null; isPipActive = false; renderContinueWatching(); }
+        function closeVideo() { 
+            document.getElementById('playerModal').style.display = 'none'; 
+            document.getElementById('videoWrapperEngineBox').innerHTML = '';
+            currentPlayingFileId = null; 
+            isPipActive = false; 
+            renderContinueWatching(); 
+        }
         function closeVideoFromOutside(event) { if(!isPipActive) closeVideo(); }
         
         function downloadVideo(fileId) { 
-            window.open(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${API_KEY}`, '_blank'); 
+            window.open(`https://drive.google.com/file/d/${fileId}/view`, '_blank'); 
         }
         
         function updateBreadcrumbs() { const container = document.getElementById('breadcrumbs'); let html = ''; folderHistory.forEach((folder, idx) => { if (idx === folderHistory.length - 1) { html += `<span>${folder.name}</span>`; } else { html += `<a href="#" onclick="showAppPage('library'); loadFolder('${folder.id}', '${folder.name}')">${folder.name}</a> / `; } }); container.innerHTML = html; }
         function goBack() { if (folderHistory.length > 1) { folderHistory.pop(); const prev = folderHistory[folderHistory.length - 1]; folderHistory.pop(); showAppPage('library'); loadFolder(prev.id, prev.name); } }
         
-        function togglePipMode() { const modal = document.getElementById('playerModal'); if(!isPipActive) { modal.classList.add('pip-mode'); isPipActive = true; } else { modal.classList.remove('pip-mode'); isPipActive = false; } }
-        
-        function setupCustomButtons() {
-            if(!playerInstance) return;
-            const controlBar = playerInstance.controlBar; const volumeControl = controlBar.volumePanel.el();
-            const backBtn = document.createElement('button'); backBtn.className = 'vjs-control vjs-button vjs-skip-button'; backBtn.innerHTML = '⏪'; backBtn.onclick = function() { playerInstance.currentTime(playerInstance.currentTime() - 10); };
-            const fwdBtn = document.createElement('button'); fwdBtn.className = 'vjs-control vjs-button vjs-skip-button'; fwdBtn.innerHTML = '⏩'; fwdBtn.onclick = function() { playerInstance.currentTime(playerInstance.currentTime() + 10); };
-            volumeControl.parentNode.insertBefore(backBtn, volumeControl.nextSibling); volumeControl.parentNode.insertBefore(fwdBtn, backBtn.nextSibling);
+        function togglePipMode() { 
+            const modal = document.getElementById('playerModal'); 
+            if(!isPipActive) { 
+                modal.classList.add('pip-mode'); 
+                isPipActive = true; 
+            } else { 
+                modal.classList.remove('pip-mode'); 
+                isPipActive = false; 
+            } 
         }
     </script>
 </body>
