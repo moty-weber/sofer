@@ -119,9 +119,15 @@
         .minimize-player { position: absolute; top: -40px; right: 40px; color: white; font-size: 25px; background: none; border: none; cursor: pointer; z-index: 1010; }
         .close-profile { position: absolute; top: 15px; right: 20px; color: white; font-size: 24px; background: none; border: none; cursor: pointer; }
 
-        /* Dynamic Description Panel Style */
-        .video-description-box { background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 6px; margin-top: 15px; border-left: 3px solid var(--drive-yellow); font-size: 14px; line-height: 1.5; color: #cbd5e1; text-align: left; }
+        /* Video Metadata Header Panel */
+        .video-meta-header { margin-top: 15px; display: flex; flex-direction: column; gap: 4px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px; }
+        .video-meta-name { font-size: 18px; font-weight: bold; color: var(--text-light); margin: 0; }
+        .video-meta-size { font-size: 13px; color: var(--drive-yellow); font-weight: 600; margin: 0; }
 
+        /* Custom Admin Description Workspace Box */
+        .admin-description-editor-zone { background: rgba(28, 38, 56, 0.6); padding: 15px; border-radius: 6px; margin-top: 15px; border: 1px dashed rgba(255,255,255,0.15); text-align: left; }
+        .admin-description-display { font-size: 15px; line-height: 1.6; color: #cbd5e1; }
+        
         /* Picture-in-picture Mode Workspace Layout Fix */
         .player-modal.pip-mode { pointer-events: none; background: none; }
         .player-modal.pip-mode .player-content { pointer-events: auto; width: 360px; height: 260px; position: fixed; bottom: 140px; right: 20px; top: auto; left: auto; background: var(--card-bg); box-shadow: 0 10px 35px rgba(0,0,0,0.8); border: 2px solid var(--drive-blue); padding: 10px; border-radius: 8px; overflow: hidden; }
@@ -129,7 +135,7 @@
         .player-modal.pip-mode .video-wrapper iframe { height: 100% !important; }
         .player-modal.pip-mode .close-player { top: 5px; right: 5px; font-size: 20px; background: rgba(0,0,0,0.7); border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; }
         .player-modal.pip-mode .minimize-player { top: 5px; right: 35px; font-size: 14px; background: rgba(0,0,0,0.7); border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; }
-        .player-modal.pip-mode #videoModalCommentsSection { display: none !important; }
+        .player-modal.pip-mode .video-meta-header, .player-modal.pip-mode .admin-description-editor-zone, .player-modal.pip-mode #videoModalCommentsSection { display: none !important; }
 
         .video-wrapper { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 6px; overflow: hidden; }
         .video-wrapper iframe { width: 100%; height: 100%; border: none; }
@@ -271,25 +277,30 @@
 
     <div id="mainApp">
         <header>
+            <!-- Left Side: Hamburger Icon -->
             <button class="menu-toggle-btn" onclick="toggleSidebar(true)">☰</button>
             
+            <!-- Center Side: Logo, Company Name AND Central Search Bar -->
             <div class="brand-center-container">
                 <div class="brand-logo-row" onclick="resetLibraryToHome()">
                     <img src="logo.png" class="brand-logo-img" alt="Logo" onerror="this.src='https://via.placeholder.com/55?text=sofer'">
                     <h1>sofer video cloud</h1>
                 </div>
+                <!-- Global Library Search Input -->
                 <div class="global-search-wrapper">
                     <input type="text" id="globalLibrarySearchInput" placeholder="Search across all synchronized network cloud media..." onkeydown="if(event.key === 'Enter') triggerLibrarySearch()">
                     <button onclick="triggerLibrarySearch()">Search</button>
                 </div>
             </div>
             
+            <!-- Right Side: User Profile Trigger -->
             <div class="header-right-profile" onclick="openProfileModal()">
                 <span class="profile-name-span" id="headerProfileName">Loading...</span>
                 <img src="logo.png" class="profile-pic" id="headerProfilePic" alt="Profile" onerror="this.src='https://via.placeholder.com/45?text=sofer'">
             </div>
         </header>
 
+        <!-- Slide-out Sidebar Menu Container -->
         <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar(false)"></div>
         <div class="sidebar-menu" id="sidebarMenu">
             <button class="nav-btn" onclick="toggleSidebar(false); resetLibraryToHome();">🏠 Library Home</button>
@@ -299,6 +310,7 @@
             <a href="about.html" class="nav-btn" onclick="toggleSidebar(false);">About Me</a>
             <button id="adminPanelBtn" class="nav-btn" onclick="toggleSidebar(false); openAdminPanel();">Admin Panel</button>
             
+            <!-- Custom Theme Changer Dropdown inside Menu -->
             <div class="theme-select-container">
                 <label>🎨 Select Visual Workspace Theme:</label>
                 <select class="theme-dropdown" onchange="changeAppTheme(this.value)" id="themeDropdownField">
@@ -318,6 +330,7 @@
             </div>
             
             <div class="main-container">
+                <!-- Continue Watching At Exact Top Front Page Level Position -->
                 <div id="continueWatchingWrapper" style="display: none; margin-bottom: 40px;">
                     <h2 class="section-title">Continue Watching</h2>
                     <div class="grid" id="continueGrid"></div>
@@ -331,6 +344,7 @@
             </div>
         </div>
 
+        <!-- Favorites פערזענליכע בלאט -->
         <div id="favoritesPage">
             <div class="breadcrumb-container" style="background-color: #1c2638; margin-bottom: 20px;">
                 <button class="back-btn" onclick="showAppPage('library')">← Back to Main Menu</button>
@@ -342,6 +356,7 @@
             </div>
         </div>
 
+        <!-- Popular / Trending Pinned Page -->
         <div id="popularPage">
             <div class="breadcrumb-container" style="background-color: #1c2638; margin-bottom: 20px;">
                 <button class="back-btn" onclick="showAppPage('library')">← Back to Main Menu</button>
@@ -379,6 +394,7 @@
         </div>
     </div>
 
+    <!-- Personal Profile Customization Modal -->
     <div class="profile-modal" id="profileModal">
         <div class="profile-modal-content">
             <button class="close-profile" onclick="closeProfileModal()">×</button>
@@ -416,14 +432,31 @@
         </div>
     </div>
 
+    <!-- Video Player Modal - Integrated Google Embedded Frame Solution -->
     <div class="player-modal" id="playerModal" onclick="closeVideoFromOutside(event)">
         <div class="player-content" onclick="event.stopPropagation()">
             <button class="minimize-player" onclick="togglePipMode()">🗕</button>
             <button class="close-player" onclick="closeVideo()">×</button>
-            <div class="video-wrapper" id="videoWrapperEngineBox">
-                </div>
+            <div class="video-wrapper" id="videoWrapperEngineBox"></div>
             
-            <div id="videoModalDescriptionBox" class="video-description-box" style="display:none;"></div>
+            <!-- Dynamic Video Header: Exact Title Name and File Size Cluster -->
+            <div class="video-meta-header">
+                <p class="video-meta-name" id="videoMetaDisplayTitle">Video Name</p>
+                <p class="video-meta-size" id="videoMetaDisplaySize">Size: Loading...</p>
+            </div>
+
+            <!-- Custom Admin Editable Description Studio Component Section -->
+            <div class="admin-description-editor-zone">
+                <h4 style="margin: 0 0 8px 0; color: var(--drive-yellow);">Description</h4>
+                <!-- Display Section for Users -->
+                <div class="admin-description-display" id="videoDescriptionOutputView">No description provided yet.</div>
+                
+                <!-- Input Controls Area for Admin Users only -->
+                <div id="videoDescriptionAdminEditControls" style="display: none; margin-top: 12px;">
+                    <textarea id="videoDescriptionAdminInput" rows="3" placeholder="Write a full custom HTML/Text description for this video asset..." style="width:100%; background:var(--bg-dark); border:1px solid rgba(255,255,255,0.15); padding:10px; border-radius:4px; color:white; font-family:inherit; box-sizing:border-box;"></textarea>
+                    <button class="nav-btn" style="background: var(--drive-green); padding: 6px 12px; font-size:12px; margin-top:8px;" onclick="saveCustomAdminDescription()">Save Description</button>
+                </div>
+            </div>
 
             <div id="videoModalCommentsSection" style="margin-top:20px; border-top:1px solid #25334a; padding-top:15px;">
                 <h3 style="color: var(--drive-yellow); margin:0 0 10px 0;">Video Reactions & Messages</h3>
@@ -541,7 +574,7 @@
             if(document.getElementById('updatesPage').style.display === 'block') { loadBlogPosts(); }
         }
 
-        /* Centered Global Search Engine Functionality across Google Drive Library Matrix Setup */
+        /* Fixed Centered Global Search Engine Matrix Setup - Fixed syntax constraint */
         async function triggerLibrarySearch() {
             const query = document.getElementById('globalLibrarySearchInput').value.trim();
             if(!query) { alert('Please type a search word first.'); return; }
@@ -558,7 +591,7 @@
             videosGrid.innerHTML = 'Searching cloud archive matrix...';
             
             const safeQuery = query.replace(/'/g, "\\'");
-            const url = `https://www.googleapis.com/drive/v3/files?q=name+contains+'${safeQuery}'+and+mimeType+contains+'video/'+and+trashed=false&fields=files(id,name,mimeType,thumbnailLink,description)&key=${API_KEY}`;
+            const url = `https://www.googleapis.com/drive/v3/files?q=name+contains+'${safeQuery}'+and+mimeType+contains+'video/'+and+trashed=false&fields=files(id,name,mimeType,thumbnailLink,size)&key=${API_KEY}`;
             
             try {
                 const res = await fetch(url);
@@ -572,7 +605,7 @@
                         card.setAttribute('data-id', file.id);
                         card.setAttribute('data-name', file.name);
                         card.setAttribute('data-thumb', savedThumbnails[file.id] || file.thumbnailLink || '');
-                        card.setAttribute('data-description', file.description || '');
+                        card.setAttribute('data-size', file.size || '0');
                         
                         const adminOverlayHtml = isAdmin ? `<div class="admin-card-overlay" style="display:block;" onclick="changeThumbnailPrompt('${file.id}', event)">⚙️ Edit Thumbnail</div><div class="admin-popular-overlay" style="display:block;" onclick="markAsPopularManual('${file.id}', '${file.name.replace(/'/g, "\\'")}', event)">⭐ Set Popular</div>` : ''; 
                         const currentThumb = savedThumbnails[file.id] || file.thumbnailLink;
@@ -722,7 +755,7 @@
                 commentsList.innerHTML = ''; if(snap.empty) { commentsList.innerHTML = '<p style="color:var(--text-muted); font-size:12px; margin:0;">No replies or messages yet. Be the first!</p>'; return; }
                 snap.forEach(cDoc => {
                     const c = cDoc.data(); const cid = cDoc.id;
-                    const likesMap = c.likes || {}; const likesCount = Object.keys(likesMap).length;
+                    const likesMap = c.likes || {}; likesCount = Object.keys(likesMap).length;
                     const hasLiked = likesMap[loggedInUserEmail] ? 'active' : '';
                     const isOwner = (c.userEmail === loggedInUserEmail || isAdmin);
                     const cAvatar = c.userAvatar || "logo.png";
@@ -988,10 +1021,18 @@
             if (newImgUrl) { await db.collection('custom_thumbnails').doc(fileId).set({ url: newImgUrl }); savedThumbnails[fileId] = newImgUrl; const container = document.getElementById(`thumb-${fileId}`); container.innerHTML = `<img src="${newImgUrl}">`; }
         }
 
+        function formatBytes(bytes, decimals = 2) {
+            if (bytes == 0 || !bytes) return '0 Bytes';
+            const k = 1024; const dm = decimals < 0 ? 0 : decimals;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+        }
+
         async function loadFolder(folderId, folderName) {
             const index = folderHistory.findIndex(f => f.id === folderId); if (index !== -1) { folderHistory = folderHistory.slice(0, index + 1); } else { folderHistory.push({ id: folderId, name: folderName }); }
             updateBreadcrumbs();
-            const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+trashed=false&fields=files(id,name,mimeType,thumbnailLink,description)&key=${API_KEY}`;
+            const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+trashed=false&fields=files(id,name,mimeType,thumbnailLink,size)&key=${API_KEY}`;
             const res = await fetch(url); const data = await res.json();
             const foldersGrid = document.getElementById('foldersGrid'); const videosGrid = document.getElementById('videosGrid');
             foldersGrid.innerHTML = ''; videosGrid.innerHTML = '';
@@ -999,8 +1040,12 @@
 
             if (data.files && data.files.length > 0) {
                 data.files.forEach(file => {
-                    const card = document.createElement('div'); card.setAttribute('data-id', file.id); card.setAttribute('data-name', file.name); card.setAttribute('data-thumb', savedThumbnails[file.id] || file.thumbnailLink || '');
-                    card.setAttribute('data-description', file.description || '');
+                    const card = document.createElement('div'); 
+                    card.setAttribute('data-id', file.id); 
+                    card.setAttribute('data-name', file.name); 
+                    card.setAttribute('data-thumb', savedThumbnails[file.id] || file.thumbnailLink || '');
+                    card.setAttribute('data-size', file.size || '0');
+                    
                     const adminOverlayHtml = isAdmin ? `<div class="admin-card-overlay" style="display:block;" onclick="changeThumbnailPrompt('${file.id}', event)">⚙️ Edit Thumbnail</div><div class="admin-popular-overlay" style="display:block;" onclick="markAsPopularManual('${file.id}', '${file.name.replace(/'/g, "\\'")}', event)">⭐ Set Popular</div>` : ''; 
                     const currentThumb = savedThumbnails[file.id] || file.thumbnailLink; const isFav = favs.some(f => f.id === file.id) ? '❤️' : '🤍';
                     
@@ -1023,44 +1068,74 @@
             modal.classList.remove('pip-mode'); 
             isPipActive = false; 
             
-            // Integrated Official Google Drive Embedded Iframe Engine to bypass the Quota Exceeded Matrix entirely
             const googleIframeUrl = `https://drive.google.com/file/d/${id}/preview`;
             const wrapperBox = document.getElementById('videoWrapperEngineBox');
             wrapperBox.innerHTML = `<iframe src="${googleIframeUrl}" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
             
-            // Dynamic Video Description Fetching Sequence
+            // Extract attributes from cached DOM card elements
             const cardEl = document.querySelector(`[data-id="${id}"]`);
-            const title = cardEl ? cardEl.getAttribute('data-name') : 'Video Log';
+            const title = cardEl ? cardEl.getAttribute('data-name') : 'Video Assets';
             const thumb = cardEl ? cardEl.getAttribute('data-thumb') : '';
-            const desc = cardEl ? cardEl.getAttribute('data-description') : '';
-            const descBox = document.getElementById('videoModalDescriptionBox');
+            const rawSize = cardEl ? cardEl.getAttribute('data-size') : '0';
             
-            if (desc && desc.trim() !== "") {
-                descBox.innerText = desc;
-                descBox.style.display = 'block';
-            } else {
-                descBox.style.display = 'none';
-            }
+            // Render Dynamic Metadata Elements
+            document.getElementById('videoMetaDisplayTitle').innerText = title;
+            document.getElementById('videoMetaDisplaySize').innerText = `Size: ${formatBytes(parseInt(rawSize))}`;
+            
+            // Firestore Description sync
+            const descView = document.getElementById('videoDescriptionOutputView');
+            const adminInput = document.getElementById('videoDescriptionAdminInput');
+            const adminControls = document.getElementById('videoDescriptionAdminEditControls');
+            
+            descView.innerText = "Loading platform description details...";
+            adminInput.value = "";
+            
+            if(isAdmin) { adminControls.style.display = 'block'; }
+            else { adminControls.style.display = 'none'; }
 
-            // Save Progress immediately to local cluster interface mapping
+            db.collection('video_descriptions').doc(id).get().then(doc => {
+                if(doc.exists && doc.data().text) {
+                    descView.innerHTML = doc.data().text.replace(/\n/g, '<br>');
+                    adminInput.value = doc.data().text;
+                } else {
+                    descView.innerText = "No specific description logs provided yet for this synchronized video matrix.";
+                }
+            }).catch(() => {
+                descView.innerText = "Description connection idle.";
+            });
+
             saveVideoProgress(id, title, thumb);
             loadVideoMetaAndComments(id); 
+        }
+
+        async function saveCustomAdminDescription() {
+            if(!currentPlayingFileId) return;
+            const textContent = document.getElementById('videoDescriptionAdminInput').value.trim();
+            try {
+                await db.collection('video_descriptions').doc(currentPlayingFileId).set({
+                    text: textContent,
+                    lastUpdatedBy: loggedInUserEmail,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                document.getElementById('videoDescriptionOutputView').innerHTML = textContent ? textContent.replace(/\n/g, '<br>') : "No specific description logs provided yet.";
+                alert("Description catalog parameters successfully updated in cluster registry!");
+            } catch(e) {
+                alert("Error writing configuration payload into database.");
+            }
         }
         
         function closeVideo() { 
             document.getElementById('playerModal').style.display = 'none'; 
             document.getElementById('videoWrapperEngineBox').innerHTML = '';
-            document.getElementById('videoModalDescriptionBox').innerHTML = '';
             currentPlayingFileId = null; 
             isPipActive = false; 
             renderContinueWatching(); 
         }
         function closeVideoFromOutside(event) { if(!isPipActive) closeVideo(); }
         
-        // Corrected Direct Forced Raw Download Action Endpoint Mapping
         function downloadVideo(fileId) { 
-            const directDownloadUrl = `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${API_KEY}`;
-            window.open(directDownloadUrl, '_blank'); 
+            const secureDownloadGatewayUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
+            window.open(secureDownloadGatewayUrl, '_blank'); 
         }
         
         function updateBreadcrumbs() { const container = document.getElementById('breadcrumbs'); let html = ''; folderHistory.forEach((folder, idx) => { if (idx === folderHistory.length - 1) { html += `<span>${folder.name}</span>`; } else { html += `<a href="#" onclick="showAppPage('library'); loadFolder('${folder.id}', '${folder.name}')">${folder.name}</a> / `; } }); container.innerHTML = html; }
