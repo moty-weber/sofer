@@ -287,30 +287,25 @@
 
     <div id="mainApp">
         <header>
-            <!-- Left Side: Hamburger Icon -->
             <button class="menu-toggle-btn" onclick="toggleSidebar(true)">☰</button>
             
-            <!-- Center Side: Logo, Company Name AND Central Search Bar -->
             <div class="brand-center-container">
                 <div class="brand-logo-row" onclick="resetLibraryToHome()">
                     <img src="logo.png" class="brand-logo-img" alt="Logo" onerror="this.src='https://via.placeholder.com/55?text=sofer'">
                     <h1>sofer video cloud</h1>
                 </div>
-                <!-- Global Library Search Input -->
                 <div class="global-search-wrapper">
                     <input type="text" id="globalLibrarySearchInput" placeholder="Search across all synchronized network cloud media..." onkeydown="if(event.key === 'Enter') triggerLibrarySearch()">
                     <button onclick="triggerLibrarySearch()">Search</button>
                 </div>
             </div>
             
-            <!-- Right Side: User Profile Trigger -->
             <div class="header-right-profile" onclick="openProfileModal()">
                 <span class="profile-name-span" id="headerProfileName">Loading...</span>
                 <img src="logo.png" class="profile-pic" id="headerProfilePic" alt="Profile" onerror="this.src='https://via.placeholder.com/45?text=sofer'">
             </div>
         </header>
 
-        <!-- Slide-out Sidebar Menu Container -->
         <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar(false)"></div>
         <div class="sidebar-menu" id="sidebarMenu">
             <button class="nav-btn" onclick="toggleSidebar(false); resetLibraryToHome();">🏠 Library Home</button>
@@ -320,7 +315,6 @@
             <a href="about.html" class="nav-btn" onclick="toggleSidebar(false);">About Me</a>
             <button id="adminPanelBtn" class="nav-btn" onclick="toggleSidebar(false); openAdminPanel();">Admin Panel</button>
             
-            <!-- Custom Theme Changer Dropdown inside Menu -->
             <div class="theme-select-container">
                 <label>🎨 Select Visual Workspace Theme:</label>
                 <select class="theme-dropdown" onchange="changeAppTheme(this.value)" id="themeDropdownField">
@@ -340,7 +334,6 @@
             </div>
             
             <div class="main-container">
-                <!-- Continue Watching At Exact Top Front Page Level Position -->
                 <div id="continueWatchingWrapper" style="display: none; margin-bottom: 40px;">
                     <h2 class="section-title">Continue Watching</h2>
                     <div class="grid" id="continueGrid"></div>
@@ -354,7 +347,6 @@
             </div>
         </div>
 
-        <!-- Favorites פערזענליכע בלאט -->
         <div id="favoritesPage">
             <div class="breadcrumb-container" style="background-color: #1c2638; margin-bottom: 20px;">
                 <button class="back-btn" onclick="showAppPage('library')">← Back to Main Menu</button>
@@ -366,7 +358,6 @@
             </div>
         </div>
 
-        <!-- Popular / Trending Pinned Page -->
         <div id="popularPage">
             <div class="breadcrumb-container" style="background-color: #1c2638; margin-bottom: 20px;">
                 <button class="back-btn" onclick="showAppPage('library')">← Back to Main Menu</button>
@@ -404,7 +395,6 @@
         </div>
     </div>
 
-    <!-- Personal Profile Customization Modal -->
     <div class="profile-modal" id="profileModal">
         <div class="profile-modal-content">
             <button class="close-profile" onclick="closeProfileModal()">×</button>
@@ -442,26 +432,21 @@
         </div>
     </div>
 
-    <!-- Video Player Modal - Integrated Google Embedded Frame Solution -->
     <div class="player-modal" id="playerModal" onclick="closeVideoFromOutside(event)">
         <div class="player-content" onclick="event.stopPropagation()">
             <button class="minimize-player" onclick="togglePipMode()">🗕</button>
             <button class="close-player" onclick="closeVideo()">×</button>
             <div class="video-wrapper" id="videoWrapperEngineBox"></div>
             
-            <!-- Dynamic Video Header: Exact Title Name and File Size Cluster -->
             <div class="video-meta-header">
                 <p class="video-meta-name" id="videoMetaDisplayTitle">Video Name</p>
                 <p class="video-meta-size" id="videoMetaDisplaySize">Size: Loading...</p>
             </div>
 
-            <!-- Custom Admin Editable Description Studio Component Section -->
             <div class="admin-description-editor-zone">
                 <h4 style="margin: 0 0 8px 0; color: var(--drive-yellow);">Description</h4>
-                <!-- Display Section for Users -->
                 <div class="admin-description-display" id="videoDescriptionOutputView">No description provided yet.</div>
                 
-                <!-- Input Controls Area for Admin Users only -->
                 <div id="videoDescriptionAdminEditControls" style="display: none; margin-top: 12px;">
                     <textarea id="videoDescriptionAdminInput" rows="3" placeholder="Write a full custom HTML/Text description for this video asset..." style="width:100%; background:var(--bg-dark); border:1px solid rgba(255,255,255,0.15); padding:10px; border-radius:4px; color:white; font-family:inherit; box-sizing:border-box;"></textarea>
                     <button class="nav-btn" style="background: var(--drive-green); padding: 6px 12px; font-size:12px; margin-top:8px;" onclick="saveCustomAdminDescription()">Save Description</button>
@@ -515,6 +500,7 @@
         let currentPlayingFileId = null; let currentEditingPostId = null;
         let isPipActive = false;
         let base64ImageString = "";
+        let forumUnsubscribe = null;
 
         function getDeviceFingerprint() { return navigator.userAgent + (navigator.hardwareConcurrency || 2) + (navigator.deviceMemory || 4); }
 
@@ -526,7 +512,7 @@
             if (document.getElementById('themeDropdownField')) { document.getElementById('themeDropdownField').value = savedTheme; }
 
             if (savedEmail) { loggedInUserEmail = savedEmail; loggedInUserName = savedName; autoLogin(savedEmail); }
-            listenForUpdates(); updateFavMenuButtonVisibility();
+            listenForUpdates(); listenForNewForumPosts(); updateFavMenuButtonVisibility();
         };
 
         function toggleSidebar(open) {
@@ -604,7 +590,8 @@
             videosGrid.innerHTML = 'Searching cloud archive matrix...';
             
             const safeQuery = query.replace(/'/g, "\\'");
-            const url = `https://www.googleapis.com/drive/v3/files?q=name+contains+'${safeQuery}'+and+mimeType+contains+'video/'+and+trashed=false&fields=files(id,name,mimeType,thumbnailLink,size)&key=${API_KEY}`;
+            // Google Drive custom search syntax parameter matching logic
+            const url = `https://www.googleapis.com/drive/v3/files?q=name+contains+'${safeQuery}'+and+mimeType+not+contains+'application/vnd.google-apps.folder'+and+trashed=false&fields=files(id,name,mimeType,thumbnailLink,size)&key=${API_KEY}`;
             
             try {
                 const res = await fetch(url);
@@ -652,7 +639,13 @@
             document.getElementById('favoritesPage').style.display = 'none';
             document.getElementById('popularPage').style.display = 'none';
             
-            if(page === 'updates') { document.getElementById('updatesMenuBtn').classList.remove('badge-red'); document.getElementById('updatesPage').style.display = 'block'; loadBlogPosts(); } 
+            if(page === 'updates') { 
+                document.getElementById('updatesMenuBtn').classList.remove('badge-red'); 
+                // Mark latest timestamp read
+                localStorage.setItem('sofer_last_forum_view', Date.now().toString());
+                document.getElementById('updatesPage').style.display = 'block'; 
+                loadBlogPosts(); 
+            } 
             else if(page === 'favorites') { document.getElementById('favoritesPage').style.display = 'block'; renderFavorites(); } 
             else if(page === 'popular') { document.getElementById('popularPage').style.display = 'block'; renderPopularPage(); }
             else { document.getElementById('librarySection').style.display = 'block'; renderContinueWatching(); }
@@ -684,7 +677,7 @@
         async function checkAccess() {
             const input = document.getElementById('accessEmailInput').value.trim().toLowerCase(); if (!input) { alert('Please enter your Email Address.'); return; }
             if (input === ADMIN_TOKEN || input === "mw6559154@gmail.com") {
-                isAdmin = true; loggedInUserEmail = "mw6559154@gmail.com"; loggedInUserName = "Platform Administrator"; localStorage.setItem('soferUserEmail', "mw6559154@gmail.com"); localStorage.setItem('soferUserName', "Platform Administrator"); unlockApp(); return;
+                isAdmin = true; loggedInUserEmail = "mw6559154@gmail.com"; loggedInUserName = "Platform Administrator"; localStorage.setItem('soferUserEmail', "mw6559154@gmail.com"); localStorage.setItem('soferUserName', "Platform Administrator"); autoLogin("mw6559154@gmail.com"); return;
             }
             try {
                 const userDoc = await db.collection('allowed_users').doc(input).get();
@@ -859,7 +852,7 @@
 
         function loadBlogPosts() {
             const listContainer = document.getElementById('blogPostsList'); listContainer.innerHTML = 'Loading threads...';
-            db.collection('forum_posts').orderBy('timestamp', 'desc').onSnapshot(snapshot => {
+            db.collection('forum_posts').orderBy('timestamp', 'desc').get().then(snapshot => {
                 listContainer.innerHTML = '';
                 snapshot.forEach(doc => {
                     const postData = doc.data(); const postId = doc.id; const timeString = postData.timestamp ? postData.timestamp.toDate().toLocaleString() : 'Just now';
@@ -973,6 +966,25 @@
         function listenForUpdates() {
             db.collection('access_requests').onSnapshot(snap => { if(!snap.empty && isAdmin) document.getElementById('adminPanelBtn').classList.add('badge-red'); });
             db.collection('admin_messages').where("status", "==", "unread").onSnapshot(snap => { if(!snap.empty && isAdmin) { document.getElementById('adminPanelBtn').classList.add('badge-red'); document.getElementById('tabMsgBtn').classList.add('tab-badge-red'); } else { document.getElementById('tabMsgBtn').classList.remove('tab-badge-red'); } });
+        }
+
+        /* Dynamic Notification Core for Forum Updates */
+        function listenForNewForumPosts() {
+            if(forumUnsubscribe) forumUnsubscribe();
+            forumUnsubscribe = db.collection('forum_posts').orderBy('timestamp', 'desc').limit(1).onSnapshot(snap => {
+                if(!snap.empty) {
+                    snap.forEach(doc => {
+                        const post = doc.data();
+                        if(post.timestamp) {
+                            const lastView = parseInt(localStorage.getItem('sofer_last_forum_view') || '0');
+                            const postTime = post.timestamp.toDate().getTime();
+                            if(postTime > lastView && document.getElementById('updatesPage').style.display !== 'block') {
+                                document.getElementById('updatesMenuBtn').classList.add('badge-red');
+                            }
+                        }
+                    });
+                }
+            });
         }
 
         function toggleFavorite(fileId, event) {
