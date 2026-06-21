@@ -287,25 +287,30 @@
 
     <div id="mainApp">
         <header>
+            <!-- Left Side: Hamburger Icon -->
             <button class="menu-toggle-btn" onclick="toggleSidebar(true)">☰</button>
             
+            <!-- Center Side: Logo, Company Name AND Central Search Bar -->
             <div class="brand-center-container">
                 <div class="brand-logo-row" onclick="resetLibraryToHome()">
                     <img src="logo.png" class="brand-logo-img" alt="Logo" onerror="this.src='https://via.placeholder.com/55?text=sofer'">
                     <h1>sofer video cloud</h1>
                 </div>
+                <!-- Global Library Search Input -->
                 <div class="global-search-wrapper">
                     <input type="text" id="globalLibrarySearchInput" placeholder="Search across all synchronized network cloud media..." onkeydown="if(event.key === 'Enter') triggerLibrarySearch()">
                     <button onclick="triggerLibrarySearch()">Search</button>
                 </div>
             </div>
             
+            <!-- Right Side: User Profile Trigger -->
             <div class="header-right-profile" onclick="openProfileModal()">
                 <span class="profile-name-span" id="headerProfileName">Loading...</span>
                 <img src="logo.png" class="profile-pic" id="headerProfilePic" alt="Profile" onerror="this.src='https://via.placeholder.com/45?text=sofer'">
             </div>
         </header>
 
+        <!-- Slide-out Sidebar Menu Container -->
         <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar(false)"></div>
         <div class="sidebar-menu" id="sidebarMenu">
             <button class="nav-btn" onclick="toggleSidebar(false); resetLibraryToHome();">🏠 Library Home</button>
@@ -315,6 +320,7 @@
             <a href="about.html" class="nav-btn" onclick="toggleSidebar(false);">About Me</a>
             <button id="adminPanelBtn" class="nav-btn" onclick="toggleSidebar(false); openAdminPanel();">Admin Panel</button>
             
+            <!-- Custom Theme Changer Dropdown inside Menu -->
             <div class="theme-select-container">
                 <label>🎨 Select Visual Workspace Theme:</label>
                 <select class="theme-dropdown" onchange="changeAppTheme(this.value)" id="themeDropdownField">
@@ -334,6 +340,7 @@
             </div>
             
             <div class="main-container">
+                <!-- Continue Watching At Exact Top Front Page Level Position -->
                 <div id="continueWatchingWrapper" style="display: none; margin-bottom: 40px;">
                     <h2 class="section-title">Continue Watching</h2>
                     <div class="grid" id="continueGrid"></div>
@@ -347,6 +354,7 @@
             </div>
         </div>
 
+        <!-- Favorites פערזענליכע בלאט -->
         <div id="favoritesPage">
             <div class="breadcrumb-container" style="background-color: #1c2638; margin-bottom: 20px;">
                 <button class="back-btn" onclick="showAppPage('library')">← Back to Main Menu</button>
@@ -358,6 +366,7 @@
             </div>
         </div>
 
+        <!-- Popular / Trending Pinned Page -->
         <div id="popularPage">
             <div class="breadcrumb-container" style="background-color: #1c2638; margin-bottom: 20px;">
                 <button class="back-btn" onclick="showAppPage('library')">← Back to Main Menu</button>
@@ -395,6 +404,7 @@
         </div>
     </div>
 
+    <!-- Personal Profile Customization Modal -->
     <div class="profile-modal" id="profileModal">
         <div class="profile-modal-content">
             <button class="close-profile" onclick="closeProfileModal()">×</button>
@@ -432,21 +442,26 @@
         </div>
     </div>
 
+    <!-- Video Video Player Modal - Integrated Google Embedded Frame Solution -->
     <div class="player-modal" id="playerModal" onclick="closeVideoFromOutside(event)">
         <div class="player-content" onclick="event.stopPropagation()">
             <button class="minimize-player" onclick="togglePipMode()">🗕</button>
             <button class="close-player" onclick="closeVideo()">×</button>
             <div class="video-wrapper" id="videoWrapperEngineBox"></div>
             
+            <!-- Dynamic Video Header: Exact Title Name and File Size Cluster -->
             <div class="video-meta-header">
                 <p class="video-meta-name" id="videoMetaDisplayTitle">Video Name</p>
                 <p class="video-meta-size" id="videoMetaDisplaySize">Size: Loading...</p>
             </div>
 
+            <!-- Custom Admin Editable Description Studio Component Section -->
             <div class="admin-description-editor-zone">
                 <h4 style="margin: 0 0 8px 0; color: var(--drive-yellow);">Description</h4>
+                <!-- Display Section for Users -->
                 <div class="admin-description-display" id="videoDescriptionOutputView">No description provided yet.</div>
                 
+                <!-- Input Controls Area for Admin Users only -->
                 <div id="videoDescriptionAdminEditControls" style="display: none; margin-top: 12px;">
                     <textarea id="videoDescriptionAdminInput" rows="3" placeholder="Write a full custom HTML/Text description for this video asset..." style="width:100%; background:var(--bg-dark); border:1px solid rgba(255,255,255,0.15); padding:10px; border-radius:4px; color:white; font-family:inherit; box-sizing:border-box;"></textarea>
                     <button class="nav-btn" style="background: var(--drive-green); padding: 6px 12px; font-size:12px; margin-top:8px;" onclick="saveCustomAdminDescription()">Save Description</button>
@@ -506,12 +521,16 @@
 
         window.onload = function() {
             const savedEmail = localStorage.getItem('soferUserEmail');
-            const savedName = localStorage.getItem('soferUserName') || "Approved User";
+            const savedName = localStorage.getItem('soferUserName');
             const savedTheme = localStorage.getItem('soferAppTheme') || 'default';
             changeAppTheme(savedTheme);
             if (document.getElementById('themeDropdownField')) { document.getElementById('themeDropdownField').value = savedTheme; }
 
-            if (savedEmail) { loggedInUserEmail = savedEmail; loggedInUserName = savedName; autoLogin(savedEmail); }
+            if (savedEmail) { 
+                loggedInUserEmail = savedEmail; 
+                loggedInUserName = savedName || (savedEmail === "mw6559154@gmail.com" ? "Platform Administrator" : "Approved User"); 
+                autoLogin(savedEmail); 
+            }
             listenForUpdates(); listenForNewForumPosts(); updateFavMenuButtonVisibility();
         };
 
@@ -590,7 +609,6 @@
             videosGrid.innerHTML = 'Searching cloud archive matrix...';
             
             const safeQuery = query.replace(/'/g, "\\'");
-            // Google Drive custom search syntax parameter matching logic
             const url = `https://www.googleapis.com/drive/v3/files?q=name+contains+'${safeQuery}'+and+mimeType+not+contains+'application/vnd.google-apps.folder'+and+trashed=false&fields=files(id,name,mimeType,thumbnailLink,size)&key=${API_KEY}`;
             
             try {
@@ -641,7 +659,6 @@
             
             if(page === 'updates') { 
                 document.getElementById('updatesMenuBtn').classList.remove('badge-red'); 
-                // Mark latest timestamp read
                 localStorage.setItem('sofer_last_forum_view', Date.now().toString());
                 document.getElementById('updatesPage').style.display = 'block'; 
                 loadBlogPosts(); 
@@ -677,7 +694,11 @@
         async function checkAccess() {
             const input = document.getElementById('accessEmailInput').value.trim().toLowerCase(); if (!input) { alert('Please enter your Email Address.'); return; }
             if (input === ADMIN_TOKEN || input === "mw6559154@gmail.com") {
-                isAdmin = true; loggedInUserEmail = "mw6559154@gmail.com"; loggedInUserName = "Platform Administrator"; localStorage.setItem('soferUserEmail', "mw6559154@gmail.com"); localStorage.setItem('soferUserName', "Platform Administrator"); autoLogin("mw6559154@gmail.com"); return;
+                isAdmin = true; 
+                loggedInUserEmail = "mw6559154@gmail.com"; 
+                localStorage.setItem('soferUserEmail', "mw6559154@gmail.com"); 
+                autoLogin("mw6559154@gmail.com"); 
+                return;
             }
             try {
                 const userDoc = await db.collection('allowed_users').doc(input).get();
@@ -695,8 +716,11 @@
             try {
                 const dSnap = await db.collection('allowed_users').doc(email).get();
                 if(dSnap.exists) {
-                    loggedInUserName = dSnap.data().name || localStorage.getItem('soferUserName') || "Approved User";
+                    loggedInUserName = dSnap.data().name || localStorage.getItem('soferUserName') || (email === "mw6559154@gmail.com" ? "Platform Administrator" : "Approved User");
                     userProfilePicUrl = dSnap.data().avatar || "logo.png";
+                } else if (email === "mw6559154@gmail.com") {
+                    loggedInUserName = localStorage.getItem('soferUserName') || "Platform Administrator";
+                    userProfilePicUrl = "logo.png";
                 }
             } catch(e){}
             unlockApp(); 
@@ -1120,10 +1144,10 @@
                     descView.innerHTML = doc.data().text.replace(/\n/g, '<br>');
                     adminInput.value = doc.data().text;
                 } else {
-                    descView.innerText = "No specific description logs provided yet for this synchronized video matrix.";
+                    descView.innerText = "No specific description logs provided yet for this synchronized video video matrix.";
                 }
             }).catch(() => {
-                descView.innerText = "Description connection idle.";
+                descView.innerText = "Description connection connection connection idle.";
             });
 
             saveVideoProgress(id, title, thumb);
@@ -1140,9 +1164,9 @@
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 });
                 document.getElementById('videoDescriptionOutputView').innerHTML = textContent ? textContent.replace(/\n/g, '<br>') : "No specific description logs provided yet.";
-                alert("Description catalog parameters successfully updated in cluster registry!");
+                alert("Description catalog parameters parameters successfully updated updated in cluster registry!");
             } catch(e) {
-                alert("Error writing configuration payload into database.");
+                alert("Error writing configuration configuration configuration payload into database.");
             }
         }
         
