@@ -78,6 +78,22 @@
         .main-container { padding: 25px; max-width: 1400px; margin: 0 auto; }
         .section-title { border-left: 5px solid var(--drive-yellow); padding-left: 10px; margin-bottom: 20px; }
         
+        /* Carousel/Slider Styles */
+        .carousel-wrapper { position: relative; width: 100%; height: 350px; background-color: #0b0f19; border-radius: 12px; overflow: hidden; margin-bottom: 40px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 8px 24px rgba(0,0,0,0.6); }
+        .carousel-track { display: flex; width: 100%; height: 100%; transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        .carousel-slide { min-width: 100%; height: 100%; position: relative; cursor: pointer; box-sizing: border-box; }
+        .carousel-img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.55) contrast(1.05); }
+        .carousel-caption { position: absolute; bottom: 0; left: 0; width: 100%; padding: 40px 30px 30px 30px; background: linear-gradient(transparent, rgba(18, 24, 36, 0.95)); box-sizing: border-box; text-align: left; }
+        .carousel-caption h3 { margin: 0 0 8px 0; font-size: 24px; color: #fff; font-weight: bold; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .carousel-tag { display: inline-block; background-color: var(--drive-yellow); color: #121824; font-size: 12px; font-weight: bold; padding: 4px 10px; border-radius: 4px; margin-bottom: 10px; text-transform: uppercase; }
+        .carousel-control { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(28, 38, 56, 0.7); border: 1px solid rgba(255,255,255,0.1); color: white; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; font-size: 20px; font-weight: bold; display: flex; align-items: center; justify-content: center; z-index: 10; transition: background 0.2s, transform 0.2s; }
+        .carousel-control:hover { background: var(--drive-blue); transform: translateY(-50%) scale(1.1); }
+        .carousel-control.prev { left: 20px; }
+        .carousel-control.next { right: 20px; }
+        .carousel-indicators { position: absolute; bottom: 20px; right: 30px; display: flex; gap: 8px; z-index: 10; }
+        .carousel-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.4); border: none; cursor: pointer; padding: 0; transition: background 0.2s; }
+        .carousel-dot.active { background: var(--drive-yellow); width: 22px; border-radius: 6px; }
+
         /* Grids layout parameterizations */
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; justify-content: center; }
         #foldersGrid { grid-template-columns: repeat(auto-fill, minmax(275px, 1fr)); gap: 25px; }
@@ -233,6 +249,11 @@
             .brand-logo-row .brand-logo-img { width: 40px; height: 40px; }
             .brand-logo-row h1 { font-size: 19px; }
             .global-search-wrapper { width: 100%; }
+            .carousel-wrapper { height: 220px; margin-bottom: 25px; }
+            .carousel-caption h3 { font-size: 16px; }
+            .carousel-caption { padding: 20px 15px 15px 15px; }
+            .carousel-control { width: 32px; height: 32px; font-size: 14px; }
+            .carousel-indicators { bottom: 10px; right: 15px; }
             .grid, #foldersGrid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
             .card.folder { min-height: auto; }
             .card.folder .thumbnail-placeholder { height: 100px; font-size: 35px; }
@@ -332,6 +353,14 @@
             </div>
             
             <div class="main-container">
+                <!-- Trending Carousel Slider (גאר אויבן אויף די הויפט זייט) -->
+                <div id="carouselContainer" class="carousel-wrapper" style="display: none;">
+                    <button class="carousel-control prev" onclick="moveCarousel(-1)">&#10094;</button>
+                    <button class="carousel-control next" onclick="moveCarousel(1)">&#10095;</button>
+                    <div class="carousel-track" id="carouselTrack"></div>
+                    <div class="carousel-indicators" id="carouselIndicators"></div>
+                </div>
+
                 <div id="continueWatchingWrapper" style="display: none; margin-bottom: 40px;">
                     <h2 class="section-title">Continue Watching</h2>
                     <div class="grid" id="continueGrid"></div>
@@ -393,6 +422,7 @@
         </div>
     </div>
 
+    <!-- Personal Profile Customization Modal -->
     <div class="profile-modal" id="profileModal">
         <div class="profile-modal-content">
             <button class="close-profile" onclick="closeProfileModal()">×</button>
@@ -503,6 +533,11 @@
         let base64ImageString = "";
         let forumUnsubscribe = null;
 
+        // Carousel Slider State Variables
+        let carouselCurrentIndex = 0;
+        let carouselInterval = null;
+        let popularVideosList = [];
+
         function getDeviceFingerprint() { return navigator.userAgent + (navigator.hardwareConcurrency || 2) + (navigator.deviceMemory || 4); }
 
         window.onload = function() {
@@ -537,7 +572,6 @@
             document.getElementById('profileNicknameInput').value = loggedInUserName;
             document.getElementById('profileModalPreviewImg').src = userProfilePicUrl;
             
-            // אויב ס'איז א יו אר על, לייג עס אריין אין די נייע באקסל
             if(userProfilePicUrl && userProfilePicUrl.startsWith('http')) {
                 document.getElementById('profileImageUrlInput').value = userProfilePicUrl;
             } else {
@@ -556,13 +590,12 @@
                 reader.onload = function(e) {
                     base64ImageString = e.target.result;
                     document.getElementById('profileModalPreviewImg').src = base64ImageString;
-                    document.getElementById('profileImageUrlInput').value = ''; // רעשן די URL באקס אויב מען האט געקליבן א פייל
+                    document.getElementById('profileImageUrlInput').value = ''; 
                 };
                 reader.readAsDataURL(input.files[0]);
             }
         }
 
-        /* דערהיינטיקטע פונקציע פארן סעיוון - ארבעט געהעריג סיי פארן אדמין */
         async function saveUserProfileData() {
             const nick = document.getElementById('profileNicknameInput').value.trim();
             if (!nick) { alert('Please enter a nickname.'); return; }
@@ -570,10 +603,9 @@
             loggedInUserName = nick;
             userProfilePicUrl = base64ImageString || "logo.png";
             localStorage.setItem('soferUserName', nick);
-            localStorage.setItem('soferUserAvatar', userProfilePicUrl); // האלט עס אין לאקאל סטארידזש
+            localStorage.setItem('soferUserAvatar', userProfilePicUrl); 
             
             try {
-                // שרייב אריין אין די פירעבאַסע קולעקציע (אויב די יוזער עקזיסטירט)
                 await db.collection('allowed_users').doc(loggedInUserEmail).set({
                     name: nick,
                     avatar: userProfilePicUrl,
@@ -583,7 +615,6 @@
                 console.log("Firebase storage bypass for user update profile ledger.");
             }
             
-            // דערהיינטיג די גאנצע אינטערפעיס גלייך לעיוו
             document.getElementById('headerProfileName').innerText = loggedInUserName;
             document.getElementById('headerProfilePic').src = userProfilePicUrl;
             document.getElementById('userDisplayBadge').innerText = `${loggedInUserName} (${loggedInUserEmail})`;
@@ -665,7 +696,11 @@
             } 
             else if(page === 'favorites') { document.getElementById('favoritesPage').style.display = 'block'; renderFavorites(); } 
             else if(page === 'popular') { document.getElementById('popularPage').style.display = 'block'; renderPopularPage(); }
-            else { document.getElementById('librarySection').style.display = 'block'; renderContinueWatching(); }
+            else { 
+                document.getElementById('librarySection').style.display = 'block'; 
+                renderContinueWatching(); 
+                updateCarouselVisibility();
+            }
             updateFavMenuButtonVisibility();
         }
 
@@ -694,7 +729,7 @@
         async function checkAccess() {
             const input = document.getElementById('accessEmailInput').value.trim().toLowerCase(); if (!input) { alert('Please enter your Email Address.'); return; }
             if (input === ADMIN_TOKEN || input === "mw6559154@gmail.com") {
-                isAdmin = true; // פאראכטן דא צו true
+                isAdmin = true; 
                 loggedInUserEmail = "mw6559154@gmail.com"; 
                 localStorage.setItem('soferUserEmail', "mw6559154@gmail.com"); 
                 autoLogin("mw6559154@gmail.com"); 
@@ -737,14 +772,110 @@
             document.getElementById('userDisplayBadge').innerText = `${loggedInUserName} (${loggedInUserEmail})`;
 
             try { const thumbSnapshot = await db.collection('custom_thumbnails').get(); thumbSnapshot.forEach(doc => { savedThumbnails[doc.id] = doc.data().url; }); } catch(e) {}
+            
+            // לאדן די קעראַסעל דורכאויס פירעבאַסע דאַטן
+            initializeTrendingCarousel();
             loadFolder(START_FOLDER_ID, "Home");
+        }
+
+        /* --- Trending Carousel (סליידער) לאגיק --- */
+        function initializeTrendingCarousel() {
+            db.collection('popular_videos').limit(5).onSnapshot(snap => {
+                popularVideosList = [];
+                const track = document.getElementById('carouselTrack');
+                const indicators = document.getElementById('carouselIndicators');
+                
+                if(snap.empty) {
+                    document.getElementById('carouselContainer').style.display = 'none';
+                    return;
+                }
+                
+                track.innerHTML = '';
+                indicators.innerHTML = '';
+                let index = 0;
+
+                snap.forEach(doc => {
+                    const data = doc.data();
+                    const fileId = doc.id;
+                    popularVideosList.push({ id: fileId, title: data.title, thumb: data.thumb });
+
+                    // בויען א סלייד פילטערד מיט גרויסע קלארע בילדער
+                    const slide = document.createElement('div');
+                    slide.className = 'carousel-slide';
+                    slide.onclick = () => playVideo(fileId);
+                    
+                    const bgImg = data.thumb || 'https://via.placeholder.com/1200x350?text=Trending+Media';
+                    slide.innerHTML = `
+                        <img src="${bgImg}" class="carousel-img" onerror="this.src='https://via.placeholder.com/1200x350?text=Trending+Media'">
+                        <div class="carousel-caption">
+                            <span class="carousel-tag">🔥 Trending This Week</span>
+                            <h3>${data.title}</h3>
+                        </div>
+                    `;
+                    track.appendChild(slide);
+
+                    // אינדיקאטאר דאטס
+                    const dot = document.createElement('button');
+                    dot.className = `carousel-dot ${index === 0 ? 'active' : ''}`;
+                    dot.onclick = (e) => { e.stopPropagation(); jumpToSlide(index); };
+                    indicators.appendChild(dot);
+                    
+                    index++;
+                });
+
+                carouselCurrentIndex = 0;
+                updateCarouselPosition();
+                updateCarouselVisibility();
+                
+                // אנהייבן אויטאמאטיש דרייען דעם סליידער יעדע 4 סעקונדעס
+                if(carouselInterval) clearInterval(carouselInterval);
+                carouselInterval = setInterval(() => moveCarousel(1), 4000);
+            });
+        }
+
+        function moveCarousel(direction) {
+            if (popularVideosList.length === 0) return;
+            carouselCurrentIndex += direction;
+            if (carouselCurrentIndex >= popularVideosList.length) carouselCurrentIndex = 0;
+            if (carouselCurrentIndex < 0) carouselCurrentIndex = popularVideosList.length - 1;
+            updateCarouselPosition();
+        }
+
+        function jumpToSlide(index) {
+            carouselCurrentIndex = index;
+            updateCarouselPosition();
+        }
+
+        function updateCarouselPosition() {
+            const track = document.getElementById('carouselTrack');
+            if(track) {
+                track.style.transform = `translateX(-${carouselCurrentIndex * 100}%)`;
+            }
+            
+            // דערהיינטיקן די קלאסן פון די דאטס
+            const dots = document.querySelectorAll('.carousel-dot');
+            dots.forEach((dot, idx) => {
+                if(idx === carouselCurrentIndex) dot.classList.add('active');
+                else dot.classList.remove('active');
+            });
+        }
+
+        function updateCarouselVisibility() {
+            const currentFolder = folderHistory[folderHistory.length - 1];
+            const container = document.getElementById('carouselContainer');
+            // ווייז דעם סליידער נאר ווען מען געפינט זיך אויף די הויפט פעידזש (Home Base)
+            if (container && popularVideosList.length > 0 && currentFolder && currentFolder.id === START_FOLDER_ID && document.getElementById('librarySection').style.display !== 'none') {
+                container.style.display = 'block';
+            } else if (container) {
+                container.style.display = 'none';
+            }
         }
 
         async function markAsPopularManual(fileId, title, event) {
             event.stopPropagation();
             const cardEl = document.querySelector(`[data-id="${fileId}"]`); const thumb = cardEl ? cardEl.getAttribute('data-thumb') : '';
             await db.collection('popular_videos').doc(fileId).set({ title: title, thumb: thumb || '' });
-            alert('Video has been successfully pinned to the Latest Popular page!');
+            alert('Video has been successfully pinned to the Latest Popular page and Carousel!');
         }
 
         async function removePopularManual(fileId, event) {
@@ -1035,6 +1166,7 @@
         async function openAdminPanel() { document.getElementById('adminPanelBtn').classList.remove('badge-red'); document.getElementById('adminModal').style.display = 'flex'; switchAdminTab('requests'); fetchAdminData(); }
         function hideAdminPanel() { document.getElementById('adminModal').style.display = 'none'; }
         
+        // דערהיינטיקטע טאַב לאָגיק
         function switchAdminTab(tab) {
             document.getElementById('tabReqBtn').className = 'tab-btn'; document.getElementById('tabUsersBtn').className = 'tab-btn'; document.getElementById('tabMsgBtn').className = 'tab-btn'; document.getElementById('secRequests').className = 'panel-section'; document.getElementById('secUsers').className = 'panel-section'; document.getElementById('secMessages').className = 'panel-section';
             if(tab === 'requests') { document.getElementById('tabReqBtn').classList.add('active'); document.getElementById('secRequests').classList.add('active'); } 
@@ -1079,6 +1211,10 @@
         async function loadFolder(folderId, folderName) {
             const index = folderHistory.findIndex(f => f.id === folderId); if (index !== -1) { folderHistory = folderHistory.slice(0, index + 1); } else { folderHistory.push({ id: folderId, name: folderName }); }
             updateBreadcrumbs();
+            
+            // רוקע אן אפדעיט פארן באהאלטן אדער ווייזן דעם סליידער לויטן פאלדער לאקאציע
+            updateCarouselVisibility();
+
             const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+trashed=false&fields=files(id,name,mimeType,thumbnailLink,size)&key=${API_KEY}`;
             const res = await fetch(url); const data = await res.json();
             const foldersGrid = document.getElementById('foldersGrid'); const videosGrid = document.getElementById('videosGrid');
