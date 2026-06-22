@@ -38,8 +38,19 @@
         body.has-broadcast { padding-top: 175px; }
         body.has-broadcast header { top: 45px; }
 
+        /* Header controls layout */
+        .header-left-controls { display: flex; align-items: center; gap: 15px; z-index: 1060; position: relative; }
+
+        /* Search Bar Styles */
+        .search-container { display: flex; align-items: center; position: relative; }
+        .search-icon-btn { background: none; border: none; color: var(--text-light); font-size: 22px; cursor: pointer; padding: 5px; display: flex; align-items: center; justify-content: center; transition: color 0.2s; }
+        .search-icon-btn:hover { color: var(--drive-yellow); }
+        .search-input-wrapper { display: none; position: absolute; left: 45px; top: 50%; transform: translateY(-50%); background: var(--bg-dark); border: 1px solid rgba(255,255,255,0.15); border-radius: 20px; padding: 2px 10px; align-items: center; width: 220px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .search-input-wrapper.open { display: flex; }
+        .search-input-wrapper input { background: none; border: none; color: white; padding: 6px; font-size: 14px; width: 100%; outline: none; }
+
         /* Sidebar Styles */
-        .menu-toggle-btn { background: none; border: none; color: var(--text-light); font-size: 26px; cursor: pointer; z-index: 1060; }
+        .menu-toggle-btn { background: none; border: none; color: var(--text-light); font-size: 26px; cursor: pointer; }
         .sidebar-menu { position: fixed; top: 0; left: -300px; width: 280px; height: 100%; background-color: var(--card-bg); box-shadow: 5px 0 15px rgba(0,0,0,0.5); z-index: 1070; padding: 70px 20px 20px 20px; box-sizing: border-box; transition: left 0.3s ease; display: flex; flex-direction: column; gap: 15px; }
         .sidebar-menu.open { left: 0; }
         .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1065; }
@@ -51,7 +62,7 @@
         .theme-dropdown { width: 100%; padding: 8px; background: var(--bg-dark); color: var(--text-light); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; }
 
         /* Enhanced Large Logo & Brand Layout */
-        .brand-center-container { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; gap: 5px; width: 60%; max-width: 700px; }
+        .brand-center-container { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; gap: 5px; width: 45%; max-width: 700px; }
         .brand-logo-row { display: flex; align-items: center; gap: 18px; cursor: pointer; }
         .brand-logo-img { width: 65px; height: 65px; object-fit: contain; transition: transform 0.2s; }
         .brand-logo-row:hover .brand-logo-img { transform: scale(1.05); }
@@ -251,7 +262,8 @@
             body.has-broadcast { padding-top: 290px; }
             body.has-broadcast header { top: 45px; }
             header { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 15px; padding: 15px; min-height: auto; }
-            .menu-toggle-btn { position: absolute; left: 15px; top: 20px; font-size: 28px; }
+            .header-left-controls { position: absolute; left: 15px; top: 20px; }
+            .search-input-wrapper { left: auto; right: -120px; top: 45px; }
             .header-right-profile { position: absolute; top: 20px; right: 15px; padding: 4px 10px; margin: 0; }
             .brand-center-container { position: static; transform: none; width: 100%; max-width: 100%; margin-top: 45px; gap: 12px; }
             .brand-logo-row .brand-logo-img { width: 50px; height: 50px; }
@@ -317,7 +329,15 @@
 
     <div id="mainApp">
         <header>
-            <button class="menu-toggle-btn" onclick="toggleSidebar(true)">☰</button>
+            <div class="header-left-controls">
+                <button class="menu-toggle-btn" onclick="toggleSidebar(true)">☰</button>
+                <div class="search-container">
+                    <button class="search-icon-btn" onclick="toggleSearchBar()" title="Search Library">🔍</button>
+                    <div class="search-input-wrapper" id="searchInputWrapper">
+                        <input type="text" id="librarySearchInput" placeholder="Search song, folder, video..." oninput="filterLibraryResults()">
+                    </div>
+                </div>
+            </div>
             
             <div class="brand-center-container">
                 <div class="brand-logo-row" onclick="resetLibraryToHome()">
@@ -588,6 +608,43 @@
             else { menu.classList.remove('open'); overlay.classList.remove('open'); }
         }
 
+        /* Search Functions */
+        function toggleSearchBar() {
+            const wrapper = document.getElementById('searchInputWrapper');
+            const input = document.getElementById('librarySearchInput');
+            wrapper.classList.toggle('open');
+            if(wrapper.classList.contains('open')) {
+                input.focus();
+            } else {
+                input.value = '';
+                filterLibraryResults();
+            }
+        }
+
+        function filterLibraryResults() {
+            const query = document.getElementById('librarySearchInput').value.toLowerCase().trim();
+            const folderCards = document.querySelectorAll('#foldersGrid .card');
+            const videoCards = document.querySelectorAll('#videosGrid .card');
+
+            folderCards.forEach(card => {
+                const title = card.querySelector('.card-title').innerText.toLowerCase();
+                if(title.includes(query)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            videoCards.forEach(card => {
+                const title = card.querySelector('.card-title').innerText.toLowerCase();
+                if(title.includes(query)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
         function changeAppTheme(theme) {
             document.body.className = '';
             if (theme !== 'default') { document.body.classList.add('theme-' + theme); }
@@ -654,6 +711,7 @@
             document.getElementById('foldersTitle').style.display = 'block';
             document.getElementById('videosSpacer').style.display = 'block';
             document.getElementById('videosTitle').innerText = 'Media Library Assets';
+            document.getElementById('librarySearchInput').value = '';
             showAppPage('library');
             loadFolder(START_FOLDER_ID, "Home");
         }
@@ -1049,6 +1107,17 @@
             try { await db.collection('forum_posts').doc(postId).collection('comments').add({ userName: loggedInUserName, userEmail: loggedInUserEmail, userAvatar: userProfilePicUrl, commentText: text, parentId: parentId, timestamp: firebase.firestore.FieldValue.serverTimestamp() }); inputField.value = ''; if(parentId !== 'root') { document.getElementById(`inline-replybox-${parentId}`).style.display = "none"; } } catch (e) { alert('Comment error.'); }
         }
 
+        function fontCommentsForPost(postId) {
+            const container = document.getElementById(`comments-list-${postId}`);
+            db.collection('forum_posts').doc(postId).collection('comments').orderBy('timestamp', 'asc').onSnapshot(snap => {
+                container.innerHTML = ''; if(snap.empty) { container.innerHTML = '<p style="color:var(--text-muted); font-size:13px; margin:0;">No comments in this thread yet.</p>'; return; }
+                let commentMap = {}; let rootComments = [];
+                snap.forEach(cDoc => { let data = cDoc.data(); data.id = cDoc.id; data.replies = []; commentMap[data.id] = data; if (data.parentId === 'root' || !data.parentId) { rootComments.push(data); } });
+                snap.forEach(cDoc => { let data = commentMap[cDoc.id]; if (data.parentId && data.parentId !== 'root' && commentMap[data.parentId]) { commentMap[data.parentId].replies.push(data); } });
+                rootComments.forEach(rootComment => { buildRecursiveCommentNode(container, rootComment, postId); });
+            });
+        }
+
         function loadCommentsForPost(postId) {
             const container = document.getElementById(`comments-list-${postId}`);
             db.collection('forum_posts').doc(postId).collection('comments').orderBy('timestamp', 'asc').onSnapshot(snap => {
@@ -1295,7 +1364,6 @@
                         card.className = 'card folder'; card.onclick = () => { showAppPage('library'); loadFolder(file.id, file.name); };
                         card.innerHTML = `${adminOverlayHtml}<div class="thumbnail-placeholder" id="thumb-${file.id}">${savedThumbnails[file.id] ? `<img src="${savedThumbnails[file.id]}">` : '📁'}</div><div class="card-info"><p class="card-title">${file.name}</p></div>`; foldersGrid.appendChild(card);
                     } else if (file.mimeType.startsWith('video/') || file.mimeType.startsWith('audio/') || file.name.toLowerCase().includes('audio')) {
-                        // Added Support Matrix for both Audio and Video assets interchangeably
                         card.className = 'card video'; card.onclick = (e) => { if(!e.target.classList.contains('download-icon-btn') && !e.target.classList.contains('admin-card-overlay') && !e.target.classList.contains('admin-popular-overlay') && !e.target.classList.contains('fav-btn')) playVideo(file.id); };
                         
                         let visualPlaceholderIconHtml = currentThumb ? `<img src="${currentThumb}">` : (file.mimeType.startsWith('audio/') ? '🎵' : '🎬');
@@ -1304,6 +1372,9 @@
                     }
                 });
             } else { foldersGrid.innerHTML = '<p>No folders.</p>'; videosGrid.innerHTML = '<p>No matching video or audio media files discovered.</p>'; }
+            
+            // clear search input on moving folders
+            document.getElementById('librarySearchInput').value = '';
             renderContinueWatching(); updateFavMenuButtonVisibility();
         }
         
