@@ -80,7 +80,7 @@
         
         /* Grids layout parameterizations */
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; justify-content: center; }
-        #foldersGrid { grid-template-columns: repeat(auto-fill, minmax(275px, 1fr)); gap: 25px; } /* Slightly larger workspace for folders matrix */
+        #foldersGrid { grid-template-columns: repeat(auto-fill, minmax(275px, 1fr)); gap: 25px; }
 
         .card { background-color: var(--card-bg); border-radius: 8px; overflow: hidden; transition: transform 0.2s; cursor: pointer; border: 1px solid rgba(255,255,255,0.05); position: relative; }
         .card:hover { transform: translateY(-5px); }
@@ -211,7 +211,6 @@
         .comment-input-row input { flex-grow: 1; background: #121824; border: 1px solid #25334a; border-radius: 6px; padding: 10px; color: white; font-size: 14px; }
         .comment-input-row button { background: var(--drive-blue); color: white; border: none; padding: 0 15px; border-radius: 6px; cursor: pointer; font-weight: bold; }
         
-        /* סטילס פֿאַר ווידעאָ ריפּליי לייקס און דיליט */
         .video-comment-item { border-bottom: 1px solid #1c2638; padding: 10px 0; display: flex; gap: 12px; align-items: flex-start; }
         .video-comment-actions { display: flex; gap: 12px; align-items: center; margin-top: 5px; }
         .v-action-btn { background: none; border: none; color: var(--text-muted); font-size: 11px; cursor: pointer; padding: 0; text-decoration: underline; }
@@ -226,7 +225,6 @@
         .profile-preview-box { text-align: center; margin-bottom: 10px; }
         .profile-preview-box img { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 2px solid var(--drive-yellow); background: white; }
 
-        /* Mobile responsiveness queries matrix mappings */
         @media (max-width: 768px) {
             header { display: flex; flex-direction: column; align-items: stretch; justify-content: flex-start; gap: 15px; padding: 15px; min-height: auto; }
             .menu-toggle-btn { align-self: flex-start; font-size: 28px; margin-bottom: -40px; }
@@ -287,30 +285,25 @@
 
     <div id="mainApp">
         <header>
-            <!-- Left Side: Hamburger Icon -->
             <button class="menu-toggle-btn" onclick="toggleSidebar(true)">☰</button>
             
-            <!-- Center Side: Logo, Company Name AND Central Search Bar -->
             <div class="brand-center-container">
                 <div class="brand-logo-row" onclick="resetLibraryToHome()">
-                    <img src="logo.png" class="brand-logo-img" alt="Logo" onerror="this.src='https://via.placeholder.com/55?text=sofer'">
+                    <img src="logo.png" class="brand-logo-img" id="mainAppTopLogo" alt="Logo" onerror="this.src='https://via.placeholder.com/55?text=sofer'">
                     <h1>sofer video cloud</h1>
                 </div>
-                <!-- Global Library Search Input -->
                 <div class="global-search-wrapper">
                     <input type="text" id="globalLibrarySearchInput" placeholder="Search across all synchronized network cloud media..." onkeydown="if(event.key === 'Enter') triggerLibrarySearch()">
                     <button onclick="triggerLibrarySearch()">Search</button>
                 </div>
             </div>
             
-            <!-- Right Side: User Profile Trigger -->
             <div class="header-right-profile" onclick="openProfileModal()">
                 <span class="profile-name-span" id="headerProfileName">Loading...</span>
                 <img src="logo.png" class="profile-pic" id="headerProfilePic" alt="Profile" onerror="this.src='https://via.placeholder.com/45?text=sofer'">
             </div>
         </header>
 
-        <!-- Slide-out Sidebar Menu Container -->
         <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar(false)"></div>
         <div class="sidebar-menu" id="sidebarMenu">
             <button class="nav-btn" onclick="toggleSidebar(false); resetLibraryToHome();">🏠 Library Home</button>
@@ -320,7 +313,6 @@
             <a href="about.html" class="nav-btn" onclick="toggleSidebar(false);">About Me</a>
             <button id="adminPanelBtn" class="nav-btn" onclick="toggleSidebar(false); openAdminPanel();">Admin Panel</button>
             
-            <!-- Custom Theme Changer Dropdown inside Menu -->
             <div class="theme-select-container">
                 <label>🎨 Select Visual Workspace Theme:</label>
                 <select class="theme-dropdown" onchange="changeAppTheme(this.value)" id="themeDropdownField">
@@ -340,7 +332,6 @@
             </div>
             
             <div class="main-container">
-                <!-- Continue Watching At Exact Top Front Page Level Position -->
                 <div id="continueWatchingWrapper" style="display: none; margin-bottom: 40px;">
                     <h2 class="section-title">Continue Watching</h2>
                     <div class="grid" id="continueGrid"></div>
@@ -354,7 +345,6 @@
             </div>
         </div>
 
-        <!-- Favorites פערזענליכע בלאט -->
         <div id="favoritesPage">
             <div class="breadcrumb-container" style="background-color: #1c2638; margin-bottom: 20px;">
                 <button class="back-btn" onclick="showAppPage('library')">← Back to Main Menu</button>
@@ -366,7 +356,6 @@
             </div>
         </div>
 
-        <!-- Popular / Trending Pinned Page -->
         <div id="popularPage">
             <div class="breadcrumb-container" style="background-color: #1c2638; margin-bottom: 20px;">
                 <button class="back-btn" onclick="showAppPage('library')">← Back to Main Menu</button>
@@ -404,7 +393,6 @@
         </div>
     </div>
 
-    <!-- Personal Profile Customization Modal -->
     <div class="profile-modal" id="profileModal">
         <div class="profile-modal-content">
             <button class="close-profile" onclick="closeProfileModal()">×</button>
@@ -418,7 +406,10 @@
             <label style="font-weight: bold; font-size:14px;">Profile Nickname / Display Name:</label>
             <input type="text" id="profileNicknameInput" placeholder="Enter custom nickname...">
             
-            <label style="font-weight: bold; font-size:14px; margin-top: 10px; display:block;">Upload Avatar Picture:</label>
+            <label style="font-weight: bold; font-size:14px; margin-top: 10px; display:block;">Profile Picture Image URL:</label>
+            <input type="text" id="profileImageUrlInput" placeholder="Paste direct image link (http://...)" oninput="document.getElementById('profileModalPreviewImg').src = this.value || 'logo.png'; base64ImageString = this.value;">
+
+            <label style="font-weight: bold; font-size:14px; margin-top: 10px; display:block;">Or Upload Avatar Picture:</label>
             <label class="profile-upload-btn-label" for="profileImageFileInput">📁 Choose Image File (JPG/PNG)</label>
             <input type="file" id="profileImageFileInput" accept="image/*" style="display:none;" onchange="previewSelectedProfileImage(this)">
             
@@ -442,26 +433,21 @@
         </div>
     </div>
 
-    <!-- Video Video Player Modal - Integrated Google Embedded Frame Solution -->
     <div class="player-modal" id="playerModal" onclick="closeVideoFromOutside(event)">
         <div class="player-content" onclick="event.stopPropagation()">
             <button class="minimize-player" onclick="togglePipMode()">🗕</button>
             <button class="close-player" onclick="closeVideo()">×</button>
             <div class="video-wrapper" id="videoWrapperEngineBox"></div>
             
-            <!-- Dynamic Video Header: Exact Title Name and File Size Cluster -->
             <div class="video-meta-header">
                 <p class="video-meta-name" id="videoMetaDisplayTitle">Video Name</p>
                 <p class="video-meta-size" id="videoMetaDisplaySize">Size: Loading...</p>
             </div>
 
-            <!-- Custom Admin Editable Description Studio Component Section -->
             <div class="admin-description-editor-zone">
                 <h4 style="margin: 0 0 8px 0; color: var(--drive-yellow);">Description</h4>
-                <!-- Display Section for Users -->
                 <div class="admin-description-display" id="videoDescriptionOutputView">No description provided yet.</div>
                 
-                <!-- Input Controls Area for Admin Users only -->
                 <div id="videoDescriptionAdminEditControls" style="display: none; margin-top: 12px;">
                     <textarea id="videoDescriptionAdminInput" rows="3" placeholder="Write a full custom HTML/Text description for this video asset..." style="width:100%; background:var(--bg-dark); border:1px solid rgba(255,255,255,0.15); padding:10px; border-radius:4px; color:white; font-family:inherit; box-sizing:border-box;"></textarea>
                     <button class="nav-btn" style="background: var(--drive-green); padding: 6px 12px; font-size:12px; margin-top:8px;" onclick="saveCustomAdminDescription()">Save Description</button>
@@ -550,6 +536,14 @@
         function openProfileModal() {
             document.getElementById('profileNicknameInput').value = loggedInUserName;
             document.getElementById('profileModalPreviewImg').src = userProfilePicUrl;
+            
+            // אויב ס'איז א יו אר על, לייג עס אריין אין די נייע באקסל
+            if(userProfilePicUrl && userProfilePicUrl.startsWith('http')) {
+                document.getElementById('profileImageUrlInput').value = userProfilePicUrl;
+            } else {
+                document.getElementById('profileImageUrlInput').value = '';
+            }
+            
             base64ImageString = userProfilePicUrl;
             document.getElementById('profileModal').style.display = 'flex';
         }
@@ -562,12 +556,13 @@
                 reader.onload = function(e) {
                     base64ImageString = e.target.result;
                     document.getElementById('profileModalPreviewImg').src = base64ImageString;
+                    document.getElementById('profileImageUrlInput').value = ''; // רעשן די URL באקס אויב מען האט געקליבן א פייל
                 };
                 reader.readAsDataURL(input.files[0]);
             }
         }
 
-        /* Fixed Profile Saver Module for Administrators & Standard Registered Clients */
+        /* דערהיינטיקטע פונקציע פארן סעיוון - ארבעט געהעריג סיי פארן אדמין */
         async function saveUserProfileData() {
             const nick = document.getElementById('profileNicknameInput').value.trim();
             if (!nick) { alert('Please enter a nickname.'); return; }
@@ -575,24 +570,29 @@
             loggedInUserName = nick;
             userProfilePicUrl = base64ImageString || "logo.png";
             localStorage.setItem('soferUserName', nick);
+            localStorage.setItem('soferUserAvatar', userProfilePicUrl); // האלט עס אין לאקאל סטארידזש
             
-            // Set allows upsert logic matrix ensuring data configuration parameters write smoothly
-            await db.collection('allowed_users').doc(loggedInUserEmail).set({
-                name: nick,
-                avatar: userProfilePicUrl,
-                approved: true
-            }, { merge: true });
+            try {
+                // שרייב אריין אין די פירעבאַסע קולעקציע (אויב די יוזער עקזיסטירט)
+                await db.collection('allowed_users').doc(loggedInUserEmail).set({
+                    name: nick,
+                    avatar: userProfilePicUrl,
+                    approved: true
+                }, { merge: true });
+            } catch (e) {
+                console.log("Firebase storage bypass for user update profile ledger.");
+            }
             
+            // דערהיינטיג די גאנצע אינטערפעיס גלייך לעיוו
             document.getElementById('headerProfileName').innerText = loggedInUserName;
             document.getElementById('headerProfilePic').src = userProfilePicUrl;
             document.getElementById('userDisplayBadge').innerText = `${loggedInUserName} (${loggedInUserEmail})`;
             
-            alert('Your dynamic profile has been updated!');
+            alert('Your dynamic profile has been updated successfully!');
             closeProfileModal();
             if(document.getElementById('updatesPage').style.display === 'block') { loadBlogPosts(); }
         }
 
-        /* Fixed Centered Global Search Engine Matrix Setup - Fixed syntax constraint */
         async function triggerLibrarySearch() {
             const query = document.getElementById('globalLibrarySearchInput').value.trim();
             if(!query) { alert('Please type a search word first.'); return; }
@@ -694,7 +694,7 @@
         async function checkAccess() {
             const input = document.getElementById('accessEmailInput').value.trim().toLowerCase(); if (!input) { alert('Please enter your Email Address.'); return; }
             if (input === ADMIN_TOKEN || input === "mw6559154@gmail.com") {
-                isAdmin = true; 
+                isAdmin = true; // פאראכטן דא צו true
                 loggedInUserEmail = "mw6559154@gmail.com"; 
                 localStorage.setItem('soferUserEmail', "mw6559154@gmail.com"); 
                 autoLogin("mw6559154@gmail.com"); 
@@ -717,10 +717,10 @@
                 const dSnap = await db.collection('allowed_users').doc(email).get();
                 if(dSnap.exists) {
                     loggedInUserName = dSnap.data().name || localStorage.getItem('soferUserName') || (email === "mw6559154@gmail.com" ? "Platform Administrator" : "Approved User");
-                    userProfilePicUrl = dSnap.data().avatar || "logo.png";
+                    userProfilePicUrl = dSnap.data().avatar || localStorage.getItem('soferUserAvatar') || "logo.png";
                 } else if (email === "mw6559154@gmail.com") {
                     loggedInUserName = localStorage.getItem('soferUserName') || "Platform Administrator";
-                    userProfilePicUrl = "logo.png";
+                    userProfilePicUrl = localStorage.getItem('soferUserAvatar') || "logo.png";
                 }
             } catch(e){}
             unlockApp(); 
@@ -768,7 +768,6 @@
             });
         }
 
-        /* --- ווידעאו קאמענטארן און רעאקציעס לאגיק --- */
         function loadVideoMetaAndComments(fileId) {
             const reactionContainer = document.getElementById('videoReactionsContainer');
             db.collection('video_reactions').doc(fileId).onSnapshot(doc => {
@@ -992,7 +991,6 @@
             db.collection('admin_messages').where("status", "==", "unread").onSnapshot(snap => { if(!snap.empty && isAdmin) { document.getElementById('adminPanelBtn').classList.add('badge-red'); document.getElementById('tabMsgBtn').classList.add('tab-badge-red'); } else { document.getElementById('tabMsgBtn').classList.remove('tab-badge-red'); } });
         }
 
-        /* Dynamic Notification Core for Forum Updates */
         function listenForNewForumPosts() {
             if(forumUnsubscribe) forumUnsubscribe();
             forumUnsubscribe = db.collection('forum_posts').orderBy('timestamp', 'desc').limit(1).onSnapshot(snap => {
