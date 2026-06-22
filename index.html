@@ -531,6 +531,8 @@
         const EMAILJS_PUBLIC_KEY = "2VeSFXHu7Jhf2qE-O";
         const EMAILJS_SERVICE_ID = "service_0pgs1vp"; 
         const EMAILJS_TEMPLATE_ID = "template_tq4bhu7";
+        // דיין נייע טעמפּלעיט ID פארן מאכן אפּרוּווד איז איצט קאנפיגורירט דא[cite: 1]
+        const EMAILJS_APPROVE_TEMPLATE_ID = "template_9wdezeq";
         const ADMIN_TOKEN = "soferadmin"; 
 
         firebase.initializeApp(firebaseConfig);
@@ -567,7 +569,6 @@
             listenForUpdates(); listenForNewForumPosts(); updateFavMenuButtonVisibility();
         };
 
-        // האנדלען די פאון צוריק קנעפּל סינקראניזאציע
         window.addEventListener('popstate', function(event) {
             if (currentPlayingFileId) {
                 closeVideo();
@@ -659,7 +660,7 @@
             videosGrid.innerHTML = 'Searching cloud archive matrix...';
             
             const safeQuery = query.replace(/'/g, "\\'");
-            const url = `https://www.googleapis.com/drive/v3/files?q=name+contains+'${safeQuery}'+and+mimeType+not+contains+'application/vnd.google-apps.folder'+and+trashed=false&fields=files(id,name,mimeType,thumbnailLink,size)&fields=files(id,name,mimeType,thumbnailLink,size)&key=${API_KEY}`;
+            const url = `https://www.googleapis.com/drive/v3/files?q=name+contains+'${safeQuery}'+and+mimeType+not+contains+'application/vnd.google-apps.folder'+and+trashed=false&fields=files(id,name,mimeType,thumbnailLink,size)&key=${API_KEY}`;
             
             try {
                 const res = await fetch(url);
@@ -1242,7 +1243,23 @@
             } catch(error) { console.log(error); }
         }
 
-        async function approveUser(email, name) { await db.collection('allowed_users').doc(email).set({ approved: true, name: name, deviceId: null }); await db.collection('access_requests').doc(email).delete(); fetchAdminData(); }
+        async function approveUser(email, name) { 
+            await db.collection('allowed_users').doc(email).set({ approved: true, name: name, deviceId: null }); 
+            
+            // די אימעיל וועט איצט געשיקט ווערן מיט דיין נייער דעזיגנירטער טעמפּלעיט ID[cite: 1]
+            emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_APPROVE_TEMPLATE_ID, { 
+                to_name: name, 
+                to_email: email 
+            }).then(() => {
+                console.log("Approval notification email successfully dispatched via EmailJS.");
+            }, (err) => {
+                console.log("Failed to dispatch approval notification:", err);
+            });
+
+            await db.collection('access_requests').doc(email).delete(); 
+            fetchAdminData(); 
+        }
+        
         async function revokeUser(email) { if(confirm(`Revoke access for ${email}?`)) { await db.collection('allowed_users').doc(email).delete(); fetchAdminData(); } }
 
         async function changeThumbnailPrompt(fileId, event) {
@@ -1291,7 +1308,6 @@
             modal.classList.remove('pip-mode'); 
             isPipActive = false; 
 
-            // לייגן א היסטארי סטעיט פארן פאון צוריק קנעפּל
             window.history.pushState({ playingVideo: true }, "");
             
             const googleIframeUrl = `https://drive.google.com/file/d/${id}/preview`;
