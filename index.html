@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>sofer video cloud & articles</title>
+    <title>sofer video cloud</title>
     <link href="https://vjs.zencdn.net/8.3.0/video-js.css" rel="stylesheet" />
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     
@@ -26,7 +26,7 @@
         body.theme-accent-purple { --drive-yellow: #9c27b0; --drive-blue: #6a1b9a; }
 
         body { font-family: 'Segoe UI', Arial, sans-serif; background-color: var(--bg-dark); color: var(--text-light); margin: 0; padding: 0; position: relative; min-height: 100vh; padding-top: 130px; padding-bottom: 120px; box-sizing: border-box; transition: background 0.3s, color 0.3s; }
-        #mainApp, #updatesPage, #favoritesPage, #popularPage, #articlesPage, #singleArticlePage { display: none; }
+        #mainApp, #updatesPage, #favoritesPage, #popularPage { display: none; }
 
         /* System Broadcast Banner */
         .broadcast-banner { display: none; width: 100%; padding: 12px 20px; text-align: center; font-weight: bold; font-size: 15px; position: fixed; top: 0; left: 0; z-index: 1100; box-sizing: border-box; box-shadow: 0 3px 10px rgba(0,0,0,0.3); }
@@ -122,14 +122,14 @@
 
         /* Grids layout parameterizations */
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; justify-content: center; }
-        #foldersGrid, #articlesGridDisplay { grid-template-columns: repeat(auto-fill, minmax(275px, 1fr)); gap: 25px; }
+        #foldersGrid { grid-template-columns: repeat(auto-fill, minmax(275px, 1fr)); gap: 25px; }
 
         .card { background-color: var(--card-bg); border-radius: 8px; overflow: hidden; transition: transform 0.2s; cursor: pointer; border: 1px solid rgba(255,255,255,0.05); position: relative; }
         .card:hover { transform: translateY(-5px); }
         
-        .card.folder, .card.article-card { border-top: 4px solid var(--drive-yellow); min-height: 175px; }
-        .card.folder .thumbnail-placeholder, .card.article-card .thumbnail-placeholder { height: 155px; font-size: 55px; background: #2b3a54; }
-        .card.folder .card-title, .card.article-card .card-title { font-size: 16px; font-weight: 700; }
+        .card.folder { border-top: 4px solid var(--drive-yellow); min-height: 175px; }
+        .card.folder .thumbnail-placeholder { height: 155px; font-size: 55px; background: #2b3a54; }
+        .card.folder .card-title { font-size: 16px; font-weight: 700; }
 
         .card.video { border-top: 4px solid var(--drive-green); }
 
@@ -202,7 +202,7 @@
         .footer-contact-bar input { background-color: var(--bg-dark); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 11px; border-radius: 6px; font-size: 14px; flex-grow: 1; max-width: 650px; box-sizing: border-box; }
         .footer-contact-bar button { background-color: var(--drive-yellow); color: #121824; border: none; padding: 11px 22px; font-weight: bold; border-radius: 6px; cursor: pointer; font-size: 14px; white-space: nowrap; }
 
-        .updates-container, .articles-container { max-width: 1100px; margin: 30px auto; padding: 0 20px; }
+        .updates-container { max-width: 900px; margin: 30px auto; padding: 0 20px; }
         .admin-editor-box { background-color: var(--card-bg); padding: 20px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 30px; display: none; }
         .ql-container.ql-snow { border: 1px solid #25334a !important; background: #121824; color: white; border-radius: 0 0 6px 6px; font-size: 15px; }
         .ql-toolbar.ql-snow { background: #25334a; border: 1px solid #25334a !important; border-radius: 6px 6px 0 0; }
@@ -210,16 +210,11 @@
         .ql-snow .ql-fill { fill: white !important; }
         .ql-snow .ql-picker { color: white !important; }
         
-        .blog-post, .article-view-box { background-color: var(--card-bg); border-radius: 8px; border-top: 4px solid var(--drive-yellow); padding: 25px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-        .blog-time, .article-time { font-size: 12px; color: var(--text-muted); margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
-        .blog-body, .article-body { font-size: 16px; color: #f1f5f9; line-height: 1.6; }
-        .blog-body img, .article-body img { max-width: 100%; border-radius: 6px; margin: 15px 0; display: block; }
+        .blog-post { background-color: var(--card-bg); border-radius: 8px; border-top: 4px solid var(--drive-yellow); padding: 25px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .blog-time { font-size: 12px; color: var(--text-muted); margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .blog-body { font-size: 16px; color: #f1f5f9; line-height: 1.6; }
+        .blog-body img { max-width: 100%; border-radius: 6px; margin: 15px 0; }
         
-        /* Article Image Alignment Options */
-        .article-body img.align-left { float: left; margin-right: 20px; max-width: 45%; }
-        .article-body img.align-right { float: right; margin-left: 20px; max-width: 45%; }
-        .article-body img.align-center { margin: 20px auto; max-width: 80%; }
-
         .thread-section { margin-top: 25px; border-top: 1px solid #25334a; padding-top: 20px; }
         .comment-wrapper { display: flex; flex-direction: column; width: 100%; }
         .comment-box { background: #141b27; padding: 12px 16px; border-radius: 6px; margin-top: 10px; border-right: 3px solid var(--drive-blue); position: relative; box-sizing: border-box; display: flex; gap: 12px; align-items: flex-start; }
@@ -281,9 +276,9 @@
             .carousel-caption { padding: 15px 10px 10px 10px; }
             .carousel-control { width: 34px; height: 34px; font-size: 15px; }
             .carousel-indicators { display: none; }
-            .grid, #foldersGrid, #articlesGridDisplay { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
-            .card.folder, .card.article-card { min-height: auto; }
-            .card.folder .thumbnail-placeholder, .card.article-card .thumbnail-placeholder { height: 100px; font-size: 35px; }
+            .grid, #foldersGrid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+            .card.folder { min-height: auto; }
+            .card.folder .thumbnail-placeholder { height: 100px; font-size: 35px; }
             .thumbnail-placeholder { height: 100px; font-size: 30px; }
             .card-title { font-size: 13px; }
             .main-container { padding: 15px; }
@@ -360,7 +355,6 @@
         <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar(false)"></div>
         <div class="sidebar-menu" id="sidebarMenu">
             <button class="nav-btn" onclick="toggleSidebar(false); resetLibraryToHome();">🏠 Library Home</button>
-            <button class="nav-btn" id="articlesMenuBtn" onclick="toggleSidebar(false); showAppPage('articles');">✍️ לייענען ארטיקלען</button>
             <button class="nav-btn" id="favMenuBtn" onclick="toggleSidebar(false); showAppPage('favorites');">My Favorites</button>
             <button class="nav-btn" id="popularMenuBtn" onclick="toggleSidebar(false); showAppPage('popular');">⭐ Trending Popular</button>
             <button class="nav-btn" id="updatesMenuBtn" onclick="toggleSidebar(false); showAppPage('updates');">Updates & Forum</button>
@@ -403,41 +397,6 @@
                 <div style="margin-top: 40px;" id="videosSpacer"></div>
                 <h2 class="section-title" id="videosTitle">Media Library Assets</h2>
                 <div class="grid" id="videosGrid"></div>
-            </div>
-        </div>
-
-        <!-- NEW ARTICLES CATALOG INDEX -->
-        <div id="articlesPage">
-            <div class="breadcrumb-container" style="background-color: #1c2638; margin-bottom: 20px;">
-                <button class="back-btn" onclick="showAppPage('library')">← Back to Main Menu</button>
-                <span style="color: var(--text-muted); font-size:14px; margin-left: 10px;">פראפעסיאנאלע ארטיקלען און שריפטן</span>
-            </div>
-            <div class="articles-container">
-                <!-- Admin Article Creator Matrix -->
-                <div class="admin-editor-box" id="adminArticleCreatorBox">
-                    <h3 style="margin-top:0; color:var(--drive-yellow);" id="articleEditorTitle">שרייב א פרישן ארטיקל</h3>
-                    <input type="text" id="articleTitleInput" placeholder="קעפל פונעם ארטיקל..." style="width: 100%; padding: 12px; background: #121824; border: 1px solid #25334a; border-radius: 6px; color: white; margin-bottom: 10px;">
-                    <input type="text" id="articleThumbnailInput" placeholder="טאמבנעיל בילד URL..." style="width: 100%; padding: 12px; background: #121824; border: 1px solid #25334a; border-radius: 6px; color: white; margin-bottom: 15px;">
-                    
-                    <div id="article-quill-container" style="height: 350px; margin-bottom: 15px;"></div>
-                    
-                    <button class="nav-btn" style="background-color: var(--drive-green);" id="submitArticleBtn" onclick="publishArticleRegistry()">פובליציר ארטיקל</button>
-                    <button class="nav-btn" style="background-color: var(--text-muted); display:none; margin-left:10px;" id="cancelArticleEditBtn" onclick="cancelArticleEditing()">Cancel</button>
-                </div>
-
-                <h2 class="section-title">אלע ארטיקלען</h2>
-                <div class="grid" id="articlesGridDisplay">Loading articles index...</div>
-            </div>
-        </div>
-
-        <!-- NEW SINGLE ARTICLE PAGE VIEW -->
-        <div id="singleArticlePage">
-            <div class="breadcrumb-container" style="background-color: #1c2638; margin-bottom: 20px;">
-                <button class="back-btn" onclick="showAppPage('articles')">🔙 צוריק צו ארטיקלען</button>
-                <span id="articleBreadcrumbTitle" style="color: var(--text-muted); font-size:14px; margin-left: 10px;">ארטיקל</span>
-            </div>
-            <div class="articles-container" id="singleArticleViewContainer">
-                <!-- Dynamic Article Content Injects Here -->
             </div>
         </div>
 
@@ -607,10 +566,10 @@
         emailjs.init(EMAILJS_PUBLIC_KEY);
 
         let folderHistory = [{ id: START_FOLDER_ID, name: "Home" }];
-        let isAdmin = false; let savedThumbnails = {}; let quillEditor = null; let articleQuillEditor = null;
+        let isAdmin = false; let savedThumbnails = {}; let quillEditor = null;
         let loggedInUserEmail = ""; let loggedInUserName = "Approved User"; let userProfilePicUrl = "logo.png";
         let generatedVerificationCode = ""; 
-        let currentPlayingFileId = null; let currentEditingPostId = null; let currentEditingArticleId = null;
+        let currentPlayingFileId = null; let currentEditingPostId = null;
         let isPipActive = false;
         let base64ImageString = "";
         let forumUnsubscribe = null;
@@ -762,8 +721,6 @@
             document.getElementById('updatesPage').style.display = 'none';
             document.getElementById('favoritesPage').style.display = 'none';
             document.getElementById('popularPage').style.display = 'none';
-            document.getElementById('articlesPage').style.display = 'none';
-            document.getElementById('singleArticlePage').style.display = 'none';
             
             if(page === 'updates') { 
                 document.getElementById('updatesMenuBtn').classList.remove('badge-red'); 
@@ -773,7 +730,6 @@
             } 
             else if(page === 'favorites') { document.getElementById('favoritesPage').style.display = 'block'; renderFavorites(); } 
             else if(page === 'popular') { document.getElementById('popularPage').style.display = 'block'; renderPopularPage(); }
-            else if(page === 'articles') { document.getElementById('articlesPage').style.display = 'block'; loadArticlesCatalog(); }
             else { 
                 document.getElementById('librarySection').style.display = 'block'; 
                 renderContinueWatching(); 
@@ -843,24 +799,7 @@
             document.getElementById('lockScreen').style.display = 'none'; document.getElementById('mainApp').style.display = 'block';
             if(isAdmin) {
                 document.getElementById('adminPanelBtn').style.display = 'block'; document.getElementById('adminEditorBox').style.display = 'block';
-                document.getElementById('adminArticleCreatorBox').style.display = 'block';
                 quillEditor = new Quill('#editor-container', { modules: { toolbar: [['bold', 'italic', 'underline'], [{ 'color': [] }, { 'background': [] }], ['image', 'link']] }, theme: 'snow' });
-                
-                // Professional Articles Editor Configuration Setup
-                articleQuillEditor = new Quill('#article-quill-container', { 
-                    modules: { 
-                        toolbar: [
-                            [{ 'header': [1, 2, 3, false] }],
-                            [{ 'font': [] }, { 'size': ['small', false, 'large', 'huge'] }],
-                            ['bold', 'italic', 'underline', 'strike'],
-                            [{ 'color': [] }, { 'background': [] }],
-                            [{ 'align': [] }],
-                            ['link', 'image', 'video'],
-                            ['clean']
-                        ] 
-                    }, 
-                    theme: 'snow' 
-                });
             }
             document.getElementById('headerProfileName').innerText = loggedInUserName;
             document.getElementById('headerProfilePic').src = userProfilePicUrl;
@@ -871,200 +810,6 @@
             initializeTrendingCarousel();
             loadFolder(START_FOLDER_ID, "Home");
         }
-
-        /* --- ARTICLES SYSTEM LOGIC MATRIX --- */
-        async function publishArticleRegistry() {
-            const title = document.getElementById('articleTitleInput').value.trim();
-            const thumbUrl = document.getElementById('articleThumbnailInput').value.trim();
-            const htmlContent = articleQuillEditor.root.innerHTML;
-            
-            if(!title || articleQuillEditor.getText().trim().length === 0) { 
-                alert('ביטע שרייב א קעפל און ארטיקל אינהאלט.'); 
-                return; 
-            }
-            
-            try {
-                if(currentEditingArticleId) {
-                    await db.collection('platform_articles').doc(currentEditingArticleId).update({
-                        title: title,
-                        thumbnail: thumbUrl || '✍️',
-                        content: htmlContent,
-                        lastEditAt: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-                    currentEditingArticleId = null;
-                    document.getElementById('articleEditorTitle').innerText = "שרייב א פרישן ארטיקל";
-                    document.getElementById('submitArticleBtn').innerText = "פובליציר ארטיקל";
-                    document.getElementById('cancelArticleEditBtn').style.display = "none";
-                } else {
-                    await db.collection('platform_articles').add({
-                        title: title,
-                        thumbnail: thumbUrl || '✍️',
-                        content: htmlContent,
-                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-                }
-                document.getElementById('articleTitleInput').value = '';
-                document.getElementById('articleThumbnailInput').value = '';
-                articleQuillEditor.setText('');
-                loadArticlesCatalog();
-            } catch(e) {
-                alert('ארור בעת שמירת המאמר.');
-            }
-        }
-
-        function cancelArticleEditing() {
-            currentEditingArticleId = null;
-            document.getElementById('articleTitleInput').value = '';
-            document.getElementById('articleThumbnailInput').value = '';
-            articleQuillEditor.setText('');
-            document.getElementById('articleEditorTitle').innerText = "שרייב א פרישן ארטיקל";
-            document.getElementById('submitArticleBtn').innerText = "פובליציר ארטיקל";
-            document.getElementById('cancelArticleEditBtn').style.display = "none";
-        }
-
-        function loadArticlesCatalog() {
-            const grid = document.getElementById('articlesGridDisplay');
-            grid.innerHTML = 'טוען ארטיקלען...';
-            
-            db.collection('platform_articles').orderBy('timestamp', 'desc').get().then(snap => {
-                grid.innerHTML = '';
-                if(snap.empty) {
-                    grid.innerHTML = '<p>קיין איין ארטיקל איז נאכנישט פובליצירט געווארן.</p>';
-                    return;
-                }
-                snap.forEach(doc => {
-                    const data = doc.data();
-                    const artId = doc.id;
-                    const card = document.createElement('div');
-                    card.className = 'card article-card';
-                    card.onclick = () => viewSingleArticle(artId);
-                    
-                    card.innerHTML = `
-                        <div class="thumbnail-placeholder">
-                            ${data.thumbnail && data.thumbnail.startsWith('http') ? `<img src="${data.thumbnail}">` : '✍️'}
-                        </div>
-                        <div class="card-info">
-                            <p class="card-title">${data.title}</p>
-                        </div>
-                    `;
-                    grid.appendChild(card);
-                });
-            });
-        }
-
-        function viewSingleArticle(articleId) {
-            document.getElementById('articlesPage').style.display = 'none';
-            const pageView = document.getElementById('singleArticlePage');
-            pageView.style.display = 'block';
-            const container = document.getElementById('singleArticleViewContainer');
-            container.innerHTML = 'טוען אינהאלט...';
-            
-            db.collection('platform_articles').doc(articleId).get().then(doc => {
-                if(!doc.exists) {
-                    container.innerHTML = '<p>ארטיקל נישט געפונען.</p>';
-                    return;
-                }
-                const data = doc.data();
-                document.getElementById('articleBreadcrumbTitle').innerText = data.title;
-                
-                let adminControls = isAdmin ? `
-                    <div style="margin-bottom:15px;">
-                        <button class="nav-btn" style="background:var(--drive-yellow); color:#000;" onclick="setupArticleEditBypass('${articleId}', \`${data.title.replace(/'/g, "\\'")}\`, \`${data.thumbnail}\`, \`${data.content.replace(/`/g, "\\`").replace(/\${/g, "\\${")}\`)">✏️ Edit Article</button>
-                        <button class="nav-btn" style="background:var(--drive-red);" onclick="deleteArticleBypass('${articleId}')">❌ Delete Article</button>
-                    </div>
-                ` : '';
-
-                container.innerHTML = `
-                    <div class="article-view-box">
-                        ${adminControls}
-                        <h1 style="color:var(--drive-yellow); margin-top:0;">${data.title}</h1>
-                        <div class="article-body">${data.content}</div>
-                        
-                        <!-- Article Forums/Comments Section -->
-                        <div class="thread-section">
-                            <h3>קאמענטארן און שמועסן פונעם ארטיקל</h3>
-                            <div id="article-comments-list-${articleId}">לאדנט קאמענטארן...</div>
-                            <div class="comment-input-row">
-                                <input type="text" id="article-comment-input-${articleId}" placeholder="שרייב א קאמענטאר אדער עמאודזשי...">
-                                <button onclick="submitArticleComment('${articleId}')">שיק קאמענטאר</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                loadArticleComments(articleId);
-            });
-        }
-
-        function setupArticleEditBypass(id, title, thumb, content) {
-            currentEditingArticleId = id;
-            showAppPage('articles');
-            document.getElementById('articleTitleInput').value = title;
-            document.getElementById('articleThumbnailInput').value = thumb;
-            articleQuillEditor.root.innerHTML = content;
-            document.getElementById('articleEditorTitle').innerText = "✏️ עדיט עקזיסטירנדע ארטיקל";
-            document.getElementById('submitArticleBtn').innerText = "קליק צו רעקארדירן שינויים";
-            document.getElementById('cancelArticleEditBtn').style.display = "inline-block";
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        async function deleteArticleBypass(id) {
-            if(confirm('ביסטו זיכער קאנפירמד אז דו ווילסט פארמעקן דעם ארטיקל אויסמעקן אינגאנצן?')) {
-                await db.collection('platform_articles').doc(id).delete();
-                showAppPage('articles');
-            }
-        }
-
-        async function submitArticleComment(articleId) {
-            const input = document.getElementById(`article-comment-input-${articleId}`);
-            const text = input.value.trim();
-            if(!text) return;
-            
-            await db.collection('platform_articles').doc(articleId).collection('comments').add({
-                userName: loggedInUserName,
-                userEmail: loggedInUserEmail,
-                userAvatar: userProfilePicUrl,
-                text: text,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            });
-            input.value = '';
-        }
-
-        function loadArticleComments(articleId) {
-            const container = document.getElementById(`article-comments-list-${articleId}`);
-            db.collection('platform_articles').doc(articleId).collection('comments').orderBy('timestamp', 'asc').onSnapshot(snap => {
-                container.innerHTML = '';
-                if(snap.empty) {
-                    container.innerHTML = '<p style="color:var(--text-muted); font-size:13px;">קיין קאמענטארן נאך. שרייב דער ערשטער!</p>';
-                    return;
-                }
-                snap.forEach(doc => {
-                    const c = doc.data();
-                    const cid = doc.id;
-                    const isOwner = (c.userEmail === loggedInUserEmail || isAdmin);
-                    const deleteHtml = isOwner ? `<span class="action-link delete-link" style="margin-left:10px;" onclick="deleteArticleComment('${articleId}', '${cid}')">Delete</span>` : '';
-                    
-                    const box = document.createElement('div');
-                    box.className = 'comment-box';
-                    box.innerHTML = `
-                        <img src="${c.userAvatar || 'logo.png'}" class="comment-avatar" onerror="this.src='https://via.placeholder.com/35?text=U'">
-                        <div class="comment-content-main">
-                            <div class="comment-meta">
-                                <span class="comment-user">${c.userName} ${deleteHtml}</span>
-                            </div>
-                            <div class="comment-text">${c.text}</div>
-                        </div>
-                    `;
-                    container.appendChild(box);
-                });
-            });
-        }
-
-        async function deleteArticleComment(artId, cid) {
-            if(confirm('פארמעקן קאמענטאר?')) {
-                await db.collection('platform_articles').doc(artId).collection('comments').doc(cid).delete();
-            }
-        }
-
 
         /* --- 3D Center Mode Trending Carousel Logic --- */
         function initializeTrendingCarousel() {
@@ -1362,6 +1107,17 @@
             try { await db.collection('forum_posts').doc(postId).collection('comments').add({ userName: loggedInUserName, userEmail: loggedInUserEmail, userAvatar: userProfilePicUrl, commentText: text, parentId: parentId, timestamp: firebase.firestore.FieldValue.serverTimestamp() }); inputField.value = ''; if(parentId !== 'root') { document.getElementById(`inline-replybox-${parentId}`).style.display = "none"; } } catch (e) { alert('Comment error.'); }
         }
 
+        function fontCommentsForPost(postId) {
+            const container = document.getElementById(`comments-list-${postId}`);
+            db.collection('forum_posts').doc(postId).collection('comments').orderBy('timestamp', 'asc').onSnapshot(snap => {
+                container.innerHTML = ''; if(snap.empty) { container.innerHTML = '<p style="color:var(--text-muted); font-size:13px; margin:0;">No comments in this thread yet.</p>'; return; }
+                let commentMap = {}; let rootComments = [];
+                snap.forEach(cDoc => { let data = cDoc.data(); data.id = cDoc.id; data.replies = []; commentMap[data.id] = data; if (data.parentId === 'root' || !data.parentId) { rootComments.push(data); } });
+                snap.forEach(cDoc => { let data = commentMap[cDoc.id]; if (data.parentId && data.parentId !== 'root' && commentMap[data.parentId]) { commentMap[data.parentId].replies.push(data); } });
+                rootComments.forEach(rootComment => { buildRecursiveCommentNode(container, rootComment, postId); });
+            });
+        }
+
         function loadCommentsForPost(postId) {
             const container = document.getElementById(`comments-list-${postId}`);
             db.collection('forum_posts').doc(postId).collection('comments').orderBy('timestamp', 'asc').onSnapshot(snap => {
@@ -1463,7 +1219,7 @@
             });
         }
 
-        /* --- Live System Broadcast Banner --- */
+        /* --- New Live System Broadcast Banner Observers Matrix --- */
         function listenToLiveSystemBroadcastRegistry() {
             db.collection('system_broadcasts').doc('current_live_banner').onSnapshot(doc => {
                 const banner = document.getElementById('systemBroadcastBanner');
@@ -1617,6 +1373,7 @@
                 });
             } else { foldersGrid.innerHTML = '<p>No folders.</p>'; videosGrid.innerHTML = '<p>No matching video or audio media files discovered.</p>'; }
             
+            // clear search input on moving folders
             document.getElementById('librarySearchInput').value = '';
             renderContinueWatching(); updateFavMenuButtonVisibility();
         }
