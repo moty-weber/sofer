@@ -1190,9 +1190,8 @@
         }
 
         function updateFavMenuButtonVisibility() {
-            let favs = JSON.parse(localStorage.getItem('sofer_favs') || '[]'); const currentFolder = folderHistory[folderHistory.length - 1];
-            if(favs.length > 0 && currentFolder && currentFolder.id === START_FOLDER_ID) { document.getElementById('favMenuBtn').style.display = 'inline-block'; } 
-            else { document.getElementById('favMenuBtn').style.display = 'none'; }
+            // פארלאנגט: דאס קנעפּל זאל אייביג בלייבן זעבאר אפילו אויב עס זענען נישטא קיין פעיווערעטס
+            document.getElementById('favMenuBtn').style.display = 'inline-block';
         }
 
         function renderFavorites() {
@@ -1254,7 +1253,8 @@
             
             updateCarouselVisibility();
 
-            const url = `https://www.googleapis.com/drive/v3/files?q=window.onload'${folderId}'+in+parents+and+trashed=false&fields=files(id,name,mimeType,thumbnailLink,size)&key=${API_KEY}`;
+            // פֿעראָכטן: די 'window.onload' באג איז פאמיטן און צוריקגעטוישט צו די ארגינעלע 'parents' פאראמעטער
+            const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+trashed=false&fields=files(id,name,mimeType,thumbnailLink,size)&key=${API_KEY}`;
             const res = await fetch(url); const data = await res.json();
             const foldersGrid = document.getElementById('foldersGrid'); const videosGrid = document.getElementById('videosGrid');
             foldersGrid.innerHTML = ''; videosGrid.innerHTML = '';
