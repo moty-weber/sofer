@@ -254,7 +254,7 @@
         @media (max-width: 768px) {
             header { display: flex; flex-direction: column; align-items: stretch; justify-content: flex-start; gap: 15px; padding: 15px; min-height: auto; }
             .menu-toggle-btn { align-self: flex-start; font-size: 28px; margin-bottom: -40px; }
-            .header-right-profile { align-self: flex-end; padding: 4px 10px; }
+            .header-right-profile { position: absolute; top: 15px; right: 15px; padding: 4px 10px; margin: 0; }
             .brand-center-container { position: static; transform: none; width: 100%; max-width: 100%; margin-top: 10px; gap: 12px; }
             .brand-logo-row .brand-logo-img { width: 40px; height: 40px; }
             .brand-logo-row h1 { font-size: 19px; }
@@ -274,8 +274,8 @@
             .card-title { font-size: 13px; }
             .main-container { padding: 15px; }
             .player-content, .admin-content, .profile-modal-content { width: 95%; padding: 15px; }
-            .close-player { top: -35px; right: 5px; font-size: 26px; }
-            .minimize-player { top: -35px; right: 40px; font-size: 22px; }
+            .close-player { top: 5px; right: 10px; font-size: 32px; background: rgba(0,0,0,0.5); border-radius: 50%; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; }
+            .minimize-player { top: 5px; right: 55px; font-size: 24px; background: rgba(0,0,0,0.5); border-radius: 50%; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; }
             .replies-container { padding-left: 10px; }
             .comment-box { padding: 10px; gap: 8px; }
             .comment-avatar { width: 28px; height: 28px; }
@@ -567,6 +567,13 @@
             listenForUpdates(); listenForNewForumPosts(); updateFavMenuButtonVisibility();
         };
 
+        // האנדלען די פאון צוריק קנעפּל סינקראניזאציע
+        window.addEventListener('popstate', function(event) {
+            if (currentPlayingFileId) {
+                closeVideo();
+            }
+        });
+
         function toggleSidebar(open) {
             const menu = document.getElementById('sidebarMenu');
             const overlay = document.getElementById('sidebarOverlay');
@@ -652,7 +659,7 @@
             videosGrid.innerHTML = 'Searching cloud archive matrix...';
             
             const safeQuery = query.replace(/'/g, "\\'");
-            const url = `https://www.googleapis.com/drive/v3/files?q=name+contains+'${safeQuery}'+and+mimeType+not+contains+'application/vnd.google-apps.folder'+and+trashed=false&fields=files(id,name,mimeType,thumbnailLink,size)&key=${API_KEY}`;
+            const url = `https://www.googleapis.com/drive/v3/files?q=name+contains+'${safeQuery}'+and+mimeType+not+contains+'application/vnd.google-apps.folder'+and+trashed=false&fields=files(id,name,mimeType,thumbnailLink,size)&fields=files(id,name,mimeType,thumbnailLink,size)&key=${API_KEY}`;
             
             try {
                 const res = await fetch(url);
@@ -817,7 +824,6 @@
                     
                     const bgImg = data.thumb || 'https://via.placeholder.com/800x450?text=No+Custom+Image';
                     
-                    // אויב ער איז אן עדמין, לייג צו די אקשן קנעפלאך צום סלייד גלייך
                     const adminOverlayHtml = isAdmin ? `
                         <div class="admin-carousel-overlay-box">
                             <button class="admin-c-btn edit" onclick="event.stopPropagation(); changeCarouselThumbnailPrompt('${fileId}')">⚙️ Edit Image</button>
@@ -865,7 +871,6 @@
             update3DCarouselClasses();
         }
 
-        // פונקציע וואס טוישט די קלאסן פאר די 3D Center Mode עפעקט לעיוו
         function update3DCarouselClasses() {
             const slides = document.querySelectorAll('.carousel-slide');
             const total = popularVideosList.length;
@@ -873,7 +878,7 @@
 
             slides.forEach((slide) => {
                 const idx = parseInt(slide.getAttribute('data-carousel-index'));
-                slide.className = 'carousel-slide'; // רעסט קלאסן
+                slide.className = 'carousel-slide';
 
                 if (idx === carouselCurrentIndex) {
                     slide.classList.add('active');
@@ -901,7 +906,6 @@
             }
         }
 
-        // עדמין טוישט בילד דירעקט פארן קארוסעל פאפולער פייל
         async function changeCarouselThumbnailPrompt(fileId) {
             const newImgUrl = prompt("Enter custom direct image URL for this trending banner:");
             if (newImgUrl && newImgUrl.trim() !== "") {
@@ -1010,6 +1014,14 @@
             if(confirm("Are you sure you want to delete this comment permanently?")) {
                 await db.collection('video_reactions').doc(fileId).collection('comments').doc(commentId).delete();
             }
+        }
+
+        function formatBytes(bytes, decimals = 2) {
+            if (bytes == 0 || !bytes) return '0 Bytes';
+            const k = 1024; const dm = decimals < 0 ? 0 : decimals;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
         }
 
         function saveVideoProgress(fileId, title, thumb) {
@@ -1190,7 +1202,6 @@
         }
 
         function updateFavMenuButtonVisibility() {
-            // פארלאנגט: דאס קנעפּל זאל אייביג בלייבן זעבאר אפילו אויב עס זענען נישטא קיין פעיווערעטס
             document.getElementById('favMenuBtn').style.display = 'inline-block';
         }
 
@@ -1239,21 +1250,11 @@
             if (newImgUrl) { await db.collection('custom_thumbnails').doc(fileId).set({ url: newImgUrl }); savedThumbnails[fileId] = newImgUrl; const container = document.getElementById(`thumb-${fileId}`); container.innerHTML = `<img src="${newImgUrl}">`; }
         }
 
-        function formatBytes(bytes, decimals = 2) {
-            if (bytes == 0 || !bytes) return '0 Bytes';
-            const k = 1024; const dm = decimals < 0 ? 0 : decimals;
-            const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
-        }
-
         async function loadFolder(folderId, folderName) {
             const index = folderHistory.findIndex(f => f.id === folderId); if (index !== -1) { folderHistory = folderHistory.slice(0, index + 1); } else { folderHistory.push({ id: folderId, name: folderName }); }
             updateBreadcrumbs();
-            
             updateCarouselVisibility();
 
-            // פֿעראָכטן: די 'window.onload' באג איז פאמיטן און צוריקגעטוישט צו די ארגינעלע 'parents' פאראמעטער
             const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+trashed=false&fields=files(id,name,mimeType,thumbnailLink,size)&key=${API_KEY}`;
             const res = await fetch(url); const data = await res.json();
             const foldersGrid = document.getElementById('foldersGrid'); const videosGrid = document.getElementById('videosGrid');
@@ -1289,6 +1290,9 @@
             modal.style.display = 'flex'; 
             modal.classList.remove('pip-mode'); 
             isPipActive = false; 
+
+            // לייגן א היסטארי סטעיט פארן פאון צוריק קנעפּל
+            window.history.pushState({ playingVideo: true }, "");
             
             const googleIframeUrl = `https://drive.google.com/file/d/${id}/preview`;
             const wrapperBox = document.getElementById('videoWrapperEngineBox');
