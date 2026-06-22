@@ -25,16 +25,24 @@
         body.theme-accent-green { --drive-yellow: #0f9d58; --drive-blue: #2e7d32; }
         body.theme-accent-purple { --drive-yellow: #9c27b0; --drive-blue: #6a1b9a; }
 
-        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: var(--bg-dark); color: var(--text-light); margin: 0; padding: 0; position: relative; min-height: 100vh; padding-bottom: 120px; box-sizing: border-box; transition: background 0.3s, color 0.3s; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: var(--bg-dark); color: var(--text-light); margin: 0; padding: 0; position: relative; min-height: 100vh; padding-top: 130px; padding-bottom: 120px; box-sizing: border-box; transition: background 0.3s, color 0.3s; }
         #mainApp, #updatesPage, #favoritesPage, #popularPage { display: none; }
 
-        header { background-color: var(--card-bg); border-bottom: 3px solid var(--drive-blue); padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; position: relative; min-height: 110px; box-sizing: border-box; }
-        
+        /* System Broadcast Banner */
+        .broadcast-banner { display: none; width: 100%; padding: 12px 20px; text-align: center; font-weight: bold; font-size: 15px; position: fixed; top: 0; left: 0; z-index: 1100; box-sizing: border-box; box-shadow: 0 3px 10px rgba(0,0,0,0.3); }
+        .broadcast-banner.yellow { display: block; background-color: var(--drive-yellow); color: #121824; }
+        .broadcast-banner.red { display: block; background-color: var(--drive-red); color: #ffffff; }
+
+        /* Sticky Header Modification */
+        header { background-color: var(--card-bg); border-bottom: 3px solid var(--drive-blue); padding: 15px 25px; display: flex; align-items: center; justify-content: space-between; position: fixed; top: 0; left: 0; width: 100%; min-height: 110px; box-sizing: border-box; z-index: 1050; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        body.has-broadcast { padding-top: 175px; }
+        body.has-broadcast header { top: 45px; }
+
         /* Sidebar Styles */
-        .menu-toggle-btn { background: none; border: none; color: var(--text-light); font-size: 26px; cursor: pointer; z-index: 1001; }
-        .sidebar-menu { position: fixed; top: 0; left: -300px; width: 280px; height: 100%; background-color: var(--card-bg); box-shadow: 5px 0 15px rgba(0,0,0,0.5); z-index: 1000; padding: 70px 20px 20px 20px; box-sizing: border-box; transition: left 0.3s ease; display: flex; flex-direction: column; gap: 15px; }
+        .menu-toggle-btn { background: none; border: none; color: var(--text-light); font-size: 26px; cursor: pointer; z-index: 1060; }
+        .sidebar-menu { position: fixed; top: 0; left: -300px; width: 280px; height: 100%; background-color: var(--card-bg); box-shadow: 5px 0 15px rgba(0,0,0,0.5); z-index: 1070; padding: 70px 20px 20px 20px; box-sizing: border-box; transition: left 0.3s ease; display: flex; flex-direction: column; gap: 15px; }
         .sidebar-menu.open { left: 0; }
-        .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; }
+        .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1065; }
         .sidebar-overlay.open { display: block; }
         
         .sidebar-menu .nav-btn { width: 100%; text-align: left; margin-bottom: 5px; box-sizing: border-box; }
@@ -42,21 +50,15 @@
         .theme-select-container label { font-size: 13px; color: var(--text-muted); display: block; margin-bottom: 8px; }
         .theme-dropdown { width: 100%; padding: 8px; background: var(--bg-dark); color: var(--text-light); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; }
 
-        /* Centered Logo & Brand + Search Container */
-        .brand-center-container { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; gap: 8px; width: 45%; max-width: 550px; }
-        .brand-logo-row { display: flex; align-items: center; gap: 12px; cursor: pointer; }
-        .brand-logo-img { width: 45px; height: 45px; object-fit: contain; }
-        .brand-logo-row h1 { margin: 0; font-size: 22px; font-weight: bold; color: var(--text-light); white-space: nowrap; }
-        
-        /* Centered Library Search Bar */
-        .global-search-wrapper { display: flex; width: 100%; gap: 6px; }
-        .global-search-wrapper input { flex-grow: 1; background: var(--bg-dark); border: 1px solid rgba(255,255,255,0.15); border-radius: 20px; padding: 6px 14px; color: white; font-size: 13px; outline: none; }
-        .global-search-wrapper input:focus { border-color: var(--drive-blue); }
-        .global-search-wrapper button { background: var(--drive-blue); border: none; color: white; border-radius: 20px; padding: 6px 15px; font-weight: bold; font-size: 12px; cursor: pointer; }
-        .global-search-wrapper button:hover { background: var(--drive-green); }
+        /* Enhanced Large Logo & Brand Layout */
+        .brand-center-container { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; gap: 5px; width: 60%; max-width: 700px; }
+        .brand-logo-row { display: flex; align-items: center; gap: 18px; cursor: pointer; }
+        .brand-logo-img { width: 65px; height: 65px; object-fit: contain; transition: transform 0.2s; }
+        .brand-logo-row:hover .brand-logo-img { transform: scale(1.05); }
+        .brand-logo-row h1 { margin: 0; font-size: 32px; font-weight: 800; color: var(--text-light); white-space: nowrap; letter-spacing: 0.5px; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
 
         /* Right Profile Area */
-        .header-right-profile { display: flex; align-items: center; gap: 10px; cursor: pointer; background: rgba(255,255,255,0.05); padding: 5px 12px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); z-index: 1001; }
+        .header-right-profile { display: flex; align-items: center; gap: 10px; cursor: pointer; background: rgba(255,255,255,0.05); padding: 5px 12px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); z-index: 1060; }
         .header-right-profile:hover { background: rgba(255,255,255,0.1); }
         .profile-pic { width: 35px; height: 35px; border-radius: 50%; border: 2px solid var(--drive-blue); object-fit: cover; background-color: white; }
         .profile-name-span { font-size: 14px; font-weight: 600; max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -78,19 +80,13 @@
         .main-container { padding: 25px; max-width: 1400px; margin: 0 auto; }
         .section-title { border-left: 5px solid var(--drive-yellow); padding-left: 10px; margin-bottom: 20px; }
         
-        /* New Custom 3D Center Mode Carousel/Slider Styles */
+        /* Carousel/Slider Styles */
         .carousel-wrapper { position: relative; width: 100%; height: 360px; overflow: hidden; margin-bottom: 40px; display: flex; align-items: center; justify-content: center; }
         .carousel-track { display: flex; width: 100%; height: 100%; align-items: center; justify-content: center; position: relative; }
         
         .carousel-slide { position: absolute; width: 55%; height: 82%; border-radius: 12px; overflow: hidden; transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.5s ease, filter 0.5s ease; opacity: 0; transform: scale(0.7); filter: blur(6px); pointer-events: none; z-index: 1; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 12px 30px rgba(0,0,0,0.7); box-sizing: border-box; }
-        
-        /* מיטעלסטע סלייד - גרויס און קלאר */
         .carousel-slide.active { opacity: 1; transform: scale(1) translateX(0); filter: blur(0); pointer-events: auto; z-index: 5; height: 100%; }
-        
-        /* לינקע זייט קלענער און אומקלאר */
         .carousel-slide.prev-slide { opacity: 0.45; transform: scale(0.82) translateX(-58%); filter: blur(3px); pointer-events: auto; z-index: 3; }
-        
-        /* רעכטע זייט קלענער און אומקלאר */
         .carousel-slide.next-slide { opacity: 0.45; transform: scale(0.82) translateX(58%); filter: blur(3px); pointer-events: auto; z-index: 3; }
         
         .carousel-img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.65); }
@@ -98,7 +94,6 @@
         .carousel-caption h3 { margin: 0 0 8px 0; font-size: 23px; color: #fff; font-weight: bold; text-shadow: 0 2px 4px rgba(0,0,0,0.6); }
         .carousel-tag { display: inline-block; background-color: var(--drive-yellow); color: #121824; font-size: 11px; font-weight: bold; padding: 4px 9px; border-radius: 4px; margin-bottom: 8px; text-transform: uppercase; }
         
-        /* קאנטראל קנעפּל עראָוס */
         .carousel-control { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(28, 38, 56, 0.85); border: 1px solid rgba(255,255,255,0.15); color: white; width: 48px; height: 48px; border-radius: 50%; cursor: pointer; font-size: 22px; font-weight: bold; display: flex; align-items: center; justify-content: center; z-index: 15; transition: background 0.2s, transform 0.2s; }
         .carousel-control:hover { background: var(--drive-blue); transform: translateY(-50%) scale(1.1); }
         .carousel-control.prev { left: 4%; }
@@ -152,12 +147,12 @@
         .verify-row { display: flex; gap: 10px; align-items: center; }
         .verify-row button { width: auto; font-size: 12px; padding: 12px 15px; margin: 0; white-space: nowrap; background-color: #25334a; }
 
-        .player-modal, .admin-modal, .profile-modal { display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center; }
+        .player-modal, .admin-modal, .profile-modal { display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); z-index: 1080; justify-content: center; align-items: center; }
         #playerModal, #adminModal, #profileModal { display: none; }
         .player-content, .admin-content, .profile-modal-content { width: 80%; max-width: 900px; position: relative; background-color: var(--bg-dark); padding: 25px; border-radius: 8px; color: white; max-height: 90vh; overflow-y: auto; transition: all 0.3s ease; }
         .profile-modal-content { max-width: 450px; border-top: 4px solid var(--drive-yellow); }
-        .close-player { position: absolute; top: -40px; right: 0; color: white; font-size: 30px; background: none; border: none; cursor: pointer; z-index: 1010; }
-        .minimize-player { position: absolute; top: -40px; right: 40px; color: white; font-size: 25px; background: none; border: none; cursor: pointer; z-index: 1010; }
+        .close-player { position: absolute; top: -40px; right: 0; color: white; font-size: 30px; background: none; border: none; cursor: pointer; z-index: 1090; }
+        .minimize-player { position: absolute; top: -40px; right: 40px; color: white; font-size: 25px; background: none; border: none; cursor: pointer; z-index: 1090; }
         .close-profile { position: absolute; top: 15px; right: 20px; color: white; font-size: 24px; background: none; border: none; cursor: pointer; }
 
         .video-meta-header { margin-top: 15px; display: flex; flex-direction: column; gap: 4px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px; }
@@ -190,7 +185,7 @@
         .list-item.msg-item.unread { background-color: #222d42; border-left-width: 6px; font-weight: bold; border-left-color: var(--drive-red); }
         .unread-badge { background-color: var(--drive-red); color: white; font-size: 11px; padding: 2px 6px; border-radius: 4px; margin-left: 8px; font-weight: bold; }
 
-        .footer-contact-bar { position: fixed; bottom: 0; left: 0; width: 100%; background-color: var(--card-bg); border-top: 3px solid var(--drive-yellow); padding: 15px 25px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; gap: 15px; z-index: 900; box-shadow: 0 -5px 15px rgba(0,0,0,0.3); }
+        .footer-contact-bar { position: fixed; bottom: 0; left: 0; width: 100%; background-color: var(--card-bg); border-top: 3px solid var(--drive-yellow); padding: 15px 25px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; gap: 15px; z-index: 1050; box-shadow: 0 -5px 15px rgba(0,0,0,0.3); }
         .footer-contact-bar span { font-weight: bold; color: var(--text-light); font-size: 14px; }
         .footer-contact-bar .user-badge { background-color: #25334a; color: var(--drive-yellow); padding: 8px 14px; border-radius: 6px; font-weight: bold; font-size: 13px; border: 1px solid rgba(255,255,255,0.05); }
         .footer-contact-bar input { background-color: var(--bg-dark); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 11px; border-radius: 6px; font-size: 14px; flex-grow: 1; max-width: 650px; box-sizing: border-box; }
@@ -252,13 +247,15 @@
         .profile-preview-box img { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 2px solid var(--drive-yellow); background: white; }
 
         @media (max-width: 768px) {
-            header { display: flex; flex-direction: column; align-items: stretch; justify-content: flex-start; gap: 15px; padding: 15px; min-height: auto; }
-            .menu-toggle-btn { align-self: flex-start; font-size: 28px; margin-bottom: -40px; }
-            .header-right-profile { position: absolute; top: 15px; right: 15px; padding: 4px 10px; margin: 0; }
-            .brand-center-container { position: static; transform: none; width: 100%; max-width: 100%; margin-top: 10px; gap: 12px; }
-            .brand-logo-row .brand-logo-img { width: 40px; height: 40px; }
-            .brand-logo-row h1 { font-size: 19px; }
-            .global-search-wrapper { width: 100%; }
+            body { padding-top: 240px; }
+            body.has-broadcast { padding-top: 290px; }
+            body.has-broadcast header { top: 45px; }
+            header { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 15px; padding: 15px; min-height: auto; }
+            .menu-toggle-btn { position: absolute; left: 15px; top: 20px; font-size: 28px; }
+            .header-right-profile { position: absolute; top: 20px; right: 15px; padding: 4px 10px; margin: 0; }
+            .brand-center-container { position: static; transform: none; width: 100%; max-width: 100%; margin-top: 45px; gap: 12px; }
+            .brand-logo-row .brand-logo-img { width: 50px; height: 50px; }
+            .brand-logo-row h1 { font-size: 24px; }
             .carousel-wrapper { height: 210px; margin-bottom: 25px; }
             .carousel-slide { width: 75%; height: 85%; }
             .carousel-slide.prev-slide { transform: scale(0.85) translateX(-50%); }
@@ -283,13 +280,14 @@
             .footer-contact-bar { flex-direction: column; gap: 10px; padding: 15px; min-height: auto; height: auto; position: static; margin-top: 40px; border-bottom: 3px solid var(--drive-yellow); }
             .footer-contact-bar input { max-width: 100%; width: 100%; }
             .footer-contact-bar button { width: 100%; text-align: center; }
-            body { padding-bottom: 0; }
             .player-modal.pip-mode .player-content { width: 280px; height: 210px; bottom: 20px; right: 10px; }
             .player-modal.pip-mode .video-wrapper { height: 140px; }
         }
     </style>
 </head>
 <body>
+
+    <div id="systemBroadcastBanner" class="broadcast-banner" onclick="dismissBroadcast()"></div>
 
     <div class="lock-screen" id="lockScreen">
         <div class="lock-box" id="loginPanel">
@@ -323,12 +321,8 @@
             
             <div class="brand-center-container">
                 <div class="brand-logo-row" onclick="resetLibraryToHome()">
-                    <img src="logo.png" class="brand-logo-img" id="mainAppTopLogo" alt="Logo" onerror="this.src='https://via.placeholder.com/55?text=sofer'">
+                    <img src="logo.png" class="brand-logo-img" id="mainAppTopLogo" alt="Logo" onerror="this.src='https://via.placeholder.com/75?text=sofer'">
                     <h1>sofer video cloud</h1>
-                </div>
-                <div class="global-search-wrapper">
-                    <input type="text" id="globalLibrarySearchInput" placeholder="Search across all synchronized network cloud media..." onkeydown="if(event.key === 'Enter') triggerLibrarySearch()">
-                    <button onclick="triggerLibrarySearch()">Search</button>
                 </div>
             </div>
             
@@ -366,7 +360,6 @@
             </div>
             
             <div class="main-container">
-                <!-- Trending Carousel Slider 3D Center Mode Layout  -->
                 <div id="carouselContainer" class="carousel-wrapper" style="display: none;">
                     <button class="carousel-control prev" onclick="moveCarousel(-1)">&#10094;</button>
                     <button class="carousel-control next" onclick="moveCarousel(1)">&#10095;</button>
@@ -382,7 +375,7 @@
                 <h2 class="section-title" id="foldersTitle">Folders</h2>
                 <div class="grid" id="foldersGrid"></div>
                 <div style="margin-top: 40px;" id="videosSpacer"></div>
-                <h2 class="section-title" id="videosTitle">Videos</h2>
+                <h2 class="section-title" id="videosTitle">Media Library Assets</h2>
                 <div class="grid" id="videosGrid"></div>
             </div>
         </div>
@@ -435,7 +428,6 @@
         </div>
     </div>
 
-    <!-- Profile Account Modal -->
     <div class="profile-modal" id="profileModal">
         <div class="profile-modal-content">
             <button class="close-profile" onclick="closeProfileModal()">×</button>
@@ -469,10 +461,25 @@
                 <button class="tab-btn active" id="tabReqBtn" onclick="switchAdminTab('requests')">Pending Requests</button>
                 <button class="tab-btn" id="tabUsersBtn" onclick="switchAdminTab('users')">Approved Users (<span id="userCount">0</span>)</button>
                 <button class="tab-btn" id="tabMsgBtn" onclick="switchAdminTab('messages')">Inbox Messages</button>
+                <button class="tab-btn" id="tabBroadcastBtn" onclick="switchAdminTab('broadcast')">System Broadcast</button>
             </div>
             <div id="secRequests" class="panel-section active">Loading requests...</div>
             <div id="secUsers" class="panel-section">Loading active users...</div>
             <div id="secMessages" class="panel-section">Loading inbox...</div>
+            
+            <div id="secBroadcast" class="panel-section">
+                <h3 style="color: var(--drive-yellow); margin-top: 5px;">Dispatch Live System-Wide Banner Notice</h3>
+                <textarea id="adminBroadcastTextArea" placeholder="Type system notice alert message payload..." rows="3"></textarea>
+                <div style="margin: 10px 0; display:flex; gap:15px; align-items:center;">
+                    <label style="font-weight:bold;">Visual Severity Theme:</label>
+                    <select id="adminBroadcastThemeSelect" style="background:#121824; color:white; padding:8px; border-radius:4px; border:1px solid #25334a;">
+                        <option value="yellow">Yellow Attention Banner</option>
+                        <option value="red">Red High-Priority Alert Banner</option>
+                    </select>
+                </div>
+                <button class="nav-btn" style="background-color: var(--drive-green);" onclick="submitSystemBroadcastRegistry()">Deploy Live Broadcast Banner</button>
+                <button class="nav-btn" style="background-color: var(--drive-red); margin-left: 10px;" onclick="clearActiveBroadcastRegistry()">Clear Live Banner</button>
+            </div>
         </div>
     </div>
 
@@ -531,7 +538,6 @@
         const EMAILJS_PUBLIC_KEY = "2VeSFXHu7Jhf2qE-O";
         const EMAILJS_SERVICE_ID = "service_0pgs1vp"; 
         const EMAILJS_TEMPLATE_ID = "template_tq4bhu7";
-        // דיין נייע טעמפּלעיט ID פארן מאכן אפּרוּווד איז איצט קאנפיגורירט דא[cite: 1]
         const EMAILJS_APPROVE_TEMPLATE_ID = "template_9wdezeq";
         const ADMIN_TOKEN = "soferadmin"; 
 
@@ -566,7 +572,7 @@
                 loggedInUserName = savedName || (savedEmail === "mw6559154@gmail.com" ? "Platform Administrator" : "Approved User"); 
                 autoLogin(savedEmail); 
             }
-            listenForUpdates(); listenForNewForumPosts(); updateFavMenuButtonVisibility();
+            listenForUpdates(); listenForNewForumPosts(); listenToLiveSystemBroadcastRegistry(); updateFavMenuButtonVisibility();
         };
 
         window.addEventListener('popstate', function(event) {
@@ -644,60 +650,10 @@
             if(document.getElementById('updatesPage').style.display === 'block') { loadBlogPosts(); }
         }
 
-        async function triggerLibrarySearch() {
-            const query = document.getElementById('globalLibrarySearchInput').value.trim();
-            if(!query) { alert('Please type a search word first.'); return; }
-            
-            showAppPage('library');
-            toggleSidebar(false);
-            
-            document.getElementById('foldersTitle').style.display = 'none';
-            document.getElementById('foldersGrid').innerHTML = '';
-            document.getElementById('videosSpacer').style.display = 'none';
-            document.getElementById('videosTitle').innerText = `Search Results For: "${query}"`;
-            
-            const videosGrid = document.getElementById('videosGrid');
-            videosGrid.innerHTML = 'Searching cloud archive matrix...';
-            
-            const safeQuery = query.replace(/'/g, "\\'");
-            const url = `https://www.googleapis.com/drive/v3/files?q=name+contains+'${safeQuery}'+and+mimeType+not+contains+'application/vnd.google-apps.folder'+and+trashed=false&fields=files(id,name,mimeType,thumbnailLink,size)&key=${API_KEY}`;
-            
-            try {
-                const res = await fetch(url);
-                const data = await res.json();
-                videosGrid.innerHTML = '';
-                let favs = JSON.parse(localStorage.getItem('sofer_favs') || '[]');
-                
-                if(data.files && data.files.length > 0) {
-                    data.files.forEach(file => {
-                        const card = document.createElement('div');
-                        card.setAttribute('data-id', file.id);
-                        card.setAttribute('data-name', file.name);
-                        card.setAttribute('data-thumb', savedThumbnails[file.id] || file.thumbnailLink || '');
-                        card.setAttribute('data-size', file.size || '0');
-                        
-                        const adminOverlayHtml = isAdmin ? `<div class="admin-card-overlay" style="display:block;" onclick="changeThumbnailPrompt('${file.id}', event)">⚙️ Edit Thumbnail</div><div class="admin-popular-overlay" style="display:block;" onclick="markAsPopularManual('${file.id}', '${file.name.replace(/'/g, "\\'")}', event)">⭐ Set Popular</div>` : ''; 
-                        const currentThumb = savedThumbnails[file.id] || file.thumbnailLink;
-                        const isFav = favs.some(f => f.id === file.id) ? '❤️' : '🤍';
-                        
-                        card.className = 'card video';
-                        card.onclick = (e) => { if(!e.target.classList.contains('download-icon-btn') && !e.target.classList.contains('admin-card-overlay') && !e.target.classList.contains('admin-popular-overlay') && !e.target.classList.contains('fav-btn')) playVideo(file.id); };
-                        card.innerHTML = `${adminOverlayHtml}<button class="fav-btn" onclick="toggleFavorite('${file.id}', event)">${isFav}</button><div class="thumbnail-placeholder" id="thumb-${file.id}"><img src="${currentThumb || '🎬'}" onerror="this.src='https://via.placeholder.com/220x130?text=Video'"></div><div class="card-info"><p class="card-title">${file.name}</p></div><button class="download-icon-btn" onclick="downloadVideo('${file.id}')">↓</button>`;
-                        videosGrid.appendChild(card);
-                    });
-                } else {
-                    videosGrid.innerHTML = '<p>No matching video files discovered in this cloud partition.</p>';
-                }
-            } catch(e) {
-                videosGrid.innerHTML = '<p>Error executing cloud search index query.</p>';
-            }
-        }
-
         function resetLibraryToHome() {
-            document.getElementById('globalLibrarySearchInput').value = '';
             document.getElementById('foldersTitle').style.display = 'block';
             document.getElementById('videosSpacer').style.display = 'block';
-            document.getElementById('videosTitle').innerText = 'Videos';
+            document.getElementById('videosTitle').innerText = 'Media Library Assets';
             showAppPage('library');
             loadFolder(START_FOLDER_ID, "Home");
         }
@@ -797,7 +753,7 @@
             loadFolder(START_FOLDER_ID, "Home");
         }
 
-        /* --- New 3D Center Mode Trending Carousel Logic --- */
+        /* --- 3D Center Mode Trending Carousel Logic --- */
         function initializeTrendingCarousel() {
             db.collection('popular_videos').onSnapshot(snap => {
                 popularVideosList = [];
@@ -919,7 +875,7 @@
             event.stopPropagation();
             const cardEl = document.querySelector(`[data-id="${fileId}"]`); const thumb = cardEl ? cardEl.getAttribute('data-thumb') : '';
             await db.collection('popular_videos').doc(fileId).set({ title: title, thumb: thumb || '' });
-            alert('Video has been successfully pinned to the Latest Popular page and Carousel!');
+            alert('Media file pinned to Trending/Popular layout catalog!');
         }
 
         async function removePopularManual(fileId, event) {
@@ -1194,8 +1150,52 @@
             });
         }
 
+        /* --- New Live System Broadcast Banner Observers Matrix --- */
+        function listenToLiveSystemBroadcastRegistry() {
+            db.collection('system_broadcasts').doc('current_live_banner').onSnapshot(doc => {
+                const banner = document.getElementById('systemBroadcastBanner');
+                if(doc.exists && doc.data().active && doc.data().msg) {
+                    const bData = doc.data();
+                    banner.className = `broadcast-banner ${bData.theme || 'yellow'}`;
+                    banner.innerText = bData.msg;
+                    document.body.classList.add('has-broadcast');
+                } else {
+                    banner.style.display = 'none';
+                    banner.className = 'broadcast-banner';
+                    document.body.classList.remove('has-broadcast');
+                }
+            });
+        }
+
+        async function submitSystemBroadcastRegistry() {
+            const msg = document.getElementById('adminBroadcastTextArea').value.trim();
+            const severityTheme = document.getElementById('adminBroadcastThemeSelect').value;
+            if(!msg) { alert('Type broadcast alert notification message copy first.'); return; }
+            await db.collection('system_broadcasts').doc('current_live_banner').set({
+                msg: msg,
+                theme: severityTheme,
+                active: true,
+                author: loggedInUserEmail,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            alert('Live dynamic notice banner dispatched distributed successfully!');
+        }
+
+        async function clearActiveBroadcastRegistry() {
+            await db.collection('system_broadcasts').doc('current_live_banner').set({ active: false });
+            document.getElementById('adminBroadcastTextArea').value = '';
+            alert('Broadcast notice successfully disabled.');
+        }
+
+        function dismissBroadcast() {
+            if(!isAdmin) {
+                document.getElementById('systemBroadcastBanner').style.display = 'none';
+                document.body.classList.remove('has-broadcast');
+            }
+        }
+
         function toggleFavorite(fileId, event) {
-            event.stopPropagation(); let favs = JSON.parse(localStorage.getItem('sofer_favs') || '[]'); const cardEl = document.querySelector(`[data-id="${fileId}"]`); const title = cardEl ? cardEl.getAttribute('data-name') : 'Video'; const thumb = cardEl ? cardEl.getAttribute('data-thumb') : '';
+            event.stopPropagation(); let favs = JSON.parse(localStorage.getItem('sofer_favs') || '[]'); const cardEl = document.querySelector(`[data-id="${fileId}"]`); const title = cardEl ? cardEl.getAttribute('data-name') : 'Media File'; const thumb = cardEl ? cardEl.getAttribute('data-thumb') : '';
             const index = favs.findIndex(f => f.id === fileId);
             if (index === -1) { favs.push({ id: fileId, title: title, thumb: thumb }); event.target.innerText = '❤️'; } 
             else { favs.splice(index, 1); event.target.innerText = '🤍'; }
@@ -1211,7 +1211,7 @@
             if (favs.length === 0) { container.innerHTML = '<p>No favorites added yet.</p>'; return; }
             favs.forEach(item => {
                 const card = document.createElement('div'); card.className = 'card video'; card.onclick = () => playVideo(item.id);
-                card.innerHTML = `<button class="fav-btn" onclick="toggleFavorite('${item.id}', event); renderFavorites();">❤️</button><div class="thumbnail-placeholder"><img src="${item.thumb || '🎬'}" onerror="this.src='https://via.placeholder.com/220x130?text=Video'"></div><div class="card-info"><p class="card-title">${item.title}</p></div><button class="download-icon-btn" onclick="downloadVideo('${item.id}')">↓</button>`; container.appendChild(card);
+                card.innerHTML = `<button class="fav-btn" onclick="toggleFavorite('${item.id}', event); renderFavorites();">❤️</button><div class="thumbnail-placeholder"><img src="${item.thumb || '🎬'}" onerror="this.src='https://via.placeholder.com/220x130?text=Media'"></div><div class="card-info"><p class="card-title">${item.title}</p></div><button class="download-icon-btn" onclick="downloadVideo('${item.id}')">↓</button>`; container.appendChild(card);
             });
         }
 
@@ -1219,10 +1219,13 @@
         function hideAdminPanel() { document.getElementById('adminModal').style.display = 'none'; }
         
         function switchAdminTab(tab) {
-            document.getElementById('tabReqBtn').className = 'tab-btn'; document.getElementById('tabUsersBtn').className = 'tab-btn'; document.getElementById('tabMsgBtn').className = 'tab-btn'; document.getElementById('secRequests').className = 'panel-section'; document.getElementById('secUsers').className = 'panel-section'; document.getElementById('secMessages').className = 'panel-section';
+            document.getElementById('tabReqBtn').className = 'tab-btn'; document.getElementById('tabUsersBtn').className = 'tab-btn'; document.getElementById('tabMsgBtn').className = 'tab-btn'; document.getElementById('tabBroadcastBtn').className = 'tab-btn';
+            document.getElementById('secRequests').className = 'panel-section'; document.getElementById('secUsers').className = 'panel-section'; document.getElementById('secMessages').className = 'panel-section'; document.getElementById('secBroadcast').className = 'panel-section';
+            
             if(tab === 'requests') { document.getElementById('tabReqBtn').classList.add('active'); document.getElementById('secRequests').classList.add('active'); } 
             else if(tab === 'users') { document.getElementById('tabUsersBtn').classList.add('active'); document.getElementById('secUsers').classList.add('active'); } 
-            else { document.getElementById('tabMsgBtn').classList.add('active'); document.getElementById('secMessages').className = 'panel-section active'; document.getElementById('tabMsgBtn').classList.remove('tab-badge-red'); }
+            else if(tab === 'messages') { document.getElementById('tabMsgBtn').classList.add('active'); document.getElementById('secMessages').className = 'panel-section active'; document.getElementById('tabMsgBtn').classList.remove('tab-badge-red'); }
+            else { document.getElementById('tabBroadcastBtn').classList.add('active'); document.getElementById('secBroadcast').classList.add('active'); }
         }
 
         async function fetchAdminData() {
@@ -1246,7 +1249,6 @@
         async function approveUser(email, name) { 
             await db.collection('allowed_users').doc(email).set({ approved: true, name: name, deviceId: null }); 
             
-            // די אימעיל וועט איצט געשיקט ווערן מיט דיין נייער דעזיגנירטער טעמפּלעיט ID[cite: 1]
             emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_APPROVE_TEMPLATE_ID, { 
                 to_name: name, 
                 to_email: email 
@@ -1292,12 +1294,16 @@
                     if (file.mimeType === 'application/vnd.google-apps.folder') {
                         card.className = 'card folder'; card.onclick = () => { showAppPage('library'); loadFolder(file.id, file.name); };
                         card.innerHTML = `${adminOverlayHtml}<div class="thumbnail-placeholder" id="thumb-${file.id}">${savedThumbnails[file.id] ? `<img src="${savedThumbnails[file.id]}">` : '📁'}</div><div class="card-info"><p class="card-title">${file.name}</p></div>`; foldersGrid.appendChild(card);
-                    } else if (file.mimeType.startsWith('video/')) {
+                    } else if (file.mimeType.startsWith('video/') || file.mimeType.startsWith('audio/') || file.name.toLowerCase().includes('audio')) {
+                        // Added Support Matrix for both Audio and Video assets interchangeably
                         card.className = 'card video'; card.onclick = (e) => { if(!e.target.classList.contains('download-icon-btn') && !e.target.classList.contains('admin-card-overlay') && !e.target.classList.contains('admin-popular-overlay') && !e.target.classList.contains('fav-btn')) playVideo(file.id); };
-                        card.innerHTML = `${adminOverlayHtml}<button class="fav-btn" onclick="toggleFavorite('${file.id}', event)">${isFav}</button><div class="thumbnail-placeholder" id="thumb-${file.id}"><img src="${currentThumb || '🎬'}" onerror="this.src='https://via.placeholder.com/220x130?text=Video'"></div><div class="card-info"><p class="card-title">${file.name}</p></div><button class="download-icon-btn" onclick="downloadVideo('${file.id}')">↓</button>`; videosGrid.appendChild(card);
+                        
+                        let visualPlaceholderIconHtml = currentThumb ? `<img src="${currentThumb}">` : (file.mimeType.startsWith('audio/') ? '🎵' : '🎬');
+                        
+                        card.innerHTML = `${adminOverlayHtml}<button class="fav-btn" onclick="toggleFavorite('${file.id}', event)">${isFav}</button><div class="thumbnail-placeholder" id="thumb-${file.id}">${visualPlaceholderIconHtml}</div><div class="card-info"><p class="card-title">${file.name}</p></div><button class="download-icon-btn" onclick="downloadVideo('${file.id}')">↓</button>`; videosGrid.appendChild(card);
                     }
                 });
-            } else { foldersGrid.innerHTML = '<p>No folders.</p>'; videosGrid.innerHTML = '<p>No videos.</p>'; }
+            } else { foldersGrid.innerHTML = '<p>No folders.</p>'; videosGrid.innerHTML = '<p>No matching video or audio media files discovered.</p>'; }
             renderContinueWatching(); updateFavMenuButtonVisibility();
         }
         
@@ -1315,7 +1321,7 @@
             wrapperBox.innerHTML = `<iframe src="${googleIframeUrl}" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
             
             const cardEl = document.querySelector(`[data-id="${id}"]`);
-            const title = cardEl ? cardEl.getAttribute('data-name') : 'Video Assets';
+            const title = cardEl ? cardEl.getAttribute('data-name') : 'Media Asset File';
             const thumb = cardEl ? cardEl.getAttribute('data-thumb') : '';
             const rawSize = cardEl ? cardEl.getAttribute('data-size') : '0';
             
@@ -1337,10 +1343,10 @@
                     descView.innerHTML = doc.data().text.replace(/\n/g, '<br>');
                     adminInput.value = doc.data().text;
                 } else {
-                    descView.innerText = "No specific description logs provided yet for this synchronized video video matrix.";
+                    descView.innerText = "No description catalog logs synchronized for this asset item matrix registry.";
                 }
             }).catch(() => {
-                descView.innerText = "Description connection connection connection idle.";
+                descView.innerText = "Description connection configuration state idle.";
             });
 
             saveVideoProgress(id, title, thumb);
@@ -1356,10 +1362,10 @@
                     lastUpdatedBy: loggedInUserEmail,
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 });
-                document.getElementById('videoDescriptionOutputView').innerHTML = textContent ? textContent.replace(/\n/g, '<br>') : "No specific description logs provided yet.";
-                alert("Description catalog parameters parameters successfully updated updated in cluster registry!");
+                document.getElementById('videoDescriptionOutputView').innerHTML = textContent ? textContent.replace(/\n/g, '<br>') : "No description provided yet.";
+                alert("Description catalog parameters successfully updated!");
             } catch(e) {
-                alert("Error writing configuration configuration configuration payload into database.");
+                alert("Error writing configurations update schema mapping payload payload.");
             }
         }
         
