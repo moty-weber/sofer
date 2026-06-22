@@ -106,7 +106,6 @@
         .carousel-tag { display: inline-block; background-color: var(--drive-yellow); color: #121824; font-size: 11px; font-weight: bold; padding: 4px 9px; border-radius: 4px; margin-bottom: 8px; text-transform: uppercase; }
         
         .carousel-control { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(28, 38, 56, 0.85); border: 1px solid rgba(255,255,255,0.15); color: white; width: 48px; height: 48px; border-radius: 50%; cursor: pointer; font-size: 22px; font-weight: bold; display: flex; align-items: center; justify-content: center; z-index: 15; transition: background 0.2s, transform 0.2s; }
-        .carousel-control:hover { background: var(--drive-blue); transform: translateY(-50%) scale(1.1); }
         .carousel-control.prev { left: 4%; }
         .carousel-control.next { right: 4%; }
         
@@ -334,7 +333,7 @@
                 <div class="search-container">
                     <button class="search-icon-btn" onclick="toggleSearchBar()" title="Search Library">🔍</button>
                     <div class="search-input-wrapper" id="searchInputWrapper">
-                        <input type="text" id="librarySearchInput" placeholder="Search song, folder, video..." oninput="filterLibraryResults()">
+                        <input type="text" id="librarySearchInput" placeholder="Search entire cloud library..." oninput="filterLibraryResults()">
                     </div>
                 </div>
             </div>
@@ -577,6 +576,7 @@
         let carouselCurrentIndex = 0;
         let carouselInterval = null;
         let popularVideosList = [];
+        let searchTimeout = null;
 
         function getDeviceFingerprint() { return navigator.userAgent + (navigator.hardwareConcurrency || 2) + (navigator.deviceMemory || 4); }
 
@@ -608,7 +608,7 @@
             else { menu.classList.remove('open'); overlay.classList.remove('open'); }
         }
 
-        /* Search Functions */
+        /* Deep Global Cloud Search Functions */
         function toggleSearchBar() {
             const wrapper = document.getElementById('searchInputWrapper');
             const input = document.getElementById('librarySearchInput');
@@ -617,32 +617,87 @@
                 input.focus();
             } else {
                 input.value = '';
-                filterLibraryResults();
+                const currentFolder = folderHistory[folderHistory.length - 1];
+                loadFolder(currentFolder.id, currentFolder.name);
             }
         }
 
         function filterLibraryResults() {
+            clearTimeout(searchTimeout);
             const query = document.getElementById('librarySearchInput').value.toLowerCase().trim();
-            const folderCards = document.querySelectorAll('#foldersGrid .card');
-            const videoCards = document.querySelectorAll('#videosGrid .card');
+            
+            if (query.length === 0) {
+                const currentFolder = folderHistory[folderHistory.length - 1];
+                loadFolder(currentFolder.id, currentFolder.name);
+                return;
+            }
 
-            folderCards.forEach(card => {
-                const title = card.querySelector('.card-title').innerText.toLowerCase();
-                if(title.includes(query)) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
+            if (query.length < 3) return; // Wait for at least 3 characters to search entire drive
 
-            videoCards.forEach(card => {
-                const title = card.querySelector('.card-title').innerText.toLowerCase();
-                if(title.includes(query)) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
+            searchTimeout = setTimeout(async () => {
+                const foldersGrid = document.getElementById('foldersGrid');
+                const videosGrid = document.getElementById('videosGrid');
+                foldersGrid.innerHTML = '<p style="color:var(--text-muted);">Searching cloud folders...</p>';
+                videosGrid.innerHTML = '<p style="color:var(--text-muted);">Searching cloud media...</p>';
+
+                // Google Drive API parameters to search recursively inside the main structure
+                // fullText contains 'query' ensures we look into names globally
+                const driveQuery = `name contains '${query}' and trashed = false`;
+                const url = `https://www.googleapis.com/drive/v3/files?q=${encodeURIComponent(driveQuery)}&fields=files(id,name,mimeType,thumbnailLink,size)&key=${API_KEY}&pageSize=40`;
+
+                try {
+                    const res = await fetch(url);
+                    const data = await res.json();
+                    foldersGrid.innerHTML = '';
+                    videosGrid.innerHTML = '';
+                    let favs = JSON.parse(localStorage.getItem('sofer_favs') || '[]');
+
+                    if (data.files && data.files.length > 0) {
+                        document.getElementById('foldersTitle').style.display = 'block';
+                        document.getElementById('videosTitle').innerText = 'Global Search Discovery Results';
+                        
+                        data.files.forEach(file => {
+                            const card = document.createElement('div'); 
+                            card.setAttribute('data-id', file.id); 
+                            card.setAttribute('data-name', file.name); 
+                            card.setAttribute('data-thumb', savedThumbnails[file.id] || file.thumbnailLink || '');
+                            card.setAttribute('data-size', file.size || '0');
+                            
+                            const adminOverlayHtml = isAdmin ? `<div class="admin-card-overlay" style="display:block;" onclick="changeThumbnailPrompt('${file.id}', event)">⚙️ Edit Thumbnail</div><div class="admin-popular-overlay" style="display:block;" onclick="markAsPopularManual('${file.id}', '${file.name.replace(/'/g, "\\'")}', event)">⭐ Set Popular</div>` : ''; 
+                            const currentThumb = savedThumbnails[file.id] || file.thumbnailLink; 
+                            const isFav = favs.some(f => f.id === file.id) ? '❤️' : '🤍';
+                            
+                            if (file.mimeType === 'application/vnd.google-apps.folder') {
+                                card.className = 'card folder'; 
+                                card.onclick = () => { 
+                                    document.getElementById('librarySearchInput').value = '';
+                                    document.getElementById('searchInputWrapper').classList.remove('open');
+                                    showAppPage('library'); 
+                                    loadFolder(file.id, file.name); 
+                                };
+                                card.innerHTML = `${adminOverlayHtml}<div class="thumbnail-placeholder" id="thumb-${file.id}">${savedThumbnails[file.id] ? `<img src="${savedThumbnails[file.id]}">` : '📁'}</div><div class="card-info"><p class="card-title">${file.name}</p></div>`; 
+                                foldersGrid.appendChild(card);
+                            } else if (file.mimeType.startsWith('video/') || file.mimeType.startsWith('audio/') || file.name.toLowerCase().includes('audio')) {
+                                card.className = 'card video'; 
+                                card.onclick = (e) => { 
+                                    if(!e.target.classList.contains('download-icon-btn') && !e.target.classList.contains('admin-card-overlay') && !e.target.classList.contains('admin-popular-overlay') && !e.target.classList.contains('fav-btn')) playVideo(file.id); 
+                                };
+                                let visualPlaceholderIconHtml = currentThumb ? `<img src="${currentThumb}">` : (file.mimeType.startsWith('audio/') ? '🎵' : '🎬');
+                                card.innerHTML = `${adminOverlayHtml}<button class="fav-btn" onclick="toggleFavorite('${file.id}', event)">${isFav}</button><div class="thumbnail-placeholder" id="thumb-${file.id}">${visualPlaceholderIconHtml}</div><div class="card-info"><p class="card-title">${file.name}</p></div><button class="download-icon-btn" onclick="downloadVideo('${file.id}')">↓</button>`; 
+                                videosGrid.appendChild(card);
+                            }
+                        });
+
+                        if(foldersGrid.innerHTML === '') foldersGrid.innerHTML = '<p style="color:var(--text-muted); font-size:14px;">No matching directories found globally.</p>';
+                        if(videosGrid.innerHTML === '') videosGrid.innerHTML = '<p style="color:var(--text-muted); font-size:14px;">No matching media logs discovered globally.</p>';
+                    } else {
+                        foldersGrid.innerHTML = '<p>No matching global assets discovered.</p>';
+                        videosGrid.innerHTML = '<p>No matching media assets discovered.</p>';
+                    }
+                } catch(err) {
+                    console.error("Cloud engine communication interrupted: ", err);
                 }
-            });
+            }, 400);
         }
 
         function changeAppTheme(theme) {
@@ -712,6 +767,7 @@
             document.getElementById('videosSpacer').style.display = 'block';
             document.getElementById('videosTitle').innerText = 'Media Library Assets';
             document.getElementById('librarySearchInput').value = '';
+            document.getElementById('searchInputWrapper').classList.remove('open');
             showAppPage('library');
             loadFolder(START_FOLDER_ID, "Home");
         }
@@ -1107,17 +1163,6 @@
             try { await db.collection('forum_posts').doc(postId).collection('comments').add({ userName: loggedInUserName, userEmail: loggedInUserEmail, userAvatar: userProfilePicUrl, commentText: text, parentId: parentId, timestamp: firebase.firestore.FieldValue.serverTimestamp() }); inputField.value = ''; if(parentId !== 'root') { document.getElementById(`inline-replybox-${parentId}`).style.display = "none"; } } catch (e) { alert('Comment error.'); }
         }
 
-        function fontCommentsForPost(postId) {
-            const container = document.getElementById(`comments-list-${postId}`);
-            db.collection('forum_posts').doc(postId).collection('comments').orderBy('timestamp', 'asc').onSnapshot(snap => {
-                container.innerHTML = ''; if(snap.empty) { container.innerHTML = '<p style="color:var(--text-muted); font-size:13px; margin:0;">No comments in this thread yet.</p>'; return; }
-                let commentMap = {}; let rootComments = [];
-                snap.forEach(cDoc => { let data = cDoc.data(); data.id = cDoc.id; data.replies = []; commentMap[data.id] = data; if (data.parentId === 'root' || !data.parentId) { rootComments.push(data); } });
-                snap.forEach(cDoc => { let data = commentMap[cDoc.id]; if (data.parentId && data.parentId !== 'root' && commentMap[data.parentId]) { commentMap[data.parentId].replies.push(data); } });
-                rootComments.forEach(rootComment => { buildRecursiveCommentNode(container, rootComment, postId); });
-            });
-        }
-
         function loadCommentsForPost(postId) {
             const container = document.getElementById(`comments-list-${postId}`);
             db.collection('forum_posts').doc(postId).collection('comments').orderBy('timestamp', 'asc').onSnapshot(snap => {
@@ -1350,6 +1395,9 @@
             let favs = JSON.parse(localStorage.getItem('sofer_favs') || '[]');
 
             if (data.files && data.files.length > 0) {
+                document.getElementById('foldersTitle').style.display = 'block';
+                document.getElementById('videosTitle').innerText = 'Media Library Assets';
+                
                 data.files.forEach(file => {
                     const card = document.createElement('div'); 
                     card.setAttribute('data-id', file.id); 
@@ -1373,8 +1421,6 @@
                 });
             } else { foldersGrid.innerHTML = '<p>No folders.</p>'; videosGrid.innerHTML = '<p>No matching video or audio media files discovered.</p>'; }
             
-            // clear search input on moving folders
-            document.getElementById('librarySearchInput').value = '';
             renderContinueWatching(); updateFavMenuButtonVisibility();
         }
         
