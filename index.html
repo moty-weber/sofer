@@ -78,21 +78,41 @@
         .main-container { padding: 25px; max-width: 1400px; margin: 0 auto; }
         .section-title { border-left: 5px solid var(--drive-yellow); padding-left: 10px; margin-bottom: 20px; }
         
-        /* Carousel/Slider Styles */
-        .carousel-wrapper { position: relative; width: 100%; height: 350px; background-color: #0b0f19; border-radius: 12px; overflow: hidden; margin-bottom: 40px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 8px 24px rgba(0,0,0,0.6); }
-        .carousel-track { display: flex; width: 100%; height: 100%; transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
-        .carousel-slide { min-width: 100%; height: 100%; position: relative; cursor: pointer; box-sizing: border-box; }
-        .carousel-img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.55) contrast(1.05); }
+        /* New Custom 3D Center Mode Carousel/Slider Styles */
+        .carousel-wrapper { position: relative; width: 100%; height: 360px; overflow: hidden; margin-bottom: 40px; display: flex; align-items: center; justify-content: center; }
+        .carousel-track { display: flex; width: 100%; height: 100%; align-items: center; justify-content: center; position: relative; }
+        
+        .carousel-slide { position: absolute; width: 55%; height: 82%; border-radius: 12px; overflow: hidden; transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.5s ease, filter 0.5s ease; opacity: 0; transform: scale(0.7); filter: blur(6px); pointer-events: none; z-index: 1; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 12px 30px rgba(0,0,0,0.7); box-sizing: border-box; }
+        
+        /* מיטעלסטע סלייד - גרויס און קלאר */
+        .carousel-slide.active { opacity: 1; transform: scale(1) translateX(0); filter: blur(0); pointer-events: auto; z-index: 5; height: 100%; }
+        
+        /* לינקע זייט קלענער און אומקלאר */
+        .carousel-slide.prev-slide { opacity: 0.45; transform: scale(0.82) translateX(-58%); filter: blur(3px); pointer-events: auto; z-index: 3; }
+        
+        /* רעכטע זייט קלענער און אומקלאר */
+        .carousel-slide.next-slide { opacity: 0.45; transform: scale(0.82) translateX(58%); filter: blur(3px); pointer-events: auto; z-index: 3; }
+        
+        .carousel-img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.65); }
         .carousel-caption { position: absolute; bottom: 0; left: 0; width: 100%; padding: 40px 30px 30px 30px; background: linear-gradient(transparent, rgba(18, 24, 36, 0.95)); box-sizing: border-box; text-align: left; }
-        .carousel-caption h3 { margin: 0 0 8px 0; font-size: 24px; color: #fff; font-weight: bold; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
-        .carousel-tag { display: inline-block; background-color: var(--drive-yellow); color: #121824; font-size: 12px; font-weight: bold; padding: 4px 10px; border-radius: 4px; margin-bottom: 10px; text-transform: uppercase; }
-        .carousel-control { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(28, 38, 56, 0.7); border: 1px solid rgba(255,255,255,0.1); color: white; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; font-size: 20px; font-weight: bold; display: flex; align-items: center; justify-content: center; z-index: 10; transition: background 0.2s, transform 0.2s; }
+        .carousel-caption h3 { margin: 0 0 8px 0; font-size: 23px; color: #fff; font-weight: bold; text-shadow: 0 2px 4px rgba(0,0,0,0.6); }
+        .carousel-tag { display: inline-block; background-color: var(--drive-yellow); color: #121824; font-size: 11px; font-weight: bold; padding: 4px 9px; border-radius: 4px; margin-bottom: 8px; text-transform: uppercase; }
+        
+        /* קאנטראל קנעפּל עראָוס */
+        .carousel-control { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(28, 38, 56, 0.85); border: 1px solid rgba(255,255,255,0.15); color: white; width: 48px; height: 48px; border-radius: 50%; cursor: pointer; font-size: 22px; font-weight: bold; display: flex; align-items: center; justify-content: center; z-index: 15; transition: background 0.2s, transform 0.2s; }
         .carousel-control:hover { background: var(--drive-blue); transform: translateY(-50%) scale(1.1); }
-        .carousel-control.prev { left: 20px; }
-        .carousel-control.next { right: 20px; }
-        .carousel-indicators { position: absolute; bottom: 20px; right: 30px; display: flex; gap: 8px; z-index: 10; }
-        .carousel-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.4); border: none; cursor: pointer; padding: 0; transition: background 0.2s; }
-        .carousel-dot.active { background: var(--drive-yellow); width: 22px; border-radius: 6px; }
+        .carousel-control.prev { left: 4%; }
+        .carousel-control.next { right: 4%; }
+        
+        .carousel-indicators { position: absolute; bottom: 20px; right: 25%; display: flex; gap: 8px; z-index: 15; }
+        .carousel-dot { width: 9px; height: 9px; border-radius: 50%; background: rgba(255,255,255,0.4); border: none; cursor: pointer; padding: 0; transition: background 0.2s; }
+        .carousel-dot.active { background: var(--drive-yellow); width: 20px; border-radius: 6px; }
+
+        /* Admin Action Overlay in Slide */
+        .admin-carousel-overlay-box { position: absolute; top: 15px; left: 15px; z-index: 20; display: flex; gap: 8px; }
+        .admin-c-btn { background: rgba(0,0,0,0.85); border: 1px solid rgba(255,255,255,0.2); color: white; font-size: 11px; font-weight: bold; padding: 6px 12px; border-radius: 4px; cursor: pointer; transition: background 0.2s; }
+        .admin-c-btn.edit:hover { background: var(--drive-yellow); color: #000; }
+        .admin-c-btn.delete:hover { background: var(--drive-red); }
 
         /* Grids layout parameterizations */
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; justify-content: center; }
@@ -101,7 +121,6 @@
         .card { background-color: var(--card-bg); border-radius: 8px; overflow: hidden; transition: transform 0.2s; cursor: pointer; border: 1px solid rgba(255,255,255,0.05); position: relative; }
         .card:hover { transform: translateY(-5px); }
         
-        /* Custom Folder Display Resize Modifiers */
         .card.folder { border-top: 4px solid var(--drive-yellow); min-height: 175px; }
         .card.folder .thumbnail-placeholder { height: 155px; font-size: 55px; background: #2b3a54; }
         .card.folder .card-title { font-size: 16px; font-weight: 700; }
@@ -124,7 +143,6 @@
         .close-continue-btn { position: absolute; top: 5px; right: 5px; background: rgba(0,0,0,0.8); color: white; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; font-size: 14px; z-index: 10; display: flex; align-items: center; justify-content: center; font-weight: bold; }
         .close-continue-btn:hover { background: var(--drive-red); }
 
-        /* לאגין סקרין */
         .lock-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-dark); display: flex; justify-content: center; align-items: center; z-index: 2000; }
         .lock-box { background-color: var(--card-bg); padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); text-align: center; width: 90%; max-width: 420px; border-top: 4px solid var(--drive-blue); }
         .lock-screen input, .lock-screen textarea, .admin-content input, .admin-content textarea, .profile-modal-content input { width: 100%; padding: 12px; margin: 10px 0; background-color: var(--bg-dark); border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 6px; box-sizing: border-box; }
@@ -134,7 +152,6 @@
         .verify-row { display: flex; gap: 10px; align-items: center; }
         .verify-row button { width: auto; font-size: 12px; padding: 12px 15px; margin: 0; white-space: nowrap; background-color: #25334a; }
 
-        /* מאדאלס */
         .player-modal, .admin-modal, .profile-modal { display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center; }
         #playerModal, #adminModal, #profileModal { display: none; }
         .player-content, .admin-content, .profile-modal-content { width: 80%; max-width: 900px; position: relative; background-color: var(--bg-dark); padding: 25px; border-radius: 8px; color: white; max-height: 90vh; overflow-y: auto; transition: all 0.3s ease; }
@@ -143,16 +160,13 @@
         .minimize-player { position: absolute; top: -40px; right: 40px; color: white; font-size: 25px; background: none; border: none; cursor: pointer; z-index: 1010; }
         .close-profile { position: absolute; top: 15px; right: 20px; color: white; font-size: 24px; background: none; border: none; cursor: pointer; }
 
-        /* Video Metadata Header Panel */
         .video-meta-header { margin-top: 15px; display: flex; flex-direction: column; gap: 4px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px; }
         .video-meta-name { font-size: 18px; font-weight: bold; color: var(--text-light); margin: 0; }
         .video-meta-size { font-size: 13px; color: var(--drive-yellow); font-weight: 600; margin: 0; }
 
-        /* Custom Admin Description Workspace Box */
         .admin-description-editor-zone { background: rgba(28, 38, 56, 0.6); padding: 15px; border-radius: 6px; margin-top: 15px; border: 1px dashed rgba(255,255,255,0.15); text-align: left; }
         .admin-description-display { font-size: 15px; line-height: 1.6; color: #cbd5e1; }
         
-        /* Picture-in-picture Mode Workspace Layout Fix */
         .player-modal.pip-mode { pointer-events: none; background: none; }
         .player-modal.pip-mode .player-content { pointer-events: auto; width: 360px; height: 260px; position: fixed; bottom: 140px; right: 20px; top: auto; left: auto; background: var(--card-bg); box-shadow: 0 10px 35px rgba(0,0,0,0.8); border: 2px solid var(--drive-blue); padding: 10px; border-radius: 8px; overflow: hidden; }
         .player-modal.pip-mode .video-wrapper { height: 180px; }
@@ -163,7 +177,6 @@
 
         .video-wrapper { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 6px; overflow: hidden; }
         .video-wrapper iframe { width: 100%; height: 100%; border: none; }
-        .video-watermark { position: absolute; bottom: 55px; right: 20px; width: 50px; height: 50px; object-fit: contain; pointer-events: none; z-index: 10; opacity: 0.85; }
 
         .admin-tabs { display: flex; gap: 10px; margin-bottom: 15px; border-bottom: 1px solid #25334a; padding-bottom: 10px; }
         .tab-btn { background: #25334a; border: none; color: white; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: bold; }
@@ -177,14 +190,12 @@
         .list-item.msg-item.unread { background-color: #222d42; border-left-width: 6px; font-weight: bold; border-left-color: var(--drive-red); }
         .unread-badge { background-color: var(--drive-red); color: white; font-size: 11px; padding: 2px 6px; border-radius: 4px; margin-left: 8px; font-weight: bold; }
 
-        /* קאנטאקט באר אונטן */
         .footer-contact-bar { position: fixed; bottom: 0; left: 0; width: 100%; background-color: var(--card-bg); border-top: 3px solid var(--drive-yellow); padding: 15px 25px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; gap: 15px; z-index: 900; box-shadow: 0 -5px 15px rgba(0,0,0,0.3); }
         .footer-contact-bar span { font-weight: bold; color: var(--text-light); font-size: 14px; }
         .footer-contact-bar .user-badge { background-color: #25334a; color: var(--drive-yellow); padding: 8px 14px; border-radius: 6px; font-weight: bold; font-size: 13px; border: 1px solid rgba(255,255,255,0.05); }
         .footer-contact-bar input { background-color: var(--bg-dark); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 11px; border-radius: 6px; font-size: 14px; flex-grow: 1; max-width: 650px; box-sizing: border-box; }
         .footer-contact-bar button { background-color: var(--drive-yellow); color: #121824; border: none; padding: 11px 22px; font-weight: bold; border-radius: 6px; cursor: pointer; font-size: 14px; white-space: nowrap; }
 
-        /* אָפּדעיטס און פאָרום בלאַט */
         .updates-container { max-width: 900px; margin: 30px auto; padding: 0 20px; }
         .admin-editor-box { background-color: var(--card-bg); padding: 20px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 30px; display: none; }
         .ql-container.ql-snow { border: 1px solid #25334a !important; background: #121824; color: white; border-radius: 0 0 6px 6px; font-size: 15px; }
@@ -198,7 +209,6 @@
         .blog-body { font-size: 16px; color: #f1f5f9; line-height: 1.6; }
         .blog-body img { max-width: 100%; border-radius: 6px; margin: 15px 0; }
         
-        /* פאָרום קאָמענטאַרן */
         .thread-section { margin-top: 25px; border-top: 1px solid #25334a; padding-top: 20px; }
         .comment-wrapper { display: flex; flex-direction: column; width: 100%; }
         .comment-box { background: #141b27; padding: 12px 16px; border-radius: 6px; margin-top: 10px; border-right: 3px solid var(--drive-blue); position: relative; box-sizing: border-box; display: flex; gap: 12px; align-items: flex-start; }
@@ -249,11 +259,14 @@
             .brand-logo-row .brand-logo-img { width: 40px; height: 40px; }
             .brand-logo-row h1 { font-size: 19px; }
             .global-search-wrapper { width: 100%; }
-            .carousel-wrapper { height: 220px; margin-bottom: 25px; }
-            .carousel-caption h3 { font-size: 16px; }
-            .carousel-caption { padding: 20px 15px 15px 15px; }
-            .carousel-control { width: 32px; height: 32px; font-size: 14px; }
-            .carousel-indicators { bottom: 10px; right: 15px; }
+            .carousel-wrapper { height: 210px; margin-bottom: 25px; }
+            .carousel-slide { width: 75%; height: 85%; }
+            .carousel-slide.prev-slide { transform: scale(0.85) translateX(-50%); }
+            .carousel-slide.next-slide { transform: scale(0.85) translateX(50%); }
+            .carousel-caption h3 { font-size: 14px; }
+            .carousel-caption { padding: 15px 10px 10px 10px; }
+            .carousel-control { width: 34px; height: 34px; font-size: 15px; }
+            .carousel-indicators { display: none; }
             .grid, #foldersGrid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
             .card.folder { min-height: auto; }
             .card.folder .thumbnail-placeholder { height: 100px; font-size: 35px; }
@@ -353,7 +366,7 @@
             </div>
             
             <div class="main-container">
-                <!-- Trending Carousel Slider (גאר אויבן אויף די הויפט זייט) -->
+                <!-- Trending Carousel Slider 3D Center Mode Layout  -->
                 <div id="carouselContainer" class="carousel-wrapper" style="display: none;">
                     <button class="carousel-control prev" onclick="moveCarousel(-1)">&#10094;</button>
                     <button class="carousel-control next" onclick="moveCarousel(1)">&#10095;</button>
@@ -422,7 +435,7 @@
         </div>
     </div>
 
-    <!-- Personal Profile Customization Modal -->
+    <!-- Profile Account Modal -->
     <div class="profile-modal" id="profileModal">
         <div class="profile-modal-content">
             <button class="close-profile" onclick="closeProfileModal()">×</button>
@@ -533,7 +546,6 @@
         let base64ImageString = "";
         let forumUnsubscribe = null;
 
-        // Carousel Slider State Variables
         let carouselCurrentIndex = 0;
         let carouselInterval = null;
         let popularVideosList = [];
@@ -773,14 +785,13 @@
 
             try { const thumbSnapshot = await db.collection('custom_thumbnails').get(); thumbSnapshot.forEach(doc => { savedThumbnails[doc.id] = doc.data().url; }); } catch(e) {}
             
-            // לאדן די קעראַסעל דורכאויס פירעבאַסע דאַטן
             initializeTrendingCarousel();
             loadFolder(START_FOLDER_ID, "Home");
         }
 
-        /* --- Trending Carousel (סליידער) לאגיק --- */
+        /* --- New 3D Center Mode Trending Carousel Logic --- */
         function initializeTrendingCarousel() {
-            db.collection('popular_videos').limit(5).onSnapshot(snap => {
+            db.collection('popular_videos').onSnapshot(snap => {
                 popularVideosList = [];
                 const track = document.getElementById('carouselTrack');
                 const indicators = document.getElementById('carouselIndicators');
@@ -799,22 +810,31 @@
                     const fileId = doc.id;
                     popularVideosList.push({ id: fileId, title: data.title, thumb: data.thumb });
 
-                    // בויען א סלייד פילטערד מיט גרויסע קלארע בילדער
                     const slide = document.createElement('div');
                     slide.className = 'carousel-slide';
+                    slide.setAttribute('data-carousel-index', index);
                     slide.onclick = () => playVideo(fileId);
                     
-                    const bgImg = data.thumb || 'https://via.placeholder.com/1200x350?text=Trending+Media';
+                    const bgImg = data.thumb || 'https://via.placeholder.com/800x450?text=No+Custom+Image';
+                    
+                    // אויב ער איז אן עדמין, לייג צו די אקשן קנעפלאך צום סלייד גלייך
+                    const adminOverlayHtml = isAdmin ? `
+                        <div class="admin-carousel-overlay-box">
+                            <button class="admin-c-btn edit" onclick="event.stopPropagation(); changeCarouselThumbnailPrompt('${fileId}')">⚙️ Edit Image</button>
+                            <button class="admin-c-btn delete" onclick="event.stopPropagation(); removePopularManual('${fileId}', event)">❌ Delete</button>
+                        </div>
+                    ` : '';
+
                     slide.innerHTML = `
-                        <img src="${bgImg}" class="carousel-img" onerror="this.src='https://via.placeholder.com/1200x350?text=Trending+Media'">
+                        ${adminOverlayHtml}
+                        <img src="${bgImg}" class="carousel-img" onerror="this.src='https://via.placeholder.com/800x450?text=Media+Asset'">
                         <div class="carousel-caption">
-                            <span class="carousel-tag">🔥 Trending This Week</span>
+                            <span class="carousel-tag">🔥 Trending</span>
                             <h3>${data.title}</h3>
                         </div>
                     `;
                     track.appendChild(slide);
 
-                    // אינדיקאטאר דאטס
                     const dot = document.createElement('button');
                     dot.className = `carousel-dot ${index === 0 ? 'active' : ''}`;
                     dot.onclick = (e) => { e.stopPropagation(); jumpToSlide(index); };
@@ -823,11 +843,10 @@
                     index++;
                 });
 
-                carouselCurrentIndex = 0;
-                updateCarouselPosition();
+                if (carouselCurrentIndex >= popularVideosList.length) carouselCurrentIndex = 0;
+                update3DCarouselClasses();
                 updateCarouselVisibility();
                 
-                // אנהייבן אויטאמאטיש דרייען דעם סליידער יעדע 4 סעקונדעס
                 if(carouselInterval) clearInterval(carouselInterval);
                 carouselInterval = setInterval(() => moveCarousel(1), 4000);
             });
@@ -838,21 +857,33 @@
             carouselCurrentIndex += direction;
             if (carouselCurrentIndex >= popularVideosList.length) carouselCurrentIndex = 0;
             if (carouselCurrentIndex < 0) carouselCurrentIndex = popularVideosList.length - 1;
-            updateCarouselPosition();
+            update3DCarouselClasses();
         }
 
         function jumpToSlide(index) {
             carouselCurrentIndex = index;
-            updateCarouselPosition();
+            update3DCarouselClasses();
         }
 
-        function updateCarouselPosition() {
-            const track = document.getElementById('carouselTrack');
-            if(track) {
-                track.style.transform = `translateX(-${carouselCurrentIndex * 100}%)`;
-            }
-            
-            // דערהיינטיקן די קלאסן פון די דאטס
+        // פונקציע וואס טוישט די קלאסן פאר די 3D Center Mode עפעקט לעיוו
+        function update3DCarouselClasses() {
+            const slides = document.querySelectorAll('.carousel-slide');
+            const total = popularVideosList.length;
+            if (total === 0) return;
+
+            slides.forEach((slide) => {
+                const idx = parseInt(slide.getAttribute('data-carousel-index'));
+                slide.className = 'carousel-slide'; // רעסט קלאסן
+
+                if (idx === carouselCurrentIndex) {
+                    slide.classList.add('active');
+                } else if (idx === (carouselCurrentIndex - 1 + total) % total) {
+                    slide.classList.add('prev-slide');
+                } else if (idx === (carouselCurrentIndex + 1) % total) {
+                    slide.classList.add('next-slide');
+                }
+            });
+
             const dots = document.querySelectorAll('.carousel-dot');
             dots.forEach((dot, idx) => {
                 if(idx === carouselCurrentIndex) dot.classList.add('active');
@@ -863,11 +894,19 @@
         function updateCarouselVisibility() {
             const currentFolder = folderHistory[folderHistory.length - 1];
             const container = document.getElementById('carouselContainer');
-            // ווייז דעם סליידער נאר ווען מען געפינט זיך אויף די הויפט פעידזש (Home Base)
             if (container && popularVideosList.length > 0 && currentFolder && currentFolder.id === START_FOLDER_ID && document.getElementById('librarySection').style.display !== 'none') {
                 container.style.display = 'block';
             } else if (container) {
                 container.style.display = 'none';
+            }
+        }
+
+        // עדמין טוישט בילד דירעקט פארן קארוסעל פאפולער פייל
+        async function changeCarouselThumbnailPrompt(fileId) {
+            const newImgUrl = prompt("Enter custom direct image URL for this trending banner:");
+            if (newImgUrl && newImgUrl.trim() !== "") {
+                await db.collection('popular_videos').doc(fileId).update({ thumb: newImgUrl.trim() });
+                alert("Carousel thumbnail parameter successfully synchronized!");
             }
         }
 
@@ -879,9 +918,11 @@
         }
 
         async function removePopularManual(fileId, event) {
-            event.stopPropagation();
-            if(confirm("Remove from Latest Popular list?")) {
-                await db.collection('popular_videos').doc(fileId).delete(); alert('Removed successfully!'); renderPopularPage();
+            if(event) event.stopPropagation();
+            if(confirm("Remove from Pinned Trending list & Carousel permanently?")) {
+                await db.collection('popular_videos').doc(fileId).delete(); 
+                alert('Removed successfully!'); 
+                if(document.getElementById('popularPage').style.display === 'block') { renderPopularPage(); }
             }
         }
 
@@ -1166,7 +1207,6 @@
         async function openAdminPanel() { document.getElementById('adminPanelBtn').classList.remove('badge-red'); document.getElementById('adminModal').style.display = 'flex'; switchAdminTab('requests'); fetchAdminData(); }
         function hideAdminPanel() { document.getElementById('adminModal').style.display = 'none'; }
         
-        // דערהיינטיקטע טאַב לאָגיק
         function switchAdminTab(tab) {
             document.getElementById('tabReqBtn').className = 'tab-btn'; document.getElementById('tabUsersBtn').className = 'tab-btn'; document.getElementById('tabMsgBtn').className = 'tab-btn'; document.getElementById('secRequests').className = 'panel-section'; document.getElementById('secUsers').className = 'panel-section'; document.getElementById('secMessages').className = 'panel-section';
             if(tab === 'requests') { document.getElementById('tabReqBtn').classList.add('active'); document.getElementById('secRequests').classList.add('active'); } 
@@ -1212,10 +1252,9 @@
             const index = folderHistory.findIndex(f => f.id === folderId); if (index !== -1) { folderHistory = folderHistory.slice(0, index + 1); } else { folderHistory.push({ id: folderId, name: folderName }); }
             updateBreadcrumbs();
             
-            // רוקע אן אפדעיט פארן באהאלטן אדער ווייזן דעם סליידער לויטן פאלדער לאקאציע
             updateCarouselVisibility();
 
-            const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+trashed=false&fields=files(id,name,mimeType,thumbnailLink,size)&key=${API_KEY}`;
+            const url = `https://www.googleapis.com/drive/v3/files?q=window.onload'${folderId}'+in+parents+and+trashed=false&fields=files(id,name,mimeType,thumbnailLink,size)&key=${API_KEY}`;
             const res = await fetch(url); const data = await res.json();
             const foldersGrid = document.getElementById('foldersGrid'); const videosGrid = document.getElementById('videosGrid');
             foldersGrid.innerHTML = ''; videosGrid.innerHTML = '';
